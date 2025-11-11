@@ -16,7 +16,7 @@ function music_slot_reset(_slot) {
 /// @desc plays music using music control
 /// @arg {Asset.GMSound} _sound the sound to use as the music
 /// @arg {real} _slot the channel you'll be playing the music at
-function music_play(_sound, _slot, _loop = true, _gain = 1, _pitch = 1) {
+function music_play(_sound, _slot, _loop = true, _gain = 1, _pitch = 1, _loop_start = 0, _loop_end = 0) {
 	if !instance_exists(o_dev_musiccontrol)
         return false
     
@@ -26,6 +26,9 @@ function music_play(_sound, _slot, _loop = true, _gain = 1, _pitch = 1) {
         gain[_slot] = _gain
         pitch[_slot] = _pitch
         slot = _slot
+        if _loop
+            audio_sound_loop_start(_sound, _loop_start)
+            audio_sound_loop_end(_sound, _loop_end)
     }
     
     music_update()

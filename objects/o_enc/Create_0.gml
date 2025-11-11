@@ -40,7 +40,7 @@
 		function(index) {
 			return item_spell_get_exists(item_s_act, global.party_names[index])
 		}
-	)
+	) 
 	pmlerp = array_create(array_length(global.party_names), 0)
 	bt_selection = array_create(array_length(global.party_names), 0)
     pm_hurt = array_create(array_length(global.party_names), 0)
@@ -56,7 +56,7 @@
 	spellpage = array_create(array_length(global.party_names), 0)
 	spell_using = array_create(array_length(global.party_names), -1)
 	tp_upon_spell = array_create(array_length(global.party_names), -1)
-	
+		
 	partyactselection = array_create(array_length(global.party_names), 0)
 	together_with = array_create(array_length(global.party_names), [])
 	
@@ -78,10 +78,10 @@
 { // party actions (aside from s-action and alike)
 	bonus_actions = {}
 	var names = struct_get_names(global.party)
-	for (var i = 0; i < array_length(names); ++i) {
+	/* for (var i = 0; i < array_length(names); ++i) {
 	    struct_set(bonus_actions, names[i], [new item_s_defaultaction(names[i])])
-	}
-}
+	} */
+} 
 
 { // enemy's turn
 	turn_timer = 0

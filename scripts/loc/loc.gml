@@ -25,6 +25,7 @@ function loc_load(lang = global.loc_lang) {
         if file_exists(fname) {
             var f = file_text_open_read(fname)
 		    var content = ""
+			show_debug_message(global.loc_files)
         
 		    while !file_text_eof(f){
 		        content += file_text_readln(f)

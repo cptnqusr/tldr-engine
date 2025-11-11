@@ -45,15 +45,17 @@ function item_w_wood_blade() : item_weapon() constructor {
 	
 	stats = {}
 	icon = spr_ui_menu_icon_sword
-	weapon_whitelist = ["kris"]
+	weapon_whitelist = ["kris", "sponge", "frog"]
 	
 	reactions = {
-		susie: "What's this!? A CHOPSTICK?",
-		ralsei: "That's yours, Kris...",
-        noelle: "(It has bite marks...)"
-	}
-    
-    item_localize("item_w_wood_blade")
+		susie: "(Has it only been 4 days?)",
+		ralsei: "Is that Kris' blade?",
+        noelle: "(Still has bite marks.)",
+		frog: {
+			frog: "Crono wielded this, at first.",
+			susie: "(Kris did too.)"
+		}
+	}  
 }
 function item_w_lw_pencil() : item_weapon() constructor {
     name = ["Pencil"]
@@ -130,6 +132,26 @@ function item_w_lw_holiday_pencil() : item_weapon() constructor {
     
     item_localize("item_w_lw_holiday_pencil")
 }
+
+function item_w_killichudder() : item_weapon() constructor {
+	name = ["Killichudder"]
+	desc = ["A blade, pulsing with animous energy.\nDoes not come with crown.", "--"]
+	
+	stats = {
+		attack: 4,
+		magic: 2,
+	}
+	icon = spr_ui_menu_icon_sword
+	weapon_whitelist = ["kris", "sponge", "frog"]
+	
+	reactions = {
+		susie: "When I get that Knight...",
+		ralsei: "No thank you!",
+        noelle: "Where's Berdly?",
+		frog: "I hath done enough of that."
+	}  
+}
+
 
 // axes
 function item_w_mane_ax() : item_weapon() constructor {

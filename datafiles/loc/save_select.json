@@ -41,38 +41,38 @@
     },
     "save_select_messages_ominous": {
         "en": {
-            "main": "",
+            "main": "CONTINGENCY ACTIVATED.",
 
-            "copy": "CHOOSE THE ONE TO COPY.",
-            "copy_returned": "IT RETAINED ITS ORIGINAL SHAPE.",
+            "copy": "MELPERT.",
+            "copy_returned": "THERE IS LITTLE TIME.",
             
-            "copyto": "CHOOSE THE TARGET FOR THE REFLECTION.", 
+            "copyto": "WHICH ONE?", 
 
-            "copyempty": "IT IS BARREN AND CANNOT BE COPIED.", 
-            "copyempty_all": "BUT THERE WAS NOTHING LEFT TO COPY.", 
+            "copyempty": "THERE IS NOBODY HERE.", 
+            "copyempty_all": "THERE IS NOBODY ANYWHERE.", 
 
-            "copycant": "IT IS IMMUNE TO ITS OWN IMAGE.", 
+            "copycant": "I CANNOT ALLOW THAT.", 
 
-            "copysuccess": "THE DIVISION IS COMPLETE.", 
-            "copysuccess_weird": "WHAT AN INTERESTING BEHAVIOR.",
-            "copysuccess_prepared": "PREPARATIONS ARE COMPLETE.",
-            "copysuccess_conformed": "IT CONFORMED TO THE REFLECTION.",
+            "copysuccess": "THEN IT SHALL BE SO.", 
+            "copysuccess_weird": "THEY WILL NOT LAST.",
+            "copysuccess_prepared": "THEIR BREATH GOES QUIET.",
+            "copysuccess_conformed": "THEIR HANDS GRASP AIMLESSLY.",
 
-            "copy_overwritewarn": "IT WILL BE SUBSUMED.", 
+            "copy_overwritewarn": "SHALL THIS ONE BE CONDEMNED?", 
 
-            "erase": "SELECT THE ONE TO ERASE.", 
-            "erase_interesting": "VERY INTERESTING.", 
-            "erase_cancel": "THEN IT WAS SPARED.", 
+            "erase": "WHAT?", 
+            "erase_interesting": "IS THIS DERISION?", 
+            "erase_cancel": "HURRY.", 
 
-            "erase_warn1": "TRULY ERASE IT?", 
-            "erase_warn2": "THEN IT WILL BE DESTROYED.", 
-            "erasesuccess": "IT WAS AS IF IT WAS NEVER THERE AT ALL.", 
+            "erase_warn1": "ARE YOU CERTAIN?", 
+            "erase_warn2": "MELPERT, I BEG YOU.", 
+            "erasesuccess": "THEN WE WILL BEGIN AGAIN.", 
 
-            "eraseempty": "BUT IT WAS ALREADY GONE.",
-            "eraseempty_all": "BUT THERE WAS NOTHING LEFT TO ERASE.",
+            "eraseempty": "THERE IS NOBODY HERE.",
+            "eraseempty_all": "THERE IS NOBODY ANYWHERE.",
 
-            "chfile": "Start Chapter {0} from Chapter {1}'s FILE.", 
-            "chfileconfirm": "This will start Chapter {0} in FILE Slot {2}."
+            "chfile": "", 
+            "chfileconfirm": ""
         },
         "ja": {
             "main": "",

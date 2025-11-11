@@ -154,4 +154,25 @@ char_presets = {
 		voice_interrupt: false,
 		voice_skip: 1,
 	},
+	ralsei_noface: {
+		_face: noone,
+		voice: snd_text_ralsei,
+		voice_pitchrange: [0.03, 0.07],
+		voice_interrupt: false,
+		voice_skip: 9,
+	},
+	noelle_noface: {
+		_face: noone,
+		voice: snd_text_noelle,
+		voice_pitchrange: [0.03, 0.07],
+		voice_interrupt: false,
+		voice_skip: 9,
+	},
+	susie_noface: {
+		_face: noone,
+		voice: snd_text_susie,
+		voice_pitchrange: [0.03, 0.07],
+		voice_interrupt: false,
+		voice_skip: 9,
+	},
 }
