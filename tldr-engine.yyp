@@ -238,9 +238,6 @@
   ],
   "ForcedPrefabProjectReferences":[],
   "IncludedFiles":[
-    {"$GMIncludedFile":"","%Name":"._gamecontrollerdb.txt","CopyToMask":-1,"filePath":"datafiles","name":"._gamecontrollerdb.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"._input_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"._input_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
-    {"$GMIncludedFile":"","%Name":"._loc","CopyToMask":-1,"filePath":"datafiles","name":"._loc","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"gamecontrollerdb.txt","CopyToMask":-1,"filePath":"datafiles","name":"gamecontrollerdb.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"input_license.txt","CopyToMask":-1,"filePath":"datafiles","name":"input_license.txt","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"chapter_select.json","CopyToMask":-1,"filePath":"datafiles/loc","name":"chapter_select.json","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
