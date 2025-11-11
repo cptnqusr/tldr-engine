@@ -97,3 +97,42 @@ function item_lw_shit() : item() constructor {
 		}
 	}
 }
+
+function item_nine_key() : item() constructor {
+	name = ["Nine Key"]
+	desc = ["Having trouble? Now you're not. Heals 999HP to the entire party, and never runs out of uses.", "Heals team 999HP"]
+	
+	use_type = ITEM_USE.EVERYONE
+	use = function(index, target, caller = -1) {
+		party_heal_all(999, caller)
+	}
+	
+	reactions = {
+		susie: "Mind if I take a couple with me?",
+		ralsei: "Is this...? No, it can't be.",
+		noelle: "Where's the rest of the keyboard?",
+		frog: "Divine intervention!" 
+	}
+    
+}
+
+function item_cryberry() : item() constructor {
+	name = ["Cryberry"]
+	desc = ["Bitter fruit from the meat gardens. Gain 30%SP.", "+30% SP"]
+	
+	use_type = ITEM_USE.EVERYONE
+	use = function(index, target, caller = -1) {
+		cutscene_func(function() {
+			o_enc.tp += 30
+			cutscene_audio_play(snd_chrono_save)
+		})
+	}
+	
+	reactions = {
+		susie: "Could use a little more salt.",
+		ralsei: "Does anyone have a tissue?",
+		noelle: "It's been raining on my face...",
+		frog: "Cyrus..."
+	}
+    
+}

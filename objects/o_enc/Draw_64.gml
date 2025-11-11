@@ -376,14 +376,20 @@ surface_set_target(surf) {
 			
 		// spell selector
 		if state == 1 && (bt_selection[selection] == 1) && !can_act[selection] {
+			var cando = true
+			var add = 0
+			
 			for (var i = spellpage[selection] * 6; i < min(array_length(spells), 6 + spellpage[selection]*6); ++i) {
 				var txt = item_get_name(spells[i])
 				
 			    if i == actselection[selection] 
 					draw_sprite_ext(spr_uisoul, 0, 10 + (i%2 == 1 ? 230 : 0), 385 + 30 * floor(i/2) - 90*spellpage[selection], 1, 1, 0, c_red, 1)
 				
+				if tp < spells[i].tp_cost
+					cando = false
+				
                 draw_set_color(c_white)
-				if tp < spells[i].tp_cost 
+				if !cando
 					draw_set_color(c_gray)
 				else if struct_exists(spells[i], "color") {
                     if is_callable(spells[i].color) 

@@ -345,3 +345,44 @@ function item_s_defaultaction(nname) : item_spell() constructor {
 	tp_cost = 0
 	is_party_act = true
 }
+
+function item_s_magicmissile() : item_spell() constructor {
+	name = "MagicMissile"
+	desc = ["Now it's time for the final battle.", "MAGIC MISSILE!"]
+	use_type = ITEM_USE.ENEMY 
+	
+    use = function(index, target, caller = -1) {
+        var __name = global.party_names[index]
+        var __e_obj = o_enc.encounter_data.enemies[target].actor_id
+        
+        cutscene_set_variable(o_enc, "exec_waiting", true)
+		cutscene_dialogue(string(loc("spell_cast"), party_getname(__name), string_upper(loc("spell_rude_buster_name"))),, false)
+        cutscene_sleep(20)
+        cutscene_set_partysprite(index, "rudebuster")
+        cutscene_wait_until(function(__name) {
+            return party_get_inst(__name).image_index >= 6
+        }, [__name])
+        cutscene_func(instance_destroy, [o_ui_dialogue])
+        cutscene_func(function(tgt, m, _slot, name) {
+            var inst = instance_create(o_eff_rudebuster, m.x + m.sprite_width/2 - 30, m.y - m.myheight/2, tgt.depth - 50)
+            inst.target_x = tgt.x
+            inst.target_y = tgt.y - tgt.myheight/2
+            
+            inst.enemy_o = tgt
+            inst.slot = _slot
+            inst.dmg = party_getdata(name, "attack") * 11 + party_getdata(name, "magic") * 5 - o_enc.encounter_data.enemies[_slot].defense * 3
+            inst.user = name
+            
+            inst.image_angle = point_direction(inst.x, inst.y, tgt.x, tgt.y - tgt.myheight/2) - 20
+            inst.speed = 12
+            inst.friction = -1.5/2
+            inst.direction = inst.image_angle
+            
+            do_animate(0, 1, 3, "linear", inst, "image_alpha")
+        }, [__e_obj, party_get_inst(__name), target, __name])
+        cutscene_sleep(50)
+		cutscene_set_variable(o_enc, "exec_waiting", false)
+    }
+    
+	tp_cost = 0
+}

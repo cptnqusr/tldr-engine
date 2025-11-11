@@ -82,5 +82,31 @@
     "party_noelle_action_letter": {
         "en": "N",
         "ja": "Ｎ"
+    },
+
+    "party_sponge_name": {
+        "en": "Sponge",
+        "ja": "SORRY NOTHING"
+    },
+    "party_sponge_desc": {
+        "en": "Sponge\nSoaks up the world's\nsadness. Lonely.",
+        "ja": "Sponge\nSoaks up the world's\nsadness. Lonely."
+    },
+    "party_sponge_stat_sadness": {
+        "en": "Sadness",
+        "ja": "Sadness"
+    },
+
+    "party_frog_name": {
+        "en": "Frog",
+        "ja": "Frog"
+    },
+    "party_frog_desc": {
+        "en": "Hero\nOnce had his own\nadventure, long ago.",
+        "ja": "Hero\nOnce had his own\nadventure, long ago."
+    },
+    "party_frog_stat_frog": {
+        "en": "Is frog",
+        "ja": "Is frog"
     }
 }

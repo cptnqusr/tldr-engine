@@ -77,7 +77,8 @@ global.recruits = []
 global.recruits_lost = []
 
 global.storage = array_create(item_get_maxcount(ITEM_TYPE.STORAGE), undefined)
-
 global.lw_items = []
 global.lw_weapon = undefined
 global.lw_armor = undefined
+
+//save_wipe()

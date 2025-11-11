@@ -1,7 +1,7 @@
 /// @description theme set
 var theme = ""
-//theme = "ominous"
-theme = "finished"
+theme = "ominous"
+//theme = "finished"
 
 loc_id_messages = "save_select_messages_normal"
 

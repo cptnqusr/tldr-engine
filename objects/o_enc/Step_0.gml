@@ -268,6 +268,7 @@ if battle_state == "menu" {
 				audio_play(snd_ui_select)
 			}
 			else if bt_selection[selection] == 1 && !can_act[selection] { // power, spell selected
+				
 				party_get_inst(global.party_names[selection]).sprite_index = enc_getparty_sprite(selection, "spellready")
 				party_get_inst(global.party_names[selection]).image_speed = 1
 				
@@ -484,7 +485,7 @@ if battle_state == "menu" {
 						}
 					}
 				}
-				else {
+				else { 
                     together_with[selection] = []
                     
                     if struct_exists(acts[ii], "tp_cost") && tp < acts[ii].tp_cost 
@@ -626,6 +627,8 @@ if battle_state == "menu" {
 			buffer = 1
 		}
 		
+		var cando = true
+		
 		// movement
 		if InputPressed(INPUT_VERB.RIGHT) && actselection[selection] < array_length(spells) - 1 {
 			actselection[selection]++; 
@@ -665,9 +668,10 @@ if battle_state == "menu" {
 		if actselection[selection] > 5 
 			spellpage[selection] = 1
 		else
-			spellpage[selection] = 0
+			spellpage[selection] = 0 
 		
-		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && tp >= spells[actselection[selection]].tp_cost {
+		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && tp < spells[actselection[selection]].tp_cost { // check who the spell targets
+			
 			if spells[actselection[selection]].use_type == ITEM_USE.INDIVIDUAL {
 				state = 2
 				buffer = 1
@@ -693,16 +697,20 @@ if battle_state == "menu" {
 				audio_play(snd_ui_select)
 			}
 			else if spells[actselection[selection]].use_type == ITEM_USE.ENEMY {
-				if spells[actselection[selection]].is_party_act 
-					state = 4
-				else 
-					state = 3
 				
+				if spells[actselection[selection]].is_party_act {
+					state = 4
+				}
+				else {
+					state = 3
+				}
 				buffer = 1
 				
 				audio_play(snd_ui_select)
 				updateglowing_enemy(partyactselection[selection])
 			}
+			
+			
 		}
 	}
 	if state == 2 && (bt_selection[selection] == 2 || (!can_act[selection] && bt_selection[selection] == 1 && spells[actselection[selection]].use_type == ITEM_USE.INDIVIDUAL)) { // item/spell target chooser

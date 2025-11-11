@@ -8,6 +8,7 @@ instance_create(o_dev_musiccontrol)
 instance_create(o_fader)
 instance_create(o_flash)
 
+instance_create(o_fader_white)
 if !allow_incompatible_saves {
     var __v = (struct_exists(global.settings, "VERSION_SAVED") ? global.settings.VERSION_SAVED : "v0.0.0")
     if !__engine_versions_compare(__v, ENGINE_LAST_COMPATIBLE_VERSION) {
@@ -50,8 +51,8 @@ global.save_recording = []
 global.save = {}
 #region create the save entries
     // base player data
-    save_entry("NAME", "PLAYER")
-    save_entry("ROOM", room_test_main, undefined, function() { return room })
+    save_entry("NAME", "LINK")
+    save_entry("ROOM", room_intro_cutscene, undefined, function() { return room })
     save_entry("ROOM_NAME", "", function(_raw_data){ global.room_name = _raw_data }, function(){ return global.room_name })
     
     save_entry("TIME", global.time, function(_raw_data){ global.time = _raw_data }, function(){ return global.time })
@@ -66,7 +67,7 @@ global.save = {}
     save_entry("COMPLETE_TIME", 0)
     
     // light world data
-    save_entry("LW_NAME", "Kris")
+    save_entry("LW_NAME", "Sponge")
     save_entry("LW_LV", 1)
     save_entry("LW_HP", 20)
     save_entry("LW_MAXHP", 20)
@@ -127,8 +128,10 @@ global.save = {}
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 party_init()
+party_m_initialize("sponge", party_m_sponge)
+party_m_initialize("frog", party_m_frog)
 global.party_names = [   // <-- if you wish to change the default team members, change them here
-    "kris", "susie", "ralsei"
+    "sponge", "frog",
 ]
 party_apply_equipment()
 
@@ -140,7 +143,7 @@ global.font_numbers_g = font_add_sprite_ext(spr_ui_numbers_gfont,"0123456789+-%/
 
 // load the default items
 array_push(global.key_items, new item_key_cell_phone())
-
+array_push(global.items, new item_nine_key(), new item_cryberry())
 // create entries for the party stuff later since we must first apply their equipment
 save_entry("PARTY_DATA", global.party, 
     function(_raw_data) { global.party = save_party_import(_raw_data) },
