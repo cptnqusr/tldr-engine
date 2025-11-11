@@ -162,5 +162,7 @@ save_load(global.save_slot)
 // init the typer chars
 typer_chars_init()
 // << initialize your typer chars here
+new typer_char_ralsei_noface().__initialize()
+
 
 room_goto_next()

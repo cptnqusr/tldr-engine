@@ -26,6 +26,7 @@ function typer_char() constructor {
     voice_pitch_calc = 1 // the pitch of the voice (could be either a function or a real number)
     voice_interrupt = false // whether to stop the voice sound every time a new blip is played
     voice_skip = 1 // every (how many?) frames to play the sound
+	voice_pitchrange = undefined
     
     /// @desc initialize the typer char - add to the typer's char presets
     __initialize = method(self, function(typer) {
@@ -69,4 +70,12 @@ function typer_char_noelle() : typer_char() constructor {
     
     face_sprite = spr_face_noelle
     voice = snd_text_noelle
+}
+
+function typer_char_ralsei_noface() : typer_char() constructor {
+    name = "ralsei_noface"
+    
+    voice = snd_text_ralsei
+	voice_pitchrange = [0.09, 0.13]
+	voice_skip = 9
 }

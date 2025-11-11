@@ -247,7 +247,7 @@ if command == "char" { // char(char_preset_string, face_expression = undefined) 
 	voice_pitch_calc = struct_get(struct_get(char_presets, arg[0]), "voice_pitch_calc")
 	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
 	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
-    voice_pitchrange = undefined
+    voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
 	
 	char = arg[0]
 	looping = false
