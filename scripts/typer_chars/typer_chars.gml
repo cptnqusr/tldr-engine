@@ -75,7 +75,7 @@ function typer_char_noelle() : typer_char() constructor {
 function typer_char_ralsei_noface() : typer_char() constructor {
     name = "ralsei_noface"
     
-    voice = snd_text_ralsei
-	voice_pitchrange = [0.09, 0.13]
-	voice_skip = 9
+    voice = snd_txtral_trippy
+	voice_pitchrange = [0.9, 1.1]
+	voice_skip = 11
 }

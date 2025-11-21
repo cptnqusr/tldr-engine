@@ -1,5 +1,5 @@
 event_inherited()
-text = ""
+text = save_interact_dialogue
 
 inst = noone
 started = false

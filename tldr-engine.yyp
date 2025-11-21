@@ -874,6 +874,7 @@
     {"id":{"name":"snd_text_ralsei","path":"sounds/snd_text_ralsei/snd_text_ralsei.yy",},},
     {"id":{"name":"snd_text_susie","path":"sounds/snd_text_susie/snd_text_susie.yy",},},
     {"id":{"name":"snd_text","path":"sounds/snd_text/snd_text.yy",},},
+    {"id":{"name":"snd_txtral_trippy","path":"sounds/snd_txtral_trippy/snd_txtral_trippy.yy",},},
     {"id":{"name":"snd_ui_cancel_small","path":"sounds/snd_ui_cancel_small/snd_ui_cancel_small.yy",},},
     {"id":{"name":"snd_ui_cancel","path":"sounds/snd_ui_cancel/snd_ui_cancel.yy",},},
     {"id":{"name":"snd_ui_cant_select","path":"sounds/snd_ui_cant_select/snd_ui_cant_select.yy",},},
