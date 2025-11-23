@@ -3,9 +3,13 @@
   "%Name":"rForest",
   "autoTileSets":[],
   "macroPageTiles":{
-    "SerialiseHeight":0,
-    "SerialiseWidth":0,
-    "TileSerialiseData":[],
+    "SerialiseHeight":11,
+    "SerialiseWidth":14,
+    "TileCompressedData":[
+      -10,0,4,54,55,56,57,-10,0,4,63,64,65,66,-10,0,4,72,73,74,75,-10,0,4,81,82,83,84,-10,0,4,90,91,92,93,
+      -84,0,
+    ],
+    "TileDataFormat":1,
   },
   "name":"rForest",
   "out_columns":10,

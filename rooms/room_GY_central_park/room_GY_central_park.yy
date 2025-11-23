@@ -12,8 +12,7 @@
     {"name":"inst_8AF3066_1_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
     {"name":"inst_49CECC4C_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
     {"name":"inst_5209E684_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
-    {"name":"inst_70BD577D","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
-    {"name":"inst_354407FE","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
+    {"name":"inst_5F5BA610","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -33,8 +32,9 @@
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_dev_music","path":"objects/o_dev_music/o_dev_music.yy",},"propertyId":{"name":"mus","path":"objects/o_dev_music/o_dev_music.yy",},"resource":{"name":"mus_somethingorange","path":"sounds/mus_somethingorange/mus_somethingorange.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"mus_somethingorange",},
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_dev_music","path":"objects/o_dev_music/o_dev_music.yy",},"propertyId":{"name":"pitch","path":"objects/o_dev_music/o_dev_music.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"1",},
           ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":-20.0,},
-        {"$GMRInstance":"v4","%Name":"inst_70BD577D","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_70BD577D","objectId":{"name":"o_actor_e_killercar","path":"objects/o_actor_e_killercar/o_actor_e_killercar.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":420.0,"y":520.0,},
-        {"$GMRInstance":"v4","%Name":"inst_354407FE","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_354407FE","objectId":{"name":"o_ex_actor_e_dentos","path":"objects/o_ex_actor_e_dentos/o_ex_actor_e_dentos.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":360.0,"y":480.0,},
+        {"$GMRInstance":"v4","%Name":"inst_5F5BA610","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_5F5BA610","objectId":{"name":"o_actor_e_rizonbot","path":"objects/o_actor_e_rizonbot/o_actor_e_rizonbot.yy",},"properties":[
+            {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_actor_e","path":"objects/o_actor_e/o_actor_e.yy",},"propertyId":{"name":"encounter","path":"objects/o_actor_e/o_actor_e.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"new enc_set_rizonbot()",},
+          ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":420.0,"y":480.0,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"Collisions","depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"Collisions","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRLayer":"","%Name":"Folder_1","depth":200,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[

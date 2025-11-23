@@ -54,6 +54,7 @@ function enc_set_ex() : enc_set() constructor {
 	]
 	
 	flavor = "* The test crew is approaching!!"
+	bgm = noone
     
     _target_calculation = function() {
         var __targets = []
