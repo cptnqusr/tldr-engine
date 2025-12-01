@@ -16,9 +16,9 @@ if !only_hp { // top
 	    draw_sprite_ext(spr_ui_menu_bt, i*2 + (selection == i ? 1 : 0), 120 + 100*i, 20 - 80 + roll, 2, 2, 0, c_white, 1)
 		
 		if selection == i && state == 0
-			draw_sprite_ext(spr_ui_soul_small, 0, 128 + 100*i, 38 - 80 + roll, 2, 2, 0, c_red, 1)
+			draw_sprite_ext(spr_ui_soul_small, 0, 128 + 100*i, 38 - 80 + roll, 2, 2, 0, c_white, 1)
 	}
-	draw_text_transformed(520, 20 - 80 + roll, string("D$ {0}", darkdollars), 2, 2, 0)
+	draw_text_transformed(520, 20 - 80 + roll, string("G {0}", darkdollars), 2, 2, 0)
 }
 { // bottom
 	draw_sprite_ext(spr_pixel, 0, 0, 417 + 80 - roll, 640, 63, 0, c_black, 1)
@@ -104,20 +104,20 @@ if selection == 0 { // items
 			
 			draw_text_transformed_color(180 + 120*i + _l_offset, 110, opt[i], 2, 2, 0, col, col, col, col, 1)
 			if i == i_pselection && state == 1 
-				draw_sprite_ext(spr_uisoul, 0, 155 + 120*i + _l_offset, 120, 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_uisoul, 0, 155 + 120*i + _l_offset, 120, 1, 1, 0, c_white, 1)
 		}
 		
 		if i_pselection == 2 { // key
 			for (var i = 0; i < item_get_count(ITEM_TYPE.KEY); ++i) {
 				if i == i_selection && state == 2 
-					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_white, 1)
 				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.key_items[i]), (state == 1 ? c_gray : c_white))
 			}
 		}
 		else { // other
 			for (var i = 0; i < item_get_count(); ++i) {
 				if i == i_selection && state == 2 
-					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_white, 1)
 				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.items[i]), (state == 1 ? c_gray : c_white))
 			}
 		}    
@@ -156,7 +156,7 @@ if selection == 1 { // equip
 		for (var i = 0; i < array_length(global.party_names); ++i) {
 			var c = (i == e_pmselection ? c_white : #666666)
 			if i == e_pmselection && state == 1 {
-				draw_sprite_ext(spr_ui_soul_arrows, o_world.frames/30 * 2, 108 + 50*i + _l_offset, 142, 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_ui_soul_arrows, o_world.frames/30 * 2, 108 + 50*i + _l_offset, 142, 1, 1, 0, c_white, 1)
 			}
 		    draw_sprite_ext(party_geticon_ow(global.party_names[i]),0, 90 + 50*i + _l_offset, 160, 2, 2, 0, c, 1)
 		}
@@ -288,7 +288,7 @@ if selection == 1 { // equip
 		]
 		for (var i = 0; i < array_length(equipped); ++i) {
 			if e_pselection == i && state == 2
-				draw_sprite_ext(spr_uisoul, 0, 308 + _l_offset, 122 + i*30, 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_uisoul, 0, 308 + _l_offset, 122 + i*30, 1, 1, 0, c_white, 1)
 			else
 				draw_sprite_ext(equipped[i][0], 0, 302 + _l_offset, 118 + 30*i, 2, 2, 0, c_white, 1)
 			
@@ -352,7 +352,7 @@ if selection == 1 { // equip
 			
 		    draw_text_transformed(384 + _l_offset, 230 + (i - e_move) * 27, txt, 2, 2, 0)
 			if i == e_selection && state == 3 
-				draw_sprite_ext(spr_uisoul, 0, 344 + _l_offset, 240 + (i - e_move) * 27, 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_uisoul, 0, 344 + _l_offset, 240 + (i - e_move) * 27, 1, 1, 0, c_white, 1)
 			
 			var icon = undefined
 			if !is_undefined(arr_mod[i]) 
@@ -395,7 +395,7 @@ if selection == 2 { // power
 		for (var i = 0; i < array_length(global.party_names); ++i) {
 			var c = (i == p_pmselection ? c_white : #666666)
 			if i == p_pmselection && state == 1 {
-				draw_sprite_ext(spr_ui_soul_arrows, o_world.frames/30 * 2, 108 + 50*i + _l_offset, 141, 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_ui_soul_arrows, o_world.frames/30 * 2, 108 + 50*i + _l_offset, 141, 1, 1, 0, c_white, 1)
 			}
 		    draw_sprite_ext(party_geticon_ow(global.party_names[i]),0, 90+50*i + _l_offset, 160, 2, 2, 0, c, 1)
 		}
@@ -463,7 +463,7 @@ if selection == 2 { // power
 		    draw_text_transformed(410 + _l_offset*3, 230 + i*25, item_get_name(party_getdata(global.party_names[p_pmselection], "spells")[i]), 2, 2, 0)
 			
 			if i == p_selection && state == 2
-				draw_sprite_ext(spr_uisoul, 0, 320 + (loc_getlang() == "ja" ? 20 : 0), 240 + i*25 - (loc_getlang() == "ja" ? 2 : 0), 1, 1, 0, c_red, 1)
+				draw_sprite_ext(spr_uisoul, 0, 320 + (loc_getlang() == "ja" ? 20 : 0), 240 + i*25 - (loc_getlang() == "ja" ? 2 : 0), 1, 1, 0, c_white, 1)
 		}
 		
 		draw_set_color(c_white)
@@ -486,7 +486,7 @@ if selection == 3 && state > 0 { // config
     
     if state == 1 || state == 2 {
         draw_text_transformed(270, 100, loc("menu_config_header"), 2, 2, 0)
-        draw_sprite_ext(spr_soul, 0, 152, 168 + c_selection*35, 1, 1, 0, c_red, 1)
+        draw_sprite_ext(spr_soul, 0, 152, 168 + c_selection*35, 1, 1, 0, c_white, 1)
         
         for (var i = 0; i < array_length(c_config); i ++) {
             if c_selection == i && state == 2
@@ -527,7 +527,7 @@ if selection == 3 && state > 0 { // config
         if __isgamepad 
             draw_text_transformed(435, 100, loc("menu_controls_gamepad"), 2, 2, 0)
         
-        draw_sprite_ext(spr_soul, 0, 88, 156 + 28 * c_controls_selection, 1, 1, 0, c_red, 1)
+        draw_sprite_ext(spr_soul, 0, 88, 156 + 28 * c_controls_selection, 1, 1, 0, c_white, 1)
         for (var i = 0; i < array_length(c_controls); i ++) {
             if c_controls_selection == i {
                 draw_set_color(c_aqua)

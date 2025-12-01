@@ -133,7 +133,7 @@ party_m_initialize("frog", party_m_frog)
 party_m_initialize("bowie", party_m_bowie)
 party_m_initialize("scoot", party_m_scoot)
 global.party_names = [   // <-- if you wish to change the default team members, change them here
-    "sponge", "frog"
+    "sponge", "frog",
 ]
 party_apply_equipment()
 

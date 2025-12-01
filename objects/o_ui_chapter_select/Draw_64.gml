@@ -11,14 +11,14 @@ if state == -1 {
 		draw_text_transformed(320, 220+yadd, txt, 2, 2, 0)
 	
 		if sselection == 0 {
-			draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(yes) - 26, 260+8 + yadd, 2, 2, 0, c_red, alpha)
+			draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(yes) - 26, 260+8 + yadd, 2, 2, 0, c_white, alpha)
 			draw_set_color(c_yellow)
 		}
 		draw_text_transformed(320, 260 + yadd, yes, 2, 2, 0)
 		
 		draw_set_color(c_white)
 		if sselection == 1 {
-			draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(no) - 26,300+8 + yadd, 2, 2, 0, c_red, alpha)
+			draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(no) - 26,300+8 + yadd, 2, 2, 0, c_white, alpha)
 			draw_set_color(c_yellow)
 		}
 		draw_text_transformed(320, 300 + yadd, no, 2, 2, 0)
@@ -48,7 +48,7 @@ else {
 			draw_sprite_ext(spr_pixel, 0, 0, 62 + 60*i - yadd, 640, 2, 0, #2B2B2B, alpha)
 	
 			if i+1 == selection && !confirming {
-				draw_sprite_ext(spr_ui_soul, 0, 20, 24 + 60*i + yadd, 2, 2, 0, c_red, alpha)
+				draw_sprite_ext(spr_ui_soul, 0, 20, 24 + 60*i + yadd, 2, 2, 0, c_white, alpha)
 			}
 			
 			draw_set_font(font_main)
@@ -110,14 +110,14 @@ else {
 		if languages {
 			if selection == total+1 && horselection == 0 {
 				draw_set_color(c_yellow)
-				draw_sprite_ext(spr_ui_soul, 0, 210 - 30 + horselection, 442, 2, 2, 0, c_red, alpha)
+				draw_sprite_ext(spr_ui_soul, 0, 210 - 30 + horselection, 442, 2, 2, 0, c_white, alpha)
 			}
 			draw_text_transformed(210, 440-6+yadd, "Quit", 2, 2, 0)
 			draw_set_color(c_white)
 			
 			if selection == total+1 && horselection == 1 {
 				draw_set_color(c_yellow)
-				draw_sprite_ext(spr_ui_soul, 0, 350-30 + horselection, 442, 2, 2, 0, c_red, alpha)
+				draw_sprite_ext(spr_ui_soul, 0, 350-30 + horselection, 442, 2, 2, 0, c_white, alpha)
 			}
 		
 			draw_set_font(font_main_ja)
@@ -129,7 +129,7 @@ else {
 			
 			if selection == total+1 && horselection == 0 {
 				draw_set_color(c_yellow)
-				draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(loc("chapter_select_quit")) - 30, 442, 2, 2, 0, c_red, alpha)
+				draw_sprite_ext(spr_ui_soul, 0, 320 - string_width(loc("chapter_select_quit")) - 30, 442, 2, 2, 0, c_white, alpha)
 			}
 			draw_text_transformed(320, 440-6 + yadd, loc("chapter_select_quit"), 2, 2, 0)
 		}

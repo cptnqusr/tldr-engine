@@ -252,7 +252,7 @@ else if state == 4 || state == 41 {
 }
 
 draw_set_color(c_white)
-draw_sprite_ext(spr_ui_soul, 0, soulx, souly, 2, 2, 0, c_red, 1)
+draw_sprite_ext(spr_ui_soul, 0, soulx, souly, 2, 2, 0, c_white, 1)
 
 
 draw_set_alpha(.25)

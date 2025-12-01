@@ -2,6 +2,7 @@
 
 for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
     var obj = noone
+	show_debug_message(encounter_data.enemies[i].obj)
 	var a = actor_find(encounter_data.enemies[i].obj, x, y,, {is_selected_for_battle: false})
 	var create = true // whether to create the actors
 	
@@ -20,4 +21,5 @@ for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
         obj.image_xscale = (obj.sprite_facing_dir == DIR.RIGHT ? -1 : 1)
     }
 	enemy_objects[i] = obj
+	show_debug_message(enemy_objects)
 }

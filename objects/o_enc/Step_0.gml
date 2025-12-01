@@ -1388,13 +1388,14 @@ if battle_state == "win" {
             if enc_enemy_isfighting(i) {
                 // call the win event for the enemies
                 if struct_exists(encounter_data.enemies[i], "ev_win") && is_callable(encounter_data.enemies[i].ev_win)
+					show_debug_message(encounter_data.enemies[i].ev_win())
                     encounter_data.enemies[i].ev_win()
             }
         }
     }
     
 	if !wininit && !waiting {
-        var __exp = 0
+        var __exp = 150
         var __dd = earned_money + global.chapter * tp / 4
         var __dd_mod = 1
         
@@ -1463,10 +1464,11 @@ if battle_state == "win" {
             if is_struct(encounter_data.enemies[i]) && instance_exists(encounter_data.enemies[i].actor_id) {
                 var o = encounter_data.enemies[i].actor_id
                 cutscene_set_variable(o, "is_in_battle", false)
+				instance_destroy(o)
             }
 		}
 		
-        cutscene_set_variable(o_camera, "target", o_actor_kris)
+        cutscene_set_variable(o_camera, "target", get_leader())
 		cutscene_set_variable(get_leader(), "moveable_battle", true)
         
         if music_isplaying(0) {

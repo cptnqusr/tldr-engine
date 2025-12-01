@@ -415,14 +415,14 @@ function party_m_sponge() : party_m() constructor {
 	
 	max_hp =	party_m_calculate_hp(100, lv)
     hp =        max_hp
-	attack =	1
+	attack =	4
 	defense =	2
-	magic =		1
+	magic =		3
 	element_resistance = {
 	}
 	
 	// inventory
-    weapon = new item_w_wood_blade()
+    weapon = new item_w_depressionedge()
     armor1 = new item_a_ambercard()
     armor2 = new item_a_ambercard()
 	spells = [
@@ -443,21 +443,19 @@ function party_m_sponge() : party_m() constructor {
 		actend: [spr_bsusie_actend, "idle", 1],
 		attack: [spr_bsponge_attack, true],
 		attackready: spr_bsponge_attackready,
-		defeat: spr_bsusie_defeat,
-		defend: [spr_bsusie_defend, true],
-		hurt: spr_bsusie_hurt,
+		defeat: spr_bsponge_defeat,
+		defend: [spr_bsponge_defend, true],
+		hurt: spr_bsponge_hurt,
 		idle: spr_bsponge_idle,
 		intro: spr_susie_right,
 		introb: spr_susie_right,
-		itemuse: [spr_bsusie_item, "idle", 1],
-		itemready: spr_bsusie_itemready,
-		spell: [spr_bsusie_spell, "idle", 1],
-		spellready: spr_bsusie_spellready,
-		victory: [spr_bsusie_victory, true],
-		spare: [spr_bsusie_act, "idle", 1],
-		attack_eff: spr_bsusie_attackeff,
-				
-		rudebuster: [spr_bsusie_rudebuster, 14],
+		itemuse: [spr_bsponge_item, "idle", 1],
+		itemready: spr_bsponge_itemready,
+		spell: [spr_bsponge_spell, "idle", 1],
+		spellready: spr_bsponge_spellready,
+		victory: [spr_sponge_right, true],
+		spare: [spr_sponge_duck_speak, "idle", 1],
+		attack_eff: spr_bkris_attackeff,
 	}
 		
 	// system
@@ -487,14 +485,14 @@ function party_m_frog() : party_m() constructor {
 	
 	max_hp =	party_m_calculate_hp(130, lv)
     hp =        max_hp
-	attack =	8
+	attack =	4
 	defense =	2
 	magic =		1
 	element_resistance = {
 	}
 	
 	// inventory
-    weapon = new item_w_spookysword()
+    weapon = new item_w_masamune()
     armor1 = new item_a_ambercard()
     armor2 = new item_a_ambercard()
 	spells = [
@@ -527,7 +525,7 @@ function party_m_frog() : party_m() constructor {
 		spellready: spr_bsusie_spellready,
 		victory: [spr_bsusie_victory, true],
 		spare: [spr_bsusie_act, "idle", 1],
-		attack_eff: spr_bsusie_attackeff,
+		attack_eff: spr_bkris_attackeff,
 				
 		rudebuster: [spr_bsusie_rudebuster, 14],
 	}

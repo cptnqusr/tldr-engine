@@ -20,7 +20,7 @@ function enc_getparty_sprite(index, sprname) {
 /// @param {real} [yoff]
 /// @param {bool} [fatal]
 /// @param {string} [seed]
-function enc_hurt_enemy(target, hurt, user, sfx = snd_damage, xoff = 0, yoff = 0, fatal = false, seed = "") {
+function enc_hurt_enemy(target, hurt, user, sfx = snd_damage, xoff = 0, yoff = 0, fatal = true, seed = "") {
 	if o_enc.encounter_data.enemies[target].hp <= 0 
 		exit
 	o_enc.encounter_data.enemies[target].hp -= hurt

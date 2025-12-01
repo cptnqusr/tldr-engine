@@ -99,7 +99,7 @@ if state == 5 && selection == 1 {
 	
 	if timer == 1 {
 		music_stop(0)
-		inst_dialogue = text_typer_create("THEN THE WORLD{br}{s(20)}WAS COVERED{br}{s(20)}IN DARKNESS.", 130, 160, depth, "{preset(god_text)}{can_skip(false)}", "{p}{e}", {
+		inst_dialogue = text_typer_create("BUT THE FUTURE{br}{s(20)}REFUSED{br}{s(20)}TO CHANGE.", 130, 160, depth, "{preset(god_text)}{can_skip(false)}", "{p}{e}", {
 			caller: id,
 			gui: true
 		})

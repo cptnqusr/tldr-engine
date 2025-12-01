@@ -23,7 +23,7 @@ if page == 0 { // main menu
 		draw_set_color(c_white)
 	}
 
-	draw_sprite_ext(spr_ui_soul, 0, (m_selection % 2 == 0 ? 170 : 350) - 28, 228 + floor(m_selection/2) * 40, 2, 2, 0, c_red, 1)
+	draw_sprite_ext(spr_ui_soul, 0, (m_selection % 2 == 0 ? 170 : 350) - 28, 228 + floor(m_selection/2) * 40, 2, 2, 0, c_white, 1)
 }
 if page == 1 { // save menu
 	if prog != 2 
@@ -58,7 +58,7 @@ if page == 1 { // save menu
 				draw_set_color(c_dkgray)
 			if i == s_selection {
 				if prog != 1 
-					draw_sprite_ext(spr_uisoul, 0, 235, 168 + i*space, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 235, 168 + i*space, 1, 1, 0, c_white, 1)
 				draw_set_color(c_yellow)
 			}
 			
@@ -75,7 +75,7 @@ if page == 1 { // save menu
 			
 			if i == s_selection{
 				if prog != 1 
-					draw_sprite_ext(spr_uisoul, 0, 92, 152 + i*space, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 92, 152 + i*space, 1, 1, 0, c_white, 1)
 				draw_set_color(c_yellow)
 			}
 			
@@ -116,7 +116,7 @@ if page == 1 { // save menu
 	draw_set_halign(fa_center)
 	
 	if s_selection == 3 {
-		draw_sprite_ext(spr_uisoul, 0, 236, 402, 1, 1, 0, c_red, 1)
+		draw_sprite_ext(spr_uisoul, 0, 236, 402, 1, 1, 0, c_white, 1)
 		draw_set_color(c_yellow)
 	}
 	if prog != 1 
@@ -164,14 +164,14 @@ if page == 1 { // save menu
 		draw_set_color(c_white)
 		if s_o_selection == 0 {
 			draw_set_color(c_yellow)
-			draw_sprite_ext(spr_uisoul, 0, 170 - 28, 332, 1, 1, 0, c_red, 1)
+			draw_sprite_ext(spr_uisoul, 0, 170 - 28, 332, 1, 1, 0, c_white, 1)
 		}
 		draw_text_transformed(170, 332 - 8, loc("save_menu_save"), 2, 2, 0)
 		
 		draw_set_color(c_white)
 		if s_o_selection == 1 {
 			draw_set_color(c_yellow)
-			draw_sprite_ext(spr_uisoul, 0, 350 - 28, 332, 1, 1, 0, c_red, 1)
+			draw_sprite_ext(spr_uisoul, 0, 350 - 28, 332, 1, 1, 0, c_white, 1)
 		}
 		
 		draw_text_transformed(350, 332 - 8, loc("save_menu_return"), 2, 2, 0)
@@ -240,7 +240,7 @@ if page == 2 { // storage
 	}
 	
 	draw_set_color(c_white)
-	draw_sprite_ext(spr_ui_soul, 0, st_soulx, st_souly, 1, 1, 0, c_red, 1)
+	draw_sprite_ext(spr_ui_soul, 0, st_soulx, st_souly, 1, 1, 0, c_white, 1)
 	
 	if st_page == 1 {
 		draw_sprite_ext(spr_ui_arrow_flat, 0, 40 + round(sine(5, 2)), 352, -2, 2, 0, c_white, 1)
@@ -252,10 +252,10 @@ if page == 4 {  // return to title
     draw_text_transformed(170, 130, loc("save_menu_return_confirm"), 2, 2, 0)
     
     if return_selection == 0 && !fading_out
-        draw_sprite_ext(spr_ui_soul, 0, 170 - 28, 268, 2, 2, 0, c_red, 1)
+        draw_sprite_ext(spr_ui_soul, 0, 170 - 28, 268, 2, 2, 0, c_white, 1)
     draw_text_transformed(170, 260, loc("save_menu_return_yes"), 2, 2, 0)
     
     if return_selection == 1 && !fading_out
-        draw_sprite_ext(spr_ui_soul, 0, 350 - 28, 268, 2, 2, 0, c_red, 1)
+        draw_sprite_ext(spr_ui_soul, 0, 350 - 28, 268, 2, 2, 0, c_white, 1)
     draw_text_transformed(350, 260, loc("save_menu_return_no"), 2, 2, 0)
 }

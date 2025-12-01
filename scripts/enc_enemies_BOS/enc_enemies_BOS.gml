@@ -2,17 +2,11 @@ function enemy_rizonbot() : enemy() constructor {
 	// base info
 	name = "Rizon Bot"
 	
-	obj = {
-        obj: o_actor_e_rizonbot,
-        var_struct: {
-            s_hurt: spr_e_rizon_bot,
-            s_spared: spr_e_killercar_hurt,
-        }
-    }
-	
+	obj = o_actor_e_rizonbot
+
 	// stats
-	hp =		170
-	max_hp =	170
+	hp =		120
+	max_hp =	120
 	attack =	3
 	defense =	5
 	status_effect = ""
@@ -39,15 +33,14 @@ function enemy_rizonbot() : enemy() constructor {
 	
 	
 	// text
-	dialogue =				"YOUR CALL IS VERY IMPORTANT TO US" // can be a function (can accept slot argument as arg0)
-	dia_bubble_offset =		[0, 0, 0] // x, y, relative to (1 for enemy and 0 for default box pos)
+	dialogue =				function(slot) { return array_shuffle(["YOUR CALL IS VERY IMPORTANT TO US","ert2"])[0]} // can be a function (can accept slot argument as arg0)
+	dia_bubble_offset =		[-5, 0, 0] // x, y, relative to (1 for enemy and 0 for default box pos)
 	dia_bubble_sprites =	[spr_ui_enc_dialogue_box, spr_ui_enc_dialogue_spike]
 	
 	turn_object = o_turn_rizonbot
 	
     // misc
     freezable = false
-    defeat_marker = 0 // marker id
 	
 	//recruit
 	recruit = new enemy_recruit()

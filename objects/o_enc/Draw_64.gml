@@ -176,7 +176,7 @@ surface_set_target(surf) {
 				
 				// draw the soul as an indicator
 				if fightselection[selection] == i 
-					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_white, 1)
 				if tired {
 					draw_sprite_ext(spr_ui_enc_tiredmark, 0, 80 + string_width(encounter_data.enemies[i].name)*2 + 42, 385 + 30*i, 1, 1, 0, c_white, 1)
 					if status_eff == "" 
@@ -249,7 +249,7 @@ surface_set_target(surf) {
 				
 			    draw_text_transformed_color(80, 375 + 30*i, encounter_data.enemies[i].name, 2, 2, 0, col1, col2, col2, col1, 1)
 				if partyactselection[selection] == i 
-					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_white, 1)
 				
 				if tired 
 					draw_sprite_ext(spr_ui_enc_tiredmark, 0, 80 + string_width(encounter_data.enemies[i].name)*2 + 42, 385 + 30*i, 1, 1, 0, c_white, 1)
@@ -314,12 +314,12 @@ surface_set_target(surf) {
 				}
 				
 				if i == actselection[selection] 
-					draw_sprite_ext(spr_uisoul, 0, 10 + (i % 2 == 1 ? 230 : 0), 385 + 30 * floor(i/2), 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 10 + (i % 2 == 1 ? 230 : 0), 385 + 30 * floor(i/2), 1, 1, 0, c_white, 1)
 			
 				// draw the act tp cost if applicable
 				draw_set_color(c_orange)
 				if struct_exists(acts[actselection[selection]], "tp_cost") && acts[actselection[selection]].tp_cost > 0 
-					draw_text_ext_transformed(500, 440, string("{0}% TP", acts[actselection[selection]].tp_cost), 15, 70, 2, 2, 0)
+					draw_text_ext_transformed(500, 440, string("{0}% SP", acts[actselection[selection]].tp_cost), 15, 70, 2, 2, 0)
 				
                 draw_set_color(c_white)
                 if struct_exists(acts[i], "color") {
@@ -355,7 +355,7 @@ surface_set_target(surf) {
 				var txt = item_get_name(items[i])
 			    
 				if i == itemselection[selection] 
-					draw_sprite_ext(spr_uisoul, 0, 10 + (i % 2 == 1 ? 230 : 0), 385 + 30 * floor(i/2) - 90 * itempage[selection], 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 10 + (i % 2 == 1 ? 230 : 0), 385 + 30 * floor(i/2) - 90 * itempage[selection], 1, 1, 0, c_white, 1)
 			    draw_text_transformed(30 + (i % 2 == 1 ? 230 : 0), 375 + 30 * floor(i/2) - 90 * itempage[selection], txt, 2, 2, 0)
 			}
 			// draw the item description if applicable
@@ -383,7 +383,7 @@ surface_set_target(surf) {
 				var txt = item_get_name(spells[i])
 				
 			    if i == actselection[selection] 
-					draw_sprite_ext(spr_uisoul, 0, 10 + (i%2 == 1 ? 230 : 0), 385 + 30 * floor(i/2) - 90*spellpage[selection], 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 10 + (i%2 == 1 ? 230 : 0), 385 + 30 * floor(i/2) - 90*spellpage[selection], 1, 1, 0, c_white, 1)
 				
 				if tp < spells[i].tp_cost
 					cando = false
@@ -410,7 +410,7 @@ surface_set_target(surf) {
 			// draw the tp cost if applicable
 			draw_set_color(c_orange)
 			if spells[actselection[selection]].tp_cost > 0 
-				draw_text_ext_transformed(500, 440, string("{0}% TP", spells[actselection[selection]].tp_cost), 15, 70, 2, 2, 0)
+				draw_text_ext_transformed(500, 440, string("{0}% SP", spells[actselection[selection]].tp_cost), 15, 70, 2, 2, 0)
 			draw_set_color(c_white)
 			
 			// pages
@@ -428,7 +428,7 @@ surface_set_target(surf) {
 			    draw_text_transformed(80, 375 + 30*i,party_getname(global.party_names[i]), 2, 2, 0)
 				
 				if itemuserselection[selection] == i 
-					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 55, 385 + 30*i, 1, 1, 0, c_white, 1)
 					
 				var hppercent = party_getdata(global.party_names[i], "hp") / party_getdata(global.party_names[i], "max_hp")
 				draw_sprite_ext(spr_pixel, 0, 400, 380 + 30*i, 101, 16, 0, c_maroon, 1)
@@ -477,8 +477,8 @@ surface_set_target(surf) {
         gpu_set_blendmode(bm_normal)
         draw_set_alpha(1)
 		
-        var __c_unfilled = c_red
-        var __c_filled = (!full ? c_orange : c_yellow)
+        var __c_unfilled = c_gray
+        var __c_filled = (!full ? c_blue : c_teal)
         var __c_outline = c_white
         
         if tp_constrict {

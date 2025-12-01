@@ -47,6 +47,8 @@ function item_w_wood_blade() : item_weapon() constructor {
 	icon = spr_ui_menu_icon_sword
 	weapon_whitelist = ["kris", "sponge", "frog"]
 	
+	weapon_fatal = true
+	
 	reactions = {
 		susie: "(Has it only been 4 days?)",
 		ralsei: "Is that Kris' blade?",

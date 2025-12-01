@@ -12,7 +12,9 @@
     {"name":"inst_8AF3066_1_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
     {"name":"inst_49CECC4C_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
     {"name":"inst_5209E684_1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
-    {"name":"inst_5F5BA610","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
+    {"name":"inst_7E97B2BF","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
+    {"name":"inst_660083E1","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
+    {"name":"inst_26A9E326","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},
   ],
   "isDnd":false,
   "layers":[
@@ -32,9 +34,9 @@
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_dev_music","path":"objects/o_dev_music/o_dev_music.yy",},"propertyId":{"name":"mus","path":"objects/o_dev_music/o_dev_music.yy",},"resource":{"name":"mus_somethingorange","path":"sounds/mus_somethingorange/mus_somethingorange.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"mus_somethingorange",},
             {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_dev_music","path":"objects/o_dev_music/o_dev_music.yy",},"propertyId":{"name":"pitch","path":"objects/o_dev_music/o_dev_music.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"1",},
           ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":0.0,"y":-20.0,},
-        {"$GMRInstance":"v4","%Name":"inst_5F5BA610","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_5F5BA610","objectId":{"name":"o_actor_e_rizonbot","path":"objects/o_actor_e_rizonbot/o_actor_e_rizonbot.yy",},"properties":[
-            {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_actor_e","path":"objects/o_actor_e/o_actor_e.yy",},"propertyId":{"name":"encounter","path":"objects/o_actor_e/o_actor_e.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"new enc_set_rizonbot()",},
-          ],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":420.0,"y":480.0,},
+        {"$GMRInstance":"v4","%Name":"inst_7E97B2BF","colour":4294967295,"frozen":false,"hasCreationCode":true,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_7E97B2BF","objectId":{"name":"o_trigger_enemy_chase","path":"objects/o_trigger_enemy_chase/o_trigger_enemy_chase.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":8.0,"scaleY":8.0,"x":380.0,"y":380.0,},
+        {"$GMRInstance":"v4","%Name":"inst_660083E1","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_660083E1","objectId":{"name":"o_actor_e_rizonbot","path":"objects/o_actor_e_rizonbot/o_actor_e_rizonbot.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":440.0,"y":500.0,},
+        {"$GMRInstance":"v4","%Name":"inst_26A9E326","colour":4294967295,"frozen":false,"hasCreationCode":false,"ignore":false,"imageIndex":0,"imageSpeed":1.0,"inheritCode":false,"inheritedItemId":null,"inheritItemSettings":false,"isDnd":false,"name":"inst_26A9E326","objectId":{"name":"o_actor_e_virovirokun","path":"objects/o_actor_e_virovirokun/o_actor_e_virovirokun.yy",},"properties":[],"resourceType":"GMRInstance","resourceVersion":"2.0","rotation":0.0,"scaleX":1.0,"scaleY":1.0,"x":200.0,"y":520.0,},
       ],"layers":[],"name":"Instances","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRInstanceLayer":"","%Name":"Collisions","depth":100,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"instances":[],"layers":[],"name":"Collisions","properties":[],"resourceType":"GMRInstanceLayer","resourceVersion":"2.0","userdefinedDepth":false,"visible":true,},
     {"$GMRLayer":"","%Name":"Folder_1","depth":200,"effectEnabled":true,"effectType":null,"gridX":32,"gridY":32,"hierarchyFrozen":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"inheritSubLayers":true,"inheritVisibility":true,"layers":[

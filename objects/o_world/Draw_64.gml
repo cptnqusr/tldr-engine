@@ -15,7 +15,7 @@ if incompatible_save_warning {
     draw_set_color(c_aqua)
     draw_text_transformed(320, 250 + __c, "Would you like to clear your SAVE DATA?\n(It will be impossible to recover)", 1, 1, 0)
     
-    draw_sprite_ext(spr_ui_soul, 0, incompatible_soulx, 303 + __c, 1, 1, 0, c_red, incompatible_alpha)
+    draw_sprite_ext(spr_ui_soul, 0, incompatible_soulx, 303 + __c, 1, 1, 0, c_white, incompatible_alpha)
     
     draw_set_color(c_white)
     if incompatible_selection == 0
