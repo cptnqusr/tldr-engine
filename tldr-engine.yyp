@@ -1522,10 +1522,10 @@
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
     {"roomId":{"name":"room_init","path":"rooms/room_init/room_init.yy",},},
+    {"roomId":{"name":"room_DL_throne_room","path":"rooms/room_DL_throne_room/room_DL_throne_room.yy",},},
     {"roomId":{"name":"room_DL_scoot_sneak","path":"rooms/room_DL_scoot_sneak/room_DL_scoot_sneak.yy",},},
     {"roomId":{"name":"room_test_movement","path":"rooms/room_test_movement/room_test_movement.yy",},},
     {"roomId":{"name":"room_GY_central_park","path":"rooms/room_GY_central_park/room_GY_central_park.yy",},},
-    {"roomId":{"name":"room_DL_throne_room","path":"rooms/room_DL_throne_room/room_DL_throne_room.yy",},},
     {"roomId":{"name":"room_DO_entrance","path":"rooms/room_DO_entrance/room_DO_entrance.yy",},},
     {"roomId":{"name":"room_RF_climactic_hallway","path":"rooms/room_RF_climactic_hallway/room_RF_climactic_hallway.yy",},},
     {"roomId":{"name":"room_GY_ducklyn_entrance","path":"rooms/room_GY_ducklyn_entrance/room_GY_ducklyn_entrance.yy",},},
