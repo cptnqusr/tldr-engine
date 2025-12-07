@@ -7,6 +7,7 @@ encounters = [
 	enc_set_virovirokun,
 	ex_enc_set_shadowguys,
     ex_enc_set_spawn,
+	enc_set_rizonbot,
 ]
 
 enc_names = []

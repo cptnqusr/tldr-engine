@@ -673,7 +673,7 @@ if battle_state == "menu" {
 		else
 			spellpage[selection] = 0 
 		
-		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && tp < spells[actselection[selection]].tp_cost { // check who the spell targets
+		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && tp >= spells[actselection[selection]].tp_cost { // check who the spell targets
 			
 			if spells[actselection[selection]].use_type == ITEM_USE.INDIVIDUAL {
 				state = 2

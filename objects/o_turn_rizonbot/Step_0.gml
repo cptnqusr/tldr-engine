@@ -1,7 +1,5 @@
 event_inherited()
 
-// __support_destroy_check()
-
 if timer > 2 {
 	if timer % 30 == 0 {
 	
@@ -19,5 +17,7 @@ if timer > 2 {
 	}
 }
 if timer == timer_end {
+	show_debug_message(string(am_support))
 	instance_destroy()
 }
+__support_destroy_check()

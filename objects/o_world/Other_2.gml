@@ -133,7 +133,7 @@ party_m_initialize("frog", party_m_frog)
 party_m_initialize("bowie", party_m_bowie)
 party_m_initialize("scoot", party_m_scoot)
 global.party_names = [   // <-- if you wish to change the default team members, change them here
-    "sponge", "frog",
+    "sponge",
 ]
 party_apply_equipment()
 
@@ -144,8 +144,8 @@ global.font_numbers_w = font_add_sprite_ext(spr_ui_numbers_wfont,"0123456789+-%/
 global.font_numbers_g = font_add_sprite_ext(spr_ui_numbers_gfont,"0123456789+-%/",false, 1);
 
 // load the default items
-array_push(global.key_items, new item_key_cell_phone())
-array_push(global.items, new item_nine_key(), new item_cryberry())
+array_push(global.key_items, new item_key_locket())
+array_push(global.items, new item_nine_key())
 // create entries for the party stuff later since we must first apply their equipment
 save_entry("PARTY_DATA", global.party, 
     function(_raw_data) { global.party = save_party_import(_raw_data) },

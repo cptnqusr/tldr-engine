@@ -12,5 +12,9 @@
     "item_key_cell_phone_cutscene": {
         "en": ["* (You tried to call on the Cell Phone.){stop}", "* It's nothing but garbage noise."],
         "ja": ["＊ (ケータイで　発信してみた){stop}", "＊ 雑音しか聞こえなかった。"]
+    },
+    "item_key_locket_cutscene": {
+        "en": ["Sponge opened the locket.", "Inside, a picture of Sponge and a woman dressed in clown attire.", "Sponge smiled."],
+        "ja": ["TEMP"]
     }
 }

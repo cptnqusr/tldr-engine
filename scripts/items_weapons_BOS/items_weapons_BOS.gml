@@ -14,14 +14,14 @@ function item_w_masamune() : item_weapon() constructor {
 		susie: "(I want a sword now.)",
 		ralsei: "It's beautiful!",
         noelle: "(Like a fairy tale...)",
-		frog: "Nought but you remain.",
+		frog: "Nought but thou remain.",
 		scoot: "[It's fancy!]",
 		bowie: "What a little wonder."
 	}  
 }
 function item_w_depressionedge() : item_weapon() constructor {
 	name = ["DepressionEdge"]
-	desc = ["Sadness as a weapon. Does more damage the more TP you have.", "--"]
+	desc = ["Sadness as a weapon. Decent damage, but only Sponge can use it.", "--"]
 	
 	stats = {
 		attack: 3,
@@ -32,11 +32,11 @@ function item_w_depressionedge() : item_weapon() constructor {
 	weapon_fatal = true
 	
 	reactions = {
-		susie: "(I want a sword now.)",
-		ralsei: "It's beautiful!",
-        noelle: "(Like a fairy tale...)",
-		frog: "Nought but you remain.",
-		scoot: "[It's fancy!]",
-		bowie: "What a little wonder."
+		susie: "It didn't look that heavy...",
+		ralsei: "Couldn't lift it an inch.",
+        noelle: "I'd need a crane.",
+		frog: "How long in thy possession?.",
+		scoot: "[Tastes salty.]",
+		bowie: "No, love, you're not alone..."
 	}  
 }

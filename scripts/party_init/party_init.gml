@@ -422,11 +422,11 @@ function party_m_sponge() : party_m() constructor {
 	}
 	
 	// inventory
-    weapon = new item_w_depressionedge()
-    armor1 = new item_a_ambercard()
-    armor2 = new item_a_ambercard()
+    weapon = new item_w_wood_blade()
+    armor1 = undefined
+    armor2 = undefined
 	spells = [
-		new item_s_magicmissile()
+		new item_s_testdmg()
 	]
 	
 	// sprites

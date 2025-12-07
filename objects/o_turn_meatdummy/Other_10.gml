@@ -2,9 +2,7 @@
 event_inherited()
 show_debug_message(object_get_name(object_index))
 
-__support_init_default()
-
-am_support = false
+//__support_init_default()
 
 if !am_support
-    timer_end = 120
+    timer_end = 300

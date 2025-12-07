@@ -9,7 +9,11 @@ if is_struct(item_inside) && is_instanceof(item_inside, item) {
     
     var txt = string(loc("item_chest_get"), item_get_name(item_inside)) + "{p}{c}"
     txt += item_add(item_inside)
+	if !state_get("progress","firstChestOpened")
+		txt += "{p}{c}Press the C Key or Y button to open the menu."
+		state_add("progress","firstChestOpened")
     dialogue_start(txt)
+	
 }
 else {
     empty_callback()

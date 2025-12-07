@@ -2,6 +2,7 @@ event_inherited()
 npc_id = 1
 
 interaction_code = function() {
+	
     dinktroduction()
 }
 

@@ -46,6 +46,7 @@ if !only_hp { // top
 			font = global.font_name[2]
 		
 		draw_set_font(font)
+		draw_set_colour(c_white)
 		draw_text_transformed(51 + 213*i + xoff, 430 + 80 - roll, string_upper(party_getname(global.party_names[i], false)), 1, 1, 0)
 		
 		draw_set_font(global.font_ui_hp)
