@@ -57,15 +57,15 @@ dinktroduction = function() {
 	cutscene_set_variable(party_get_inst("frog"), "sprite_index", spr_frog_think_down)
 	cutscene_set_variable(party_get_inst("frog"), "s_override", true)
 	cutscene_dialogue("FROG: I take it that thou also standest opposed to the fiend?")
-	cutscene_dialogue("{npc_link(1)}DINK: I heard knockoff Douglath talking about being locked up with a friend.",,true)
+	cutscene_dialogue("{npc_link(1)}DINK: I heard knockoff Douglath talking about being locked up.",,true)
 	cutscene_set_variable(party_get_inst("frog"), "dir", DIR.LEFT)
 	cutscene_set_variable(party_get_inst("frog"), "s_override", false)
 	cutscene_set_variable(party_get_inst("sponge"), "dir", DIR.RIGHT)
 	cutscene_dialogue("FROG: Aye, we received that vision, too.")
 	cutscene_dialogue(["{npc_link(1)}DINK: In fact, I might know who we're trying to spring.", 
 	"DINK: They were giving Rizon a run for his money...", 
-	"DINK: ...until he pulled a Kali Ma on one of them.",]) 
-	cutscene_dialogue(["DINK: I didn't think a human heart would actually look like that... poor kid!"],,false)
+	"DINK: ...then he pulled out some sort of weapon.",]) 
+	cutscene_dialogue(["DINK: They were trying to keep one of them alive until they got captured."],,false)
 	cutscene_sleep(30)
 	cutscene_set_variable(party_get_inst("frog"), "sprite_index", spr_frog_surprise_left)
 	cutscene_set_variable(party_get_inst("frog"), "s_override", true)
@@ -74,8 +74,8 @@ dinktroduction = function() {
 	cutscene_wait_dialogue_finish()
 	cutscene_sleep(20)
 	cutscene_set_variable(party_get_inst("frog"), "sprite_index", spr_frog_sad_right)
-	cutscene_dialogue(["FROG: A grievous injury... this needs be the mortal danger of which the lad hath spoken.", 
-	"FROG: Hath I the strength to slay something so monstrous?", 
+	cutscene_dialogue(["FROG: So it appears we are not alone in our fight. And yet, he singlehandedly overcame these heroes...", 
+	"FROG: Hath we the strength to slay something so monstrous?", 
 	"FROG: The mind wills, but I feel the flesh falter."])
 	cutscene_func(music_fade, [0, 0])
 	cutscene_sleep(30)
