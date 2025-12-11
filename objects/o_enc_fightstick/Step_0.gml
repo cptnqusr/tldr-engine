@@ -59,7 +59,7 @@ else if !fading {
 	}
 	if life % 2 == 0 
 		afterimage(,,1)
-	x -= 3
+	x -= 4
 	
 	life ++
 }

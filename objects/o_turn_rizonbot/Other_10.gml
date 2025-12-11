@@ -2,8 +2,6 @@
 event_inherited()
 show_debug_message(object_get_name(object_index))
 
-__support_init_default()
-
 am_support = false
 
 if !am_support

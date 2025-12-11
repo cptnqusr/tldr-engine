@@ -140,7 +140,7 @@ function item_s_testdmg() : item_spell() constructor {
 		var __name = global.party_names[index]
 		user = index
 		cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_func(enc_hurt_enemy, [target, 10, user])
+		cutscene_func(enc_hurt_enemy, [target, 200, user])
 		cutscene_dialogue(string(loc("spell_cast"), __name, "TEST DAMAGE"),, true)
 		cutscene_set_variable(o_enc, "waiting", false)
 	}

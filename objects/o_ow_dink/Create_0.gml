@@ -64,8 +64,10 @@ dinktroduction = function() {
 	cutscene_dialogue("FROG: Aye, we received that vision, too.")
 	cutscene_dialogue(["{npc_link(1)}DINK: In fact, I might know who we're trying to spring.", 
 	"DINK: They were giving Rizon a run for his money...", 
-	"DINK: ...then he pulled out some sort of weapon.",]) 
-	cutscene_dialogue(["DINK: They were trying to keep one of them alive until they got captured."],,false)
+	"DINK: ...then he pulled out some sort of expensive weapon.",
+	"DINK: Torched an entire section of the city, hit one of them pretty hard.",
+	"DINK: Wasn't much of a fight after that."]) 
+	cutscene_dialogue(["DINK: The rest were trying to keep the kid alive until they got captured."],,false)
 	cutscene_sleep(30)
 	cutscene_set_variable(party_get_inst("frog"), "sprite_index", spr_frog_surprise_left)
 	cutscene_set_variable(party_get_inst("frog"), "s_override", true)

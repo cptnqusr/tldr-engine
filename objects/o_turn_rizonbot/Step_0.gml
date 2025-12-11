@@ -20,4 +20,3 @@ if timer == timer_end {
 	show_debug_message(string(am_support))
 	instance_destroy()
 }
-__support_destroy_check()
