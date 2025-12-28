@@ -1,5 +1,12 @@
-if image_index == 1
+if image_index == 1 {
+    empty_callback()
 	exit
+}
+
+if is_callable(open_override) {
+    open_override()
+    exit
+}
 
 if is_struct(item_inside) && is_instanceof(item_inside, item) {
     image_index = 1
@@ -16,7 +23,10 @@ if is_struct(item_inside) && is_instanceof(item_inside, item) {
 	
 }
 else {
-    empty_callback()
+    image_index = 1
+    audio_play(snd_locker)
+    
+    dialogue_start(loc("item_chest_empty"))
 }
 
-state_add("chests_open", id)
+state_add(state_group, id)

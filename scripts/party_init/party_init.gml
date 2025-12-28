@@ -73,7 +73,7 @@ function party_m() constructor {
 	s_icon_weapon = spr_ui_menu_weapon_axe
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bsusie_act, true],
 		actready: spr_bsusie_actready,
 		actend: [spr_bsusie_actend, "idle", 1],
@@ -150,7 +150,7 @@ function party_m_kris() : party_m() constructor {
 	s_icon_weapon = spr_ui_menu_weapon_sword
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bkris_act, true],
 		actready: spr_bkris_actready,
 		actend: [spr_bkris_actend, "idle", 1],
@@ -220,7 +220,7 @@ function party_m_susie() : party_m() constructor {
 	s_icon_weapon = spr_ui_menu_weapon_axe
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bsusie_act, true],
 		actready: spr_bsusie_actready,
 		actend: [spr_bsusie_actend, "idle", 1],
@@ -294,7 +294,7 @@ function party_m_ralsei() : party_m() constructor {
 	s_icon_weapon = spr_ui_menu_weapon_scarf
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bralsei_act, true],
 		actready: spr_bralsei_actready,
 		actend: [spr_bralsei_actend, "idle", 1],
@@ -367,7 +367,7 @@ function party_m_noelle() : party_m() constructor {
 	s_icon_weapon = spr_ui_menu_weapon_ring
 	s_battle_intro =	0 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bnoelle_act, true],
 		actready: spr_bnoelle_actready,
 		actend: [spr_bnoelle_actend, "idle", 1],
