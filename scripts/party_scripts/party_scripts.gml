@@ -3,6 +3,34 @@ function get_leader(){
 	return party_get_inst(global.party_names[0])
 }
 
+/// @desc adds a party member to the end of the party ensemble
+/// @arg {string} name the name of the party member to add
+function party_member_add(name) {
+    var lx = get_leader().x
+    var ly = get_leader().y
+    
+    array_push(global.party_names, name)
+    party_member_create(name)
+    party_reposition(lx, ly)
+}
+
+/// @desc kicks out a party member (and deletes their object, if applicable)
+/// @arg {string} name the name of the party member to kick
+function party_member_kick(name) {
+    var lx = get_leader().x
+    var ly = get_leader().y
+    
+    instance_destroy(party_get_inst(name))
+    array_delete(global.party_names, party_get_index(name), 1)
+    party_reposition(lx, ly)
+    
+    with get_leader() {
+        is_player = true
+        is_follower = false
+        event_user(2)
+    }
+}
+
 ///@desc creates an actor standing in for the party leader
 function party_leader_create(name, xx, yy, ddepth){
 	var pl = actor_create(party_get_obj(name), xx, yy, ddepth)
@@ -20,7 +48,7 @@ function party_leader_create(name, xx, yy, ddepth){
 function party_member_create(name, recordnow = true, xx = get_leader().x, yy = get_leader().y){
 	var inst = actor_create(party_get_obj(name), xx, yy, get_leader().depth)
 	inst.is_follower = true
-	inst.pos = get_leader().spacing * party_getpos(name)
+	inst.pos = get_leader().spacing * party_get_index(name)
 	
 	with inst {
 		if recordnow 
@@ -74,7 +102,7 @@ function party_reposition(lx = get_leader().x, ly = get_leader().y){
 		if instance_exists(party_get_inst(global.party_names[i])) {
 			var inst = party_get_inst(global.party_names[i])
 			inst.is_follower = true
-			inst.pos = get_leader().spacing * party_getpos(global.party_names[i])
+			inst.pos = get_leader().spacing * party_get_index(global.party_names[i])
 			
 			with inst { // set position, initialize the followers
 				if array_length(record) == 0 
@@ -92,6 +120,7 @@ function party_reposition(lx = get_leader().x, ly = get_leader().y){
 	//party_interpolate()
 }
 
+/// @desc returns whether the party member is a part of the current party
 ///@arg {string} _name
 function party_ismember(_name) {
 	return array_contains(global.party_names, _name)

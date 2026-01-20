@@ -1,4 +1,7 @@
-// the general battle ui naviagation and execution
+if tp_constrict
+    tp_defend = 2
+else 
+    tp_defend = 16
 
 if battle_state == BATTLE_STATE.MENU {
 	var items = __item_sort()
@@ -800,362 +803,230 @@ if battle_state == BATTLE_STATE.MENU {
 	if selection > array_length(global.party_names) - 1 {
 		tp = tp_clamp(tp)
 		__battle_state_advance()
+    if battle_menu == BATTLE_MENU.BUTTON_SELECTION {
+        if InputPressed(INPUT_VERB.RIGHT) {
+            audio_play(snd_ui_move)
+            party_button_selection[party_selection] ++
+        }
+        else if InputPressed(INPUT_VERB.LEFT) {
+            audio_play(snd_ui_move)
+            party_button_selection[party_selection] --
+        }
         
-		instance_clean(menutext)
-	}
-}
-
-// the party executes commands
-if battle_state == BATTLE_STATE.EXEC {
-	// initially calculate and queue the execution of commands
-	if !exec_calculated {
-		var review_queue_states = [CHAR_STATE.ACT, CHAR_STATE.ITEM, CHAR_STATE.POWER, CHAR_STATE.DEFEND, CHAR_STATE.SPARE, CHAR_STATE.FIGHT] // the original order: act, item, magic, (defend), spare, attack
-		
-		var localcharstates = array_clone(char_state)
-		var alreadyfighting = false
-		
-		fighters = []
-		
-		for (var i = 0; i < array_length(review_queue_states); ++i) {
-			for (var j = 0; j < array_length(global.party_names); ++j) {
-				if localcharstates[j] == review_queue_states[i]
-					&& review_queue_states[2] != CHAR_STATE.DEFEND // not defend
-					&& review_queue_states[i] != CHAR_STATE.IDLE
-				{
-					var record = true
-					
-					if is_array(together_with[j]) {
-						if !array_equals(together_with[j],[]) {
-							for (var v = 0; v < array_length(together_with[j]); ++v) {
-								var me = together_with[j][v]
-								localcharstates[me] = CHAR_STATE.IDLE;
-							}
-						}
-					}
-					else {
-						var v = together_with[j]
-						localcharstates[v] = CHAR_STATE.IDLE;
-					}
-						
-					if localcharstates[j] == CHAR_STATE.FIGHT {
-						array_push(fighters, global.party_names[j])
-						array_push(fighterselection, fightselection[j])
-					}
-					
-					if localcharstates[j] == CHAR_STATE.FIGHT && !alreadyfighting || localcharstates[j] != CHAR_STATE.FIGHT
-						ds_queue_enqueue(exec_queue, [review_queue_states[i], j])
-					if localcharstates[j] == CHAR_STATE.FIGHT && !alreadyfighting
-						alreadyfighting = true
-				}
-			}
-		}
-		exec_calculated = true
-	}
-	
-    if waiting
-        exec_buffer = 2
-    if exec_buffer == 0 {
-    	// do the next queued command
-    	if is_undefined(exec_current) {
-    		if ds_queue_size(exec_queue) > 0 {
-    			exec_current = ds_queue_dequeue(exec_queue)
-    			var user = exec_current[1] // index
-    			
-    			if exec_current[0] == CHAR_STATE.FIGHT { // fight
-    				instance_create(o_enc_fight,,,, {
-    					caller: id, 
-    					depth: depth-1, 
-    					fighting: fighters, 
-    					fighterselection,
-    				})
-    				waiting = true
-    			}
-    			else if exec_current[0] == CHAR_STATE.ACT && can_act[user] { // act
-    				if enc_enemy_isfighting(fightselection[user]) {
-    					var act_execer = encounter_data.enemies[fightselection[user]].acts[actselection[user]].exec
-    					
-    					// set the party sprite accordingly
-                        enc_party_set_battle_sprite(global.party_names[user], "act", 0, 1)
-    					
-    					// free the members we were doing the act together
-    					if is_array(together_with[user]) {
-    						if !array_equals(together_with[user], []) {
-    							for (var i = 0; i < array_length(together_with[user]); ++i) {
-    								enc_party_set_battle_sprite(global.party_names[together_with[user][i]], "act", 0, 1)
-    								array_delete(ignore, array_get_index(ignore, together_with[i]), 1)
-    							}
-    						}
-    					}
-    					else {
-    						var i = together_with[user]
-    						enc_party_set_battle_sprite(global.party_names[i], "act", 0, 1)
-    						
-    						array_delete(ignore, array_get_index(ignore, together_with), 1)
-    					}
-    				
-    					// perform the act
-    					if is_array(act_execer)
-    						script_execute_ext(act_execer[0], act_execer, 1)
-    					else
-    						script_execute(act_execer, encounter_data.enemies[fightselection[user]].slot, user)
-    				}
-    			}
-    			else if exec_current[0] == CHAR_STATE.ACT && !can_act[user] { // special act
-    				if enc_enemy_isfighting(partyactselection[user]) {
-    					var act_execer = encounter_data.enemies[partyactselection[user]].acts_special
-    					var __default_action = 0
-    					
-    					if struct_exists(act_execer, global.party_names[user]){
-    						act_execer = struct_get(act_execer, global.party_names[user])
-    						var o = party_get_inst(global.party_names[user])
-    						o.sprite_index = enc_getparty_sprite(user, "act")
-    						o.image_index = 0
-    						o.image_speed = 1
-    				
-    						if struct_exists(act_execer, "exec")
-    							script_execute(act_execer.exec, 
-    								encounter_data.enemies[partyactselection[user]].slot, 
-    								encounter_data.enemies[partyactselection[user]].actor_id, 
-    								global.party_names[user]
-    							)
-    						else 
-    							__default_action = true
-    					
-    					}
-    					else 
-    						__default_action = true
-    					
-    					if __default_action
-    						encounter_scene_dialogue($"* Default {party_getname(global.party_names[user])} Action")
-    				}
-    			}
-    			else if exec_current[0] == CHAR_STATE.ITEM { // item
-    				var items = item_get_array(0)
-    				var o = party_get_inst(global.party_names[itemuserselection[user]])
-    				
-    				cutscene_create()
-    				
-    				cutscene_set_variable(o_enc, "waiting", true)
-    				cutscene_set_partysprite(user, "itemuse")
-    				
-    				cutscene_sleep(4)
-    				cutscene_dialogue(string(loc("item_use"), 
-    					party_getname(global.party_names[user]), 
-    					string_upper(item_get_name(items[itemselection[user]]))), 
-    					"{stop}", false
-    				)
-    				
-    				// only continue when the item use animation is finished
-    				cutscene_wait_until(function(index){
-    					return party_get_inst(global.party_names[index]).sprname == "idle"
-    				}, [user])
-    				cutscene_func(function(user){
-    					o_enc.char_state[user] = CHAR_STATE.IDLE
-    				}, [user])
-    				
-    				// actually use the said item
-    				cutscene_func(item_use, [items[itemselection[user]], itemselection[user], global.party_names[itemuserselection[user]]])
-    				cutscene_sleep(30)
-    				
-    				cutscene_func(instance_destroy, [o_ui_dialogue])
-    				cutscene_set_variable(o_enc, "waiting", false)
-    				cutscene_play()	
-    			}
-    			else if exec_current[0] == CHAR_STATE.SPARE { // spare
-    				waiting = true
-    				
-    				var o = party_get_inst(global.party_names[user]) // get party object
-    				o.sprite_index = enc_getparty_sprite(user, "spare")
-    				o.image_index = 0
-    				o.image_speed = 1
-    				
-    				var _enemy = encounter_data.enemies[fightselection[user]] // get enemy struct
-    				
-    				// find other enemies if the target is not fighting
-    				var alternative = -1
-    				if !enc_enemy_isfighting(fightselection[user]) {
-    					for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-    					    if !enc_enemy_isfighting(i) 
-    							continue
-    						if encounter_data.enemies[i].mercy >= 100 {
-    							alternative = i 
-    							break
-    						}
-    					}
-    					if alternative == -1 {
-    						for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-    						    if !enc_enemy_isfighting(i) 
-    								continue
-    								
-    							alternative = i
-    							break
-    						}
-    					}
-    				}
-    				if alternative != -1 // reassign enemy struct if the enemy target is changed
-    					_enemy = encounter_data.enemies[alternative]
-    				else
-    					alternative = fightselection[user]
-    				
-    				// spare animation cutscene
-    				var enemyo = _enemy.actor_id // get enemy object
-    				cutscene_create()
-    				
-    				if _enemy.mercy >= 100 { // spare
-    					cutscene_dialogue(string(loc("enc_exec_spare_msg"), party_getname(global.party_names[user]), _enemy.name), "{stop}", false)
-    					cutscene_wait_until(function(index){
-    						return party_get_inst(global.party_names[index]).sprname == "idle"
-    					}, [user])
-    					
-    					cutscene_func(function(user){
-    						o_enc.char_state[user] = CHAR_STATE.IDLE
-    					}, [user])
-    					
-                        cutscene_spare_enemy(alternative)
-                        
-    					cutscene_sleep(30)
-    					cutscene_func(instance_destroy, [o_ui_dialogue])
-    					cutscene_set_variable(o_enc, "waiting", false)
-    				}
-    				else { // cant spare
-    					var txt = loc("enc_exec_spare_msg") + "{br}{resetx}" + loc("enc_exec_spare_notyellow")
-    					
-    					if _enemy.tired {
-    						var tgt_spell = -1
-    						var spellowner = ""
-    						for (var i = 0; i < array_length(global.party_names); ++i) { // if party has a person who can use a mercy spell
-    						    for (var j = 0; j < array_length(party_getdata(global.party_names[i], "spells")); ++j) {
-    							    if party_getdata(global.party_names[i], "spells")[j].is_mercyspell {
-    									tgt_spell = party_getdata(global.party_names[i], "spells")[j]
-    									spellowner = party_getname(global.party_names[i])
-    									break
-    								}
-    							}
-    							if is_struct(tgt_spell) {
-    								break
-    							}
-    						}
-    						if is_struct(tgt_spell) { // if mercyspell exists
-    							txt += "{p}{c}"
-                                txt += string(loc("enc_exec_spare_suggest_spell"), spellowner, string_upper(item_get_name(tgt_spell)))
-    						}
-    					}
-    					cutscene_dialogue(string(txt, party_getname(global.party_names[user]), _enemy.name),, true)
-    					cutscene_set_variable(o_enc, "waiting", false)
-    				}
-    				
-    				cutscene_play()	
-    			}
-    			else if exec_current[0] == CHAR_STATE.POWER { // spell
-    				var selected = fightselection[user]
-    				var o = party_get_inst(global.party_names[user])
-    				var spells = array_clone(party_getdata(global.party_names[user], "spells"))
-    				
-                    // find other enemies if the target is not fighting
-    				if !enc_enemy_isfighting(selected) {
-    					for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-    					    if enc_enemy_isfighting(i) {
-                                selected = i
-                                break
-                            }
-    					}
-    				}
-                    
-    				for (var i = 0; i < array_length(struct_get(bonus_actions, global.party_names[user])); ++i) {
-    				    array_insert(spells, i, struct_get(bonus_actions, global.party_names[user])[i])
-    				}
-    				if spells[actselection[user]].use_type == 0 {
-    					selected = itemuserselection[user]
-    				}
-    			
-    				cutscene_create()
-    				cutscene_set_variable(o_enc, "waiting", true)
-    				cutscene_set_partysprite(user, "spell")
-    				cutscene_sleep(4)
-                    item_use(spells[actselection[user]], user, selected)
-    				cutscene_func(function(user) {
-    					o_enc.char_state[user] = CHAR_STATE.IDLE
-    				}, [user])
-    				
-    				cutscene_sleep(1)
-    				cutscene_wait_until(function(){
-    					return !o_enc.waiting
-    				})
-    				cutscene_set_variable(o_enc, "waiting", false)
-    				cutscene_play()	
-    			}
-    		}
-    		else 
-    			__battle_state_advance()
-    	}
-    	else {
-    		if !waiting {
-    			// if not defending, go back to the idle sprite
-    			if char_state[exec_current[1]] != CHAR_STATE.DEFEND {
-    				char_state[exec_current[1]] = CHAR_STATE.IDLE;
-                    
-                    // play the act end animation
-                    if party_get_inst(global.party_names[exec_current[1]]).sprite_index == enc_getparty_sprite(exec_current[1], "act")
-                        enc_party_set_battle_sprite(global.party_names[exec_current[1]], "actend", 0, 1)
-                    else 
-                        enc_party_set_battle_sprite(global.party_names[exec_current[1]], "idle", 0, 1)
-    				
-    				if is_array(together_with[exec_current[1]]) {
-    					if !array_equals(together_with[exec_current[1]], []) {
-    						for (var i = 0; i < array_length(together_with[exec_current[1]]); ++i) {
-    							var me = together_with[exec_current[1]][i]
-                                
-                                if party_get_inst(global.party_names[me]).sprite_index == enc_getparty_sprite(me, "act")
-                                    enc_party_set_battle_sprite(global.party_names[me], "actend", 0, 1)
-                                else 
-                                    enc_party_set_battle_sprite(global.party_names[me], "idle", 0, 1)
-                                
-                                char_state[me] = CHAR_STATE.IDLE
-    						}
-                            
-    						together_with[exec_current[1]] = []
-    					}
-    				}
-    				else {
-    					var i = together_with[exec_current[1]]
-    					
-    					char_state[i] = CHAR_STATE.IDLE
-    					if party_get_inst(global.party_names[i]).sprite_index == enc_getparty_sprite(i, "act")
-                            enc_party_set_battle_sprite(global.party_names[i], "actend", 0, 1)
-                        else 
-                            enc_party_set_battle_sprite(global.party_names[i], "idle", 0, 1)
-    					
-    					together_with[exec_current[1]] = []
-    				}
-    			}
-    			
-    			if win_condition()
-    				battle_state = BATTLE_STATE.WIN
-    			exec_current = undefined
-    		}
-    	}
-    }
-}
-
-// turn preperation and enemy dialogue writer
-if battle_state == BATTLE_STATE.DIALOGUE {
-    if battle_state != battle_state_prev {
-        for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-            if enc_enemy_isfighting(i) {
-                // call the post turn event for the enemies
-                if is_callable(encounter_data.enemies[i].ev_pre_dialogue)
-                    encounter_data.enemies[i].ev_pre_dialogue()
+        // cap navigation
+        party_button_selection[party_selection] = cap_wraparound(party_button_selection[party_selection], array_length(party_buttons[party_selection]))
+        
+        if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
+            party_buttons[party_selection][party_button_selection[party_selection]].press()
+            
+            if party_selection >= array_length(global.party_names) || party_selection < 0 {
+                __battle_state_advance()
+                exit
             }
         }
-        if is_callable(encounter_data.ev_pre_dialogue)
-            encounter_data.ev_pre_dialogue()
+        if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 && party_selection > 0 {
+            var __selection = party_selection
+            
+            party_selection --
+            while !(party_isup(global.party_names[party_selection]) 
+                && !array_contains(party_busy, global.party_names[party_selection]) 
+                && !array_contains(party_busy_internal, global.party_names[party_selection])
+            ) {
+                party_selection --
+                if party_selection < 0 {
+                    party_selection = __selection
+                    break
+                }
+            }
+            
+            if array_length(action_queue) > 0 {
+                array_pop(action_queue).cancel() // cancel the last action
+            }
+        }
+        
+        if !instance_exists(inst_flavor) {
+            inst_flavor = dialogue_start((flavor_seen ? "{instant}" : "") + enc_get_flavor(encounter_data) + "{stop}")
+            inst_flavor.die_delay = 0
+            flavor_seen = true
+        }
+    }
+    else if battle_menu == BATTLE_MENU.ENEMY_SELECTION {
+        var __delta_selection = 1 // set to 1 instead of 0 so the enemies are cycled when the menu is open
+        var __moved = false
+        var __button = party_buttons[party_selection][party_button_selection[party_selection]]
+		
+		if InputPressed(INPUT_VERB.UP) {
+			audio_play(snd_ui_move)
+			party_enemy_selection[party_selection] --
+            
+			__delta_selection = -1
+            __moved = true
+		}
+		else if InputPressed(INPUT_VERB.DOWN) {
+			audio_play(snd_ui_move)
+			party_enemy_selection[party_selection] ++
+            
+			__delta_selection = 1
+            __moved = true
+		}
+		
+		// cap navigation
+        party_enemy_selection[party_selection] = cap_wraparound(party_enemy_selection[party_selection], array_length(encounter_data.enemies))
+		
+		// skip to the next enemy if needed
+		while !enc_enemy_isfighting(party_enemy_selection[party_selection]){
+			party_enemy_selection[party_selection] += __delta_selection
+			party_enemy_selection[party_selection] = cap_wraparound(party_enemy_selection[party_selection], array_length(encounter_data.enemies))
+		}
+		
+        if InputPressed(INPUT_VERB.SELECT) && buffer == 0 { 
+            battle_menu_enemy_proceed()
+            buffer = 1
+        }
+		if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 {
+			battle_menu_enemy_cancel()
+			buffer = 1
+		}
+		
+		// if we changed selection, update the enemies flashing
+		if __moved
+			__enemy_highlight(party_enemy_selection[party_selection])
+    }
+    else if battle_menu == BATTLE_MENU.INV_SELECTION {
+        var __button = party_buttons[party_selection][party_button_selection[party_selection]]
+        
+        var list = battle_menu_inv_list
+        var selection_var_name = battle_menu_inv_var_name
+        var selection_operate = battle_menu_inv_var_operate
+        
+        var selected_item_index = variable_instance_get(self, selection_var_name)[party_selection]
+        selected_item_index = clamp(selected_item_index, 0, array_length(list)-1)
+        
+        // four direction ui movement
+        if InputPressed(INPUT_VERB.RIGHT) && selected_item_index < array_length(list) - 1 {
+            selected_item_index ++
+			if selected_item_index % 2 == 0
+				selected_item_index -= 2
+			
+			audio_play(snd_ui_move)
+		}
+		if InputPressed(INPUT_VERB.DOWN) && selected_item_index < array_length(list) - 2 {
+			selected_item_index += 2
+			audio_play(snd_ui_move)
+		}
+		if InputPressed(INPUT_VERB.LEFT) && selected_item_index > 0 {
+			selected_item_index -= 1
+			if selected_item_index % 2 == 1
+				selected_item_index += 2
+			audio_play(snd_ui_move)
+		}
+		else if InputPressed(INPUT_VERB.LEFT) && selected_item_index == 0 && array_length(list) > 1 {
+			selected_item_index -= 1
+			audio_play(snd_ui_move)
+		}
+		if InputPressed(INPUT_VERB.UP) && selected_item_index > 1 {
+			selected_item_index -= 2
+			audio_play(snd_ui_move)
+		}
+        if selected_item_index > 5
+			array_set(variable_instance_get(self, battle_menu_inv_page_var_name), party_selection, 1)
+		else
+			array_set(variable_instance_get(self, battle_menu_inv_page_var_name), party_selection, 0)
+        
+        selection_operate(cap_wraparound(selected_item_index, array_length(list)), true)
+        
+        if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
+            battle_menu_inv_proceed(list[selected_item_index])
+            buffer = 1
+        }
+        if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 {
+            battle_menu_inv_cancel()
+            buffer = 1
+        }
+    }
+    else if battle_menu == BATTLE_MENU.PARTY_SELECTION {
+        var __moved = true
+		if InputPressed(INPUT_VERB.UP) {
+			audio_play(snd_ui_move)
+			party_ally_selection[party_selection] --
+		}
+		else if InputPressed(INPUT_VERB.DOWN) {
+			audio_play(snd_ui_move)
+			party_ally_selection[party_selection] ++
+		}
+        else
+            __moved = false
+		
+		// cap navigation
+        party_ally_selection[party_selection] = cap_wraparound(party_ally_selection[party_selection], array_length(global.party_names))
+		
+        if InputPressed(INPUT_VERB.SELECT) && buffer == 0 { 
+            battle_menu_party_proceed()
+            buffer = 1
+        }
+		if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 {
+			battle_menu_party_cancel()
+			buffer = 1
+		}
+		
+		// if we changed selection, update the enemies flashing
+		if __moved
+			__ally_highlight(party_ally_selection[party_selection])
     }
     
-    if !waiting {
-    	if dialogue_init {
-    		// fade the bg
-    		animate(0, .75, 15, "linear", o_eff_bg, "fade")
-    		
+    // skip if the party member is busy at the moment
+    while (party_selection < array_length(global.party_names) && party_selection >= 0)
+        && !(party_isup(global.party_names[party_selection]) 
+            && !array_contains(party_busy, global.party_names[party_selection]) 
+            && !array_contains(party_busy_internal, global.party_names[party_selection])
+        )
+    {
+        party_selection ++
+    }
+    if party_selection >= array_length(global.party_names) || party_selection < 0 {
+        __battle_state_advance()
+        exit
+    }
+    
+    // the sticks in the ui
+    for (var i = 0; i < 3; ++i) {
+	    ui_party_sticks[i] += .25
+		if ui_party_sticks[i] > 0 
+            ui_party_sticks[i] *= 1.03
+		if ui_party_sticks[i] > 20 
+            ui_party_sticks[i] = 0
+	}
+}}
+
+else if battle_state == BATTLE_STATE.EXEC {
+    if !exec_init {
+        action_queue = __order_action_queue()
+        exec_init = true
+    }
+    if !__check_waiting() {
+        if buffer == 0 {
+            if array_length(action_queue) > 0 {
+                var action = action_queue[0]
+                array_delete(action_queue, 0, 1) // dequeue the action
+                
+                action.perform(action_queue)
+            }
+            else 
+                __battle_state_advance()
+        }
+    }
+    else 
+        buffer = 2
+}
+else if battle_state == BATTLE_STATE.DIALOGUE {
+    if !pre_dialogue_init {
+        __call_enc_event("ev_pre_dialogue")
+        pre_dialogue_init = true
+        buffer = 2
+    }
+    if !__check_waiting() && buffer == 0 {
+        if !dialogue_init {
+            animate(0, .75, 15, "linear", o_eff_bg, "fade")
             turn_objects = array_create(array_length(encounter_data.enemies), noone)
     		for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
     			if !enc_enemy_isfighting(i)
@@ -1167,35 +1038,19 @@ if battle_state == BATTLE_STATE.DIALOGUE {
     				enemy_struct: encounter_data.enemies[i]
     			}))
     			
-    			var xx = encounter_data.enemies[i].actor_id.x - guipos_x()
-    			var yy = encounter_data.enemies[i].actor_id.y - guipos_y()
-    			
-    			if encounter_data.enemies[i].dia_bubble_offset[2] == 0 {
-    				xx -= encounter_data.enemies[i].actor_id.sprite_xoffset
-    				yy -= encounter_data.enemies[i].actor_id.myheight/2
-    			}
-    			else {
-    				xx += encounter_data.enemies[i].dia_bubble_offset[0]
-    				yy += encounter_data.enemies[i].dia_bubble_offset[1]
-    			}
-    			
     			var text = encounter_data.enemies[i].dialogue
     			if is_callable(text)
     				text = text(i)
-                
-    			if is_callable(encounter_data.enemies[i].ev_dialogue)
-    				encounter_data.enemies[i].ev_dialogue() // call the enemies' dialogue event
     			
-    			if is_string(text) {
-    				var inst = instance_create(o_ui_enemydialogue, xx*2, yy*2, DEPTH_ENCOUNTER.UI, {text})
-    				inst.spr = encounter_data.enemies[i].dia_bubble_sprites
-    				
-    			    array_push(dialogueinstances, inst)
+    			if is_string(text) || is_array(text) {
+                    var inst = actor_dialogue_create(text, encounter_data.enemies[i].actor_id,,, {
+                        spr: encounter_data.enemies[i].dia_bubble_sprites
+                    }, encounter_data.enemies[i].dia_bubble_off_x, encounter_data.enemies[i].dia_bubble_off_y, encounter_data.enemies[i].dia_bubble_off_type) 
+    			    array_push(inst_dialogues, inst)
     			}
     		}
             
-            if is_callable(encounter_data.ev_dialogue)
-                encounter_data.ev_dialogue() // call the set's dialogue event
+            __call_enc_event("ev_dialogue")
             
             // choose turn targets
             turn_targets = encounter_data._target_calculation()
@@ -1203,7 +1058,7 @@ if battle_state == BATTLE_STATE.DIALOGUE {
     		    if array_contains(turn_targets, global.party_names[i]) {
                     if encounter_data.display_target {
     				    var o = party_get_inst(global.party_names[i])
-                        instance_create(o_enc_target, o.x, o.y - o.myheight/2, o.depth-10)
+                        instance_create(o_enc_target, o.x, o.s_get_middle_y(), o.depth-10)
                     }
     			}
     			else {
@@ -1212,70 +1067,61 @@ if battle_state == BATTLE_STATE.DIALOGUE {
     			}
     		}
     		
-    		dialogue_init = false
-    	}
-    	
-    	var move_on = true
-    	for (var i = 0; i < array_length(dialogueinstances); ++i) {
-    	    if instance_exists(dialogueinstances[i]) {
-    			move_on = false; 
+    		dialogue_init = true
+        }
+        
+        var move_on = true
+    	for (var i = 0; i < array_length(inst_dialogues); ++i) {
+    	    if instance_exists(inst_dialogues[i]) {
+    			move_on = false
     			break
     		}
     	}
         
-    	if move_on && win_condition()
-            battle_state = BATTLE_STATE.WIN
-    	else if move_on
+    	if move_on {
+            with o_enc_target
+                instance_destroy()
     		__battle_state_advance()
+        }
     }
 }
-
-// the enemy turn
-if battle_state == BATTLE_STATE.TURN {
-	if !turn_init {
-		instance_destroy(o_enc_target)
-		
-		mybox = instance_create(o_enc_box)
-		mysoul = instance_create(o_enc_soul, 
-			get_leader().x, get_leader().y - get_leader().myheight/2, 
-			DEPTH_ENCOUNTER.SOUL
-		)
+else if battle_state == BATTLE_STATE.TURN {
+    if !pre_turn_init {
+        __call_enc_event("ev_turn")
+        buffer = 2
         
-        for (var i = 0; i < array_length(turn_objects); ++i) {
-            if instance_exists(turn_objects[i]) {
-                // call the box created event for turn objects
-                with turn_objects[i] {
-                    event_user(2)
+        pre_turn_init = true
+    }
+    else if buffer == 0 && !__check_waiting() {
+        if !turn_init {
+    		mybox = instance_create(o_enc_box)
+    		mysoul = instance_create(o_enc_soul, 
+    			get_leader().x, get_leader().s_get_middle_y(), 
+    			DEPTH_ENCOUNTER.SOUL
+    		)
+            
+            for (var i = 0; i < array_length(turn_objects); ++i) {
+                if instance_exists(turn_objects[i]) {
+                    // call the box created event for turn objects
+                    with turn_objects[i] {
+                        event_user(2)
+                    }
                 }
             }
-        }
-        
-        if tp_constrict
-            o_enc_soul.inst_aura = instance_create(o_enc_soul_aura, 
-                o_enc_soul.x, o_enc_soul.y, 
-                DEPTH_ENCOUNTER.SOUL
-            )
-        
-        for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-			if enc_enemy_isfighting(i) {
-				// call the turn event for the enemies
-				if is_callable(encounter_data.enemies[i].ev_turn)
-					encounter_data.enemies[i].ev_turn()
-			}
-		}
-        if is_callable(encounter_data.ev_turn)
-            encounter_data.ev_turn()
-		
-		turn_init = true
-		turn_timer = 0
-	}
-	else if !instance_exists(mybox) {
-        if win_condition()
-            battle_state = BATTLE_STATE.WIN
-        else
-		  __battle_state_advance()
-	}
-	else if !mybox.is_transitioning {
+            
+            if tp_constrict
+                o_enc_soul.inst_aura = instance_create(o_enc_soul_aura, 
+                    o_enc_soul.x, o_enc_soul.y, 
+                    DEPTH_ENCOUNTER.SOUL
+                )
+    		
+    		turn_init = true
+    		turn_timer = 0
+    	}
+    	else if !instance_exists(mybox) {
+            __battle_state_advance()
+    	}
+    	else if !mybox.is_transitioning {
 		if turn_timer == 0 {
 			for (var i = 0; i < array_length(turn_objects); ++i) {
 				if instance_exists(turn_objects[i]) {
@@ -1285,15 +1131,7 @@ if battle_state == BATTLE_STATE.TURN {
 					}
 				}
 			}
-            for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-    			if enc_enemy_isfighting(i) {
-    				// call the turn start event for the enemies
-    				if is_callable(encounter_data.enemies[i].ev_turn_start)
-    					encounter_data.enemies[i].ev_turn_start()
-    			}
-    		}
-            if is_callable(encounter_data.ev_turn_start)
-                encounter_data.ev_turn_start()
+            __call_enc_event("ev_turn_start")
 		}
 		turn_timer ++
 		
@@ -1305,41 +1143,28 @@ if battle_state == BATTLE_STATE.TURN {
 		if move_on {
 			mybox.__close()
 			mysoul.alarm[0] = 1
-			turn_goingback = true
+            
+            animate(o_eff_bg.fade, 0, 20, anime_curve.linear, o_eff_bg, "fade")
 		}
 	}
-	else if turn_goingback {
-		// idk why it's not an animation :(, this is old code
-		if instance_exists(o_eff_bg) && o_eff_bg.fade > 0
-			o_eff_bg.fade -= .05
-	}
-}
-
-// get ready to go back on the loop
-if battle_state == BATTLE_STATE.POST_TURN {
-    if battle_state != battle_state_prev {
-        for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-            if enc_enemy_isfighting(i) {
-                // call the post turn event for the enemies
-                if is_callable(encounter_data.enemies[i].ev_post_turn)
-                    encounter_data.enemies[i].ev_post_turn()
-            }
-        }
-        
-        if is_callable(encounter_data.ev_post_turn)
-            encounter_data.ev_post_turn()
     }
-    
-    if !waiting {
+}
+else if battle_state == BATTLE_STATE.POST_TURN {
+    if !post_turn_init {
+        __call_enc_event("ev_post_turn")
+        post_turn_init = true
+        buffer = 2
+    }
+    if !__check_waiting() && buffer == 0 {
         for (var i = 0; i < array_length(global.party_names); ++i) { // heal party members and un-dim them
             // if defending, or anything else for that matter, just go back to being idle
-            enc_party_set_battle_sprite(global.party_names[i], "idle", 0, 1)
+            enc_party_set_battle_sprite(global.party_names[i], "idle")
             
-            char_state[i] = CHAR_STATE.IDLE
+            party_state[i] = PARTY_STATE.IDLE
             
             if !array_contains(turn_targets, global.party_names[i]) // if i wasn't target, stop being dimmed
-                animate(party_get_inst(global.party_names[i]).darken, 0, 15, "linear", party_get_inst(global.party_names[i]), "darken")
-       	    if party_getdata(global.party_names[i], "is_down")
+                animate(party_get_inst(global.party_names[i]).darken, 0, 15, anime_curve.linear, party_get_inst(global.party_names[i]), "darken")
+       	    if !party_isup(global.party_names[i])
                 party_heal(global.party_names[i], round(party_getdata(global.party_names[i], "max_hp") * .13))
         }
         
@@ -1349,40 +1174,23 @@ if battle_state == BATTLE_STATE.POST_TURN {
         else 
             flavor = flav
        	
-        event_user(0) // reset variable values
-        
-        if win_condition()
-            battle_state = BATTLE_STATE.WIN
-        else
-            __battle_state_advance()
+        event_user(1)
+        __battle_state_advance()
     }
 }
-
-// do the fight end animation and such
-if battle_state == BATTLE_STATE.WIN {
-	tproll = lerp(tproll, 0, .5)
-	if hideui
-		roll = lerp(roll, -40, .4)
-	
-    if battle_state != battle_state_prev {
-        for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
-            if enc_enemy_isfighting(i) {
-                // call the win event for the enemies
-                if is_callable(encounter_data.enemies[i].ev_win)
-                    encounter_data.enemies[i].ev_win()
-            }
-        }
-        if is_callable(encounter_data.ev_win)
-            encounter_data.ev_win()
+else if battle_state == BATTLE_STATE.WIN {
+    if !win_screen_init {
+        __call_enc_event("win")
+        win_screen_init = true
+        buffer = 2
     }
-    
-	if !wininit && !waiting {
-        var __exp = 150
+    if !win_init && !__check_waiting() && buffer == 0 {
+        var __exp = 0
         var __dd = earned_money + global.chapter * tp / 4
         var __dd_mod = 1
         
 		for (var i = 0; i < array_length(global.party_names); ++i) {
-		    char_state[i] = CHAR_STATE.IDLE
+		    party_state[i] = PARTY_STATE.IDLE
 			
 			if party_getdata(global.party_names[i], "is_down") {
 				party_setdata(global.party_names[i], "hp", round(party_getdata(global.party_names[i], "max_hp") * .12))
@@ -1402,17 +1210,26 @@ if battle_state == BATTLE_STATE.WIN {
         __dd *= __dd_mod
         __dd = round(__dd)
         
+        event_user(1)
+        party_selection = -1
+        
+        // move the tp bar out of the way
+        animate(0, -80, 10, anime_curve.circ_out, inst_tp_bar, "x_offset")
+        
 		cutscene_create()
 		cutscene_dialogue(string(loc("enc_win"), __exp, __dd) + win_message)
-		cutscene_set_variable(id, "hideui", true)
-		cutscene_sleep(4)
+        cutscene_set_variable(self, "win_hide_ui", true)
+		cutscene_sleep(5)
         
         global.save.EXP += __exp
         global.save.MONEY += __dd
 		
-        cutscene_func(instance_destroy, [id])
+        cutscene_func(instance_destroy, [self])
+        cutscene_func(instance_destroy, [inst_tp_bar])
 		cutscene_set_variable(o_eff_bg, "destroy", true)
 		cutscene_func(music_fade, [1, 0, 15])
+        
+        // move the party members and the enemies to where they need to be
 		for (var i = 0; i < array_length(global.party_names); ++i) {
 			var o = party_get_inst(global.party_names[i])
 			
@@ -1432,6 +1249,7 @@ if battle_state == BATTLE_STATE.WIN {
 		}
 		
         cutscene_sleep(12)
+        // inform the actors they are no longer in a battle
 		for (var i = 0; i < array_length(global.party_names); ++i) {
 			var o = party_get_inst(global.party_names[i])
 		    cutscene_set_variable(o, "is_in_battle", false)
@@ -1452,6 +1270,7 @@ if battle_state == BATTLE_STATE.WIN {
             cutscene_func(music_fade, [0, 1])
         }
         
+        // make the party follow/not follow again
         for (var i = 0; i < array_length(save_follow); i ++) {
             cutscene_set_variable(party_get_inst(global.party_names[i]), "follow", save_follow[i])
         }
@@ -1461,28 +1280,26 @@ if battle_state == BATTLE_STATE.WIN {
         })
 		cutscene_play()
         
-        wininit = true
-	}
-}
-else {
-	tproll = lerp(tproll, 80, .5)
-	roll = lerp(roll, 80, .5)
+        win_init = true
+    }
 }
 
-for (var i = 0; i < array_length(global.party_names); ++i) {
-	pmlerp[i] = lerp(pmlerp[i], (selection==i ? 1 : 0), .5)
-    
-    if pm_hurt[i] > 0
-        pm_hurt[i] -= 1
+// destroy flavor text when not in the selection screen
+if (battle_state != BATTLE_STATE.MENU || battle_menu != BATTLE_MENU.BUTTON_SELECTION) && instance_exists(inst_flavor)
+    instance_destroy(inst_flavor)
+
+if !win_hide_ui
+    ui_main_lerp = lerp(ui_main_lerp, 1, .5)
+else
+    ui_main_lerp = lerp(ui_main_lerp, 0, .5)
+
+// do party ui lerping
+for (var i = 0; i < array_length(global.party_names); i ++) {
+    if i == party_selection 
+        party_ui_lerp[i] = lerp(party_ui_lerp[i], 1, .5)
+    else
+        party_ui_lerp[i] = lerp(party_ui_lerp[i], 0, .5)
 }
-if buffer > 0 
-	buffer --
-if exec_buffer > 0
-    exec_buffer --
 
-tplerp = lerp(tplerp, tp, .3)
-tplerp2 = lerp(tplerp2, tp, .8)
-if tp_glow_alpha > 0
-    tp_glow_alpha -= .1
-
-battle_state_prev = battle_state
+if buffer > 0
+    buffer --

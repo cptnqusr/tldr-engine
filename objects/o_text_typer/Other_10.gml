@@ -208,7 +208,7 @@ if command == "resetx" { // resetx() OR resetx  reset the x position of the type
 	chars ++
 }
 
-if command == "spr" || command == "sprite" { // spr(sprite_index) OR sprite(sprite_index)  inserts a sprite into the text
+if command == "spr" || command == "sprite" { // spr(sprite_index, image_speed=0, image_index=0) OR sprite(sprite_index, image_speed=0, image_index=0)  inserts a sprite into the text
 	var spr = asset_get_index(arg[0])
 	var inst = instance_create(o_text_single, x + xoff, y + yoff, depth)
 	
@@ -226,7 +226,12 @@ if command == "spr" || command == "sprite" { // spr(sprite_index) OR sprite(spri
 	inst.timer = chartimeroff * chars
 	inst.god = god
 	inst.sprite = spr
-			
+    
+    if array_length(arg) > 1
+        inst.img_index = arg[1]
+    if array_length(arg) > 2
+        inst.img_spd = arg[2]
+     
 	xoff += sprite_get_width(spr)*xscale
 	xoff += xspace * xscale
 }
@@ -301,23 +306,24 @@ if command == "voice" { // voice(asset OR nil, pitch_range = undefined, interrup
 		voice_skip = bool(arg[3])
 }
 
-if command == "mini" { // mini(`text`, char = undefined, face_expression = undefined, x = auto, y = auto)
+if command == "mini" { // mini(`text`, char = undefined, face_expression = undefined, x = `auto`, y = `auto`)
+    draw_set_font(loc_font("main"))
+    
     var __char = undefined
     var __face_ex = 0
-    var __xx = x + 386 - string_width(arg[0])
+    var __xx = x + 500 - string_width(arg[0]) - face_xoff
     var __yy = y + 64
     
     if array_length(arg) > 1 __char = arg[1]
     if array_length(arg) > 2 __face_ex = arg[2]
-    if array_length(arg) > 3 __xx += real(arg[3])
-    if array_length(arg) > 4 __yy += real(arg[4])
+    if array_length(arg) > 3 && arg[3] != "auto" __xx += real(arg[3])
+    if array_length(arg) > 4 && arg[4] != "auto" __yy += real(arg[4])
         
     if string_length(string_digits(__face_ex)) == string_length(__face_ex)
         __face_ex = real(__face_ex)
     
     array_push(mini_faces, 
         instance_create(o_text_mini, __xx, __yy, depth, {
-            x: __xx, y: __yy,
             face_creator: struct_get(struct_get(char_presets, __char), "face_create"),
             face_expression: __face_ex,
             text: arg[0]
