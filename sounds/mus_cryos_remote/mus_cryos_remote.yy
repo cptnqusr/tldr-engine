@@ -6,7 +6,7 @@
     "path":"audiogroups/audiogroup_default",
   },
   "bitDepth":1,
-  "channelFormat":0,
+  "channelFormat":1,
   "compression":1,
   "compressionQuality":4,
   "conversionMode":0,
@@ -22,5 +22,5 @@
   "resourceVersion":"2.0",
   "sampleRate":44100,
   "soundFile":"mus_cryos_remote.mp3",
-  "volume":0.74,
+  "volume":0.5,
 }

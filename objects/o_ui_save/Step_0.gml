@@ -18,12 +18,12 @@ if page == 0 { // main menu
 	
 	if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
         if !m_buttons[m_selection].on {
-            audio_play(snd_ui_cant_select)
+            audio_play(snd_ui_cant_select_CT)
         }
         else {
     		page = m_buttons[m_selection].page
     		if page != -1 
-    			audio_play(snd_ui_select)
+    			audio_play(snd_ui_select_CT)
     		
     		buffer = 1
     		prog = 0
@@ -60,7 +60,7 @@ if page == 1 { // save menu
 				save_export(s_selection)
 				save_set_slot(s_selection)
 				
-				audio_play(snd_save)
+				audio_play(snd_chrono_save)
 				prog ++
 			}
 			buffer = 1
@@ -85,7 +85,7 @@ if page == 1 { // save menu
 			if s_o_selection == 0 {
 				save_export(s_selection)
 				save_set_slot(s_selection)
-				audio_play(snd_save)
+				audio_play(snd_chrono_save)
 				
 				prog = 1
 			}
@@ -134,7 +134,7 @@ if page == 2 { // storage
 		if st_page == 0 
 			st_page = 1
 		else {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			
 			var i1 = undefined
 			var i2 = undefined
@@ -185,7 +185,7 @@ if page == 4 && !fading_out { // return to title
     return_selection = (return_selection + 2) % 2
     
     if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && return_selection == 0 {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         
         fader_fade(0, 1, 20)
         music_fade(0, 0, 0)

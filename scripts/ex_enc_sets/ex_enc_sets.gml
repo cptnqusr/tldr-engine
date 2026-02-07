@@ -42,7 +42,7 @@ function ex_enc_set_spawn() : enc_set() constructor {
     }
     
     // array_push(party_actions.ralsei, new ex_item_s_revivekris("ralsei")) // this is how you'd add a bonus act like revivekris
-    // array_delete(party_actions.ralsei, 0, 1) // you can also just straight up delete the r-action if you want to 
+    array_delete(party_actions.ralsei, 0, 1) // you can also just straight up delete the r-action if you want to 
     
     enc_var_struct = {
         tp_constrict: true,

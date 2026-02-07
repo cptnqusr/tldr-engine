@@ -24,7 +24,7 @@
   ],
   "name":"spr_soul_graze",
   "nineSlice":null,
-  "origin":4,
+  "origin":9,
   "parent":{
     "name":"soul",
     "path":"folders/@Engine/sprites/ui/soul.yy",
@@ -77,7 +77,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":25,
-    "yorigin":25,
+    "yorigin":23,
   },
   "swatchColours":null,
   "swfPrecision":2.525,

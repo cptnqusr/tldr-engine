@@ -36,7 +36,7 @@ function item() constructor {
 	color = c_white
 	is_party_act = false
 	is_mercyspell = false // does it allow to spare enemies?
-	multispell_users = [] // is it a multispell? if it's empty, then no
+	party = [] // who is using the spell?
 	
 	reactions = {
 	}

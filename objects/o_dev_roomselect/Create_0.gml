@@ -15,7 +15,7 @@ while room_exists(rm) {
 select = function(_item, _item_index) {
     instance_destroy()
     music_stop_all()
-    audio_play(snd_ui_select)
+    audio_play(snd_ui_select_CT)
     
     room_goto(_item)
 }

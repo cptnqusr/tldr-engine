@@ -22,7 +22,7 @@ meatDummyFight = function() {
 			cutscene_dialogue("It looks pleased.",,true)
 		}
 		if global.temp_choice == 1 {
-			cutscene_dialogue("It undertands.",,true)
+			cutscene_dialogue("It understands.",,true)
 		}
 	})
 	

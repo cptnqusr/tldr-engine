@@ -17,7 +17,7 @@ if InputPressed(INPUT_VERB.SELECT) {
 	if !array_contains(item_blocked, selection)
         select(item_list[selection], selection)
 	else 
-		audio_play(snd_ui_cant_select)
+		audio_play(snd_ui_cant_select_CT)
 }
 if InputPressed(INPUT_VERB.CANCEL) {
 	instance_destroy()

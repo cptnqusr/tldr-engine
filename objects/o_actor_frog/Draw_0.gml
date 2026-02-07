@@ -74,38 +74,38 @@ if instance_exists(o_eff_lighting_controller) && o_eff_lighting_controller.light
     var __l_darken = o_eff_lighting_controller.lighting_darken
     var __l_off = o_eff_lighting_controller.surf_border/2
     
-	surface_set_target(o_eff_lighting_controller.surf) {
-		gpu_set_fog(true, c_white, 0, 1)
-		s_drawer(spr, image_index, 
-			(xx - guipos_x() + __l_off)*2, (yy - guipos_y() + __l_off)*2, 
-			image_xscale*2, image_yscale*2, 
-			image_angle, c_white, 1
-		)
-		gpu_set_fog(false, 0, 0, 0)
-	
-		gpu_set_blendmode(bm_subtract)
-		s_drawer(spr, image_index, 
-			(xx - guipos_x() + __l_off)*2, (yy+1 - guipos_y() + __l_off)*2, 
-			image_xscale*2, image_yscale*2, 
-			image_angle, c_black, 1
-		)
-		gpu_set_blendmode(bm_normal)
-	}
-	surface_reset_target()
+    if lighting_highlight_enabled {
+        surface_set_target(o_eff_lighting_controller.surf) {
+            gpu_set_fog(true, c_white, 0, 1)
+            s_drawer(spr, image_index, 
+                (xx - guipos_x() + __l_off)*2, (yy - guipos_y() + __l_off)*2, 
+                image_xscale*2, image_yscale*2, 
+                image_angle, c_white, 1
+            )
+            gpu_set_fog(false, 0, 0, 0)
+        
+            gpu_set_blendmode(bm_subtract)
+            s_drawer(spr, image_index, 
+                (xx - guipos_x() + __l_off)*2, (yy+1 - guipos_y() + __l_off)*2, 
+                image_xscale*2, image_yscale*2, 
+                image_angle, c_black, 1
+            )
+            gpu_set_blendmode(bm_normal)
+        }
+        surface_reset_target()
+    }
 	
 	// the shadow on the actor
-	s_drawer(spr, image_index, 
-		xx, yy, 
-		image_xscale, image_yscale, 
-		image_angle, c_black, __l_alpha * __l_darken
-	)
+    if lighting_darken_enabled
+        lighting_darken_self(s_drawer)
 
 	// the shadow on the ground
-	s_drawer(spr, image_index, 
-		xx, yy, 
-		image_xscale, lerp_type(0, -2, __l_alpha, "linear"), 
-		image_angle, c_black, image_alpha * o_eff_lighting_controller.lighting_alpha
-	)
+    if lighting_shadow_enabled
+        s_drawer(spr, image_index, 
+            xx, yy, 
+            image_xscale, lerp_type(0, -2, __l_alpha, "linear"), 
+            image_angle, c_black, image_alpha * o_eff_lighting_controller.lighting_alpha
+        )
 }
 
 // draw the sweat sprite
@@ -126,13 +126,15 @@ if dodge_getalpha() > 0 {
     	gpu_set_fog(false, c_white, 0, 0)
     }
     else
-        s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_black, dodge_getalpha() * o_dodge_controller.dodge_darken)
+        dodge_darken_self(s_drawer)
 }
 
 if flashing { // battle select flash
 	gpu_set_fog(true, c_white, 0, 0)
 	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_white, -cos(fsiner / 5)*0.4 + 0.6)
 	gpu_set_fog(false, c_white, 0, 0)
+    
+    lighting_darken_self()
 }
 if flash > 0 { // normal flash
 	gpu_set_fog(true, flash_color, 0, 0)
@@ -140,7 +142,27 @@ if flash > 0 { // normal flash
 	gpu_set_fog(false, flash_color, 0, 0)
 }
 
-image_blend = isave
+if instance_exists(o_lb_dl_controller) {
+    surface_set_target(o_lb_dl_controller.surf_light)
+        gpu_set_fog(true, lb_dl_highlight_color, 0, 1)
+        s_drawer(spr, image_index, 
+            (xx - guipos_x())*2, (yy - guipos_y())*2, 
+            image_xscale*2, image_yscale*2, 
+            image_angle, c_white, 1
+        )
+        gpu_set_fog(false, 0, 0, 0)
+        
+        gpu_set_blendmode(bm_subtract)
+        s_drawer(spr, image_index, 
+            (xx - guipos_x())*2, (yy+1 - guipos_y())*2, 
+            image_xscale*2, image_yscale*2, 
+            image_angle, c_black, 1
+        )
+        gpu_set_blendmode(bm_normal)
+    surface_reset_target()
+}
 
-image_xscale = 1.1
-image_yscale = 1.1
+image_xscale = 1.3
+image_yscale = 1.3
+
+image_blend = isave

@@ -26,6 +26,7 @@ function enc_set() constructor { // base
 	for (var i = 0; i < array_length(global.party_names); ++i) {
 	    struct_set(party_actions, global.party_names[i], [new item_s_defaultaction(global.party_names[i])])
 	}
+	party_actions = {}
     
     // miscellaneous config
     can_change_turnlen = true // by defending

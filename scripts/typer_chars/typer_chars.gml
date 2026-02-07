@@ -27,6 +27,7 @@ function typer_char() constructor {
     voice_interrupt = false // whether to stop the voice sound every time a new blip is played
     voice_skip = 1 // every (how many?) frames to play the sound
 	voice_pitchrange = undefined
+	font = loc_font("text")
     
     /// @desc initialize the typer char - add to the typer's char presets
     __initialize = method(self, function(typer) {

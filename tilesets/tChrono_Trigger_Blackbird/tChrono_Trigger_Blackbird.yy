@@ -3,9 +3,12 @@
   "%Name":"tChrono_Trigger_Blackbird",
   "autoTileSets":[],
   "macroPageTiles":{
-    "SerialiseHeight":187,
+    "SerialiseHeight":190,
     "SerialiseWidth":71,
-    "TileCompressedData":[-69,0,2,230,231,-69,0,2,265,266,-69,0,2,300,301,-69,0,2,335,336,-12993,0,],
+    "TileCompressedData":[
+      -16,0,2,233,195,-66,0,2,194,195,-69,0,2,197,198,-125,0,2,230,231,-69,0,2,265,266,-69,0,2,300,301,-69,
+      0,2,335,336,-12993,0,
+    ],
     "TileDataFormat":1,
   },
   "name":"tChrono_Trigger_Blackbird",

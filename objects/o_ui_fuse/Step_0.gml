@@ -42,7 +42,7 @@ if !confirmation {
 			buffer = 1
 		}
 		else{
-			audio_play(snd_ui_cant_select)
+			audio_play(snd_ui_cant_select_CT)
 		}
 	}
 	if InputPressed(INPUT_VERB.CANCEL) 

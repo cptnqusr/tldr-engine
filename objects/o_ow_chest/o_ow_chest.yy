@@ -39,8 +39,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_ow_chest",
-    "path":"sprites/spr_ow_chest/spr_ow_chest.yy",
+    "name":"spr_ow_chest_CT",
+    "path":"sprites/spr_ow_chest_CT/spr_ow_chest_CT.yy",
   },
   "spriteMaskId":null,
   "visible":true,

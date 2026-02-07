@@ -135,9 +135,9 @@ function item_s_testdmg() : item_spell() constructor {
 	desc = ["Deals little damage to a foe.", "Test Damage"]
 	use_type = ITEM_USE.ENEMY
 	
-	use = function(spell_user, target, caller) {
+	use = function(spell_user, target, caller = -1) {
 		cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_func(enc_hurt_enemy, [target, 10, user])
+		cutscene_func(enc_hurt_enemy, [target, 100, spell_user])
 		cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), "TEST DAMAGE"),, true)
 		cutscene_set_variable(o_enc, "waiting", false)
 	}

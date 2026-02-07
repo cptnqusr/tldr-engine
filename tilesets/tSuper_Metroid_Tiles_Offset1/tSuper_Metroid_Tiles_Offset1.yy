@@ -5,7 +5,9 @@
   "macroPageTiles":{
     "SerialiseHeight":18,
     "SerialiseWidth":15,
-    "TileCompressedData":[-185,0,2,405,408,-13,0,2,460,463,-51,0,2,352,351,-13,0,2,847,846,],
+    "TileCompressedData":[
+      -185,0,2,405,408,-13,0,2,460,463,-3,0,2,505,502,-13,0,2,340,337,-31,0,2,352,351,-13,0,2,847,846,
+    ],
     "TileDataFormat":1,
   },
   "name":"tSuper_Metroid_Tiles_Offset1",

@@ -115,68 +115,9 @@
     inst_dialogues = []
 }
 
-{ // arrays for each party member
-	can_act = array_create_ext(
-		array_length(global.party_names), 
-		function(index) {
-			return item_spell_get_exists(item_s_act, global.party_names[index])
-		}
-	) 
-	pmlerp = array_create(array_length(global.party_names), 0)
-	bt_selection = array_create(array_length(global.party_names), 0)
-    pm_hurt = array_create(array_length(global.party_names), 0)
-	
-	fightselection = array_create(array_length(global.party_names), 0)
-	
-	actselection = array_create(array_length(global.party_names), 0)
-	
-	itemselection = array_create(array_length(global.party_names), 0)
-	itempage = array_create(array_length(global.party_names), 0)
-	itemuserselection = array_create(array_length(global.party_names), 0)
-	
-	spellpage = array_create(array_length(global.party_names), 0)
-	spell_using = array_create(array_length(global.party_names), -1)
-	tp_upon_spell = array_create(array_length(global.party_names), -1)
-		
-	partyactselection = array_create(array_length(global.party_names), 0)
-	together_with = array_create(array_length(global.party_names), [])
-	
-	char_state = array_create(array_length(global.party_names), CHAR_STATE.IDLE)
-}
 encounter_data = {} // the information about the encounter: enemies, music, text and such
 
 
-{ // attack execution
-	fighters = []
-	fighterselection = []
-}
-{ // party actions (aside from s-action and alike)
-	bonus_actions = {}
-	var names = struct_get_names(global.party)
-	/* for (var i = 0; i < array_length(names); ++i) {
-	    struct_set(bonus_actions, names[i], [new item_s_defaultaction(names[i])])
-	} */
-} 
-
-{ // enemy's turn
-	turn_timer = 0
-	turn_objects = []
-	turn_targets = [] // determined in-turn
-	turn_init = false
-	turn_goingback = false
-}
-
-selection = 0
-state = 0 // how deep we are in the menu
-
-enum BATTLE_STATE {
-    MENU,
-    EXEC,
-    DIALOGUE,
-    TURN,
-    POST_TURN,
-    WIN
-}
 action_queue = []
 action_order = [
     enc_action_act,

@@ -2,7 +2,7 @@
 function party_hpchange(name, heal, caller = noone, sfx = -1) {
 	if heal > 0 { // heal
 		if sfx == -1
-			sfx = snd_heal
+			sfx = snd_chrono_heal
 		audio_play(sfx,,,,1)
 		
 		struct_set(party_nametostruct(name), "hp", min(party_getdata(name, "hp") + heal, party_getdata(name, "max_hp")))

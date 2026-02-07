@@ -107,7 +107,7 @@ if command == "preset" { // preset(`type`) out of `enemy_text`, `god_text`, `lig
 		break_tabulation = false
 		shadow = false
 		god = true
-		
+		font = loc_font("main_DR")
 		xspace = 5
 		yspace = 20
 		
@@ -145,7 +145,7 @@ if command == "font" { // font(`string`) out of `main`, `text`, `enc`
 	else if arg[0] == "main"
 		font = loc_font("main")
 	else{
-		font = asset_get_index(arg[0])
+		font = loc_font(arg[0])
 	}
 }
 if command == "shadow" { // shadow(bool)
@@ -272,6 +272,7 @@ if command == "char" { // char(`char_preset_string`, face_expression = undefined
 	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
 	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
     voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
+	font = struct_get(struct_get(char_presets, arg[0]), "font")
 	
 	char = arg[0]
 	looping = false

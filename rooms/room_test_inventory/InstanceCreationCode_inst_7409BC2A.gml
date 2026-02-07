@@ -10,7 +10,7 @@ trigger_exit_code = function() {
     if __healed {
         cutscene_create()
         cutscene_dialogue("* (As you left the battlefield, you felt a bit better...)")
-        cutscene_audio_play(snd_heal)
+        cutscene_audio_play(snd_chrono_heal)
         cutscene_play()
     }
     

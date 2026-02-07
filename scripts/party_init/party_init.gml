@@ -368,6 +368,12 @@ function party_m_noelle() : party_m() constructor {
 }
 function party_m_sponge() : party_m() constructor {
 	name = "party_sponge_name"
+	obj = {
+		obj: o_actor_sponge,
+		var_struct: {
+			name: "sponge"
+		},
+	}
 	
 	// colors
 	color = c_orange
@@ -430,6 +436,12 @@ function party_m_sponge() : party_m() constructor {
 }
 function party_m_frog() : party_m() constructor {
 	name = "party_frog_name"
+	obj = {
+		obj: o_actor_frog,
+		var_struct: {
+			name: "frog"
+		},
+	}
 	
 	// colors
 	color = c_green
@@ -494,6 +506,7 @@ function party_m_frog() : party_m() constructor {
 }
 function party_m_bowie() : party_m() constructor {
 	name = "party_bowie_name"
+	obj = o_actor_bowie
 	
 	// colors
 	color = c_red
@@ -558,6 +571,7 @@ function party_m_bowie() : party_m() constructor {
 }
 function party_m_scoot() : party_m() constructor {
 	name = "party_scoot_name"
+	obj = o_actor_scoot
 	
 	// colors
 	color = c_red

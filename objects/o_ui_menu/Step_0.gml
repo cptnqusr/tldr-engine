@@ -14,11 +14,11 @@ if !only_hp {
 		
 		if InputPressed(INPUT_VERB.RIGHT) {
 			selection ++
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		if InputPressed(INPUT_VERB.LEFT) {
 			selection--
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		
 		if selection < 0
@@ -30,7 +30,7 @@ if !only_hp {
 			state = 1; 
 			buffer = 1
 			
-			audio_play(snd_ui_select);
+			audio_play(snd_ui_select_CT);
 		}
 	}
 	
@@ -38,11 +38,11 @@ if !only_hp {
 		if state == 1 { // submenu selector
 			if InputPressed(INPUT_VERB.RIGHT) {
 				i_pselection ++; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.LEFT) {
 				i_pselection --; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if i_pselection < 0
@@ -60,20 +60,20 @@ if !only_hp {
 					if array_length(global.items) > 0 {
 						state = 2
 						buffer = 1
-						audio_play(snd_ui_select)
+						audio_play(snd_ui_select_CT)
 					}
 					else
-						audio_play(snd_ui_cant_select)
+						audio_play(snd_ui_cant_select_CT)
 				}
 				else {
 					// if we can even open the key item menu
 					if array_length(global.key_items) > 0 {
 						state = 2; 
 						buffer = 1
-						audio_play(snd_ui_select); 
+						audio_play(snd_ui_select_CT); 
 					}
 					else
-						audio_play(snd_ui_cant_select)
+						audio_play(snd_ui_cant_select_CT)
 				}
 			}
 		}
@@ -87,25 +87,25 @@ if !only_hp {
 				i_selection ++; 
 				if i_selection % 2 == 0
 					i_selection -= 2
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.DOWN) && i_selection < item_get_count(t) - 2 {
 				i_selection += 2; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.LEFT) && i_selection > 0 {
 				i_selection--; 
 				if i_selection % 2 == 1
 					i_selection+=2
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			else if InputPressed(INPUT_VERB.LEFT) && i_selection == 0 && item_get_count(t) > 1 {
 				i_selection = 1; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.UP) && i_selection > 1 {
 				i_selection -= 2; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if i_selection < 0
@@ -132,7 +132,7 @@ if !only_hp {
 						buffer = 1;
 						i_mode = arr[i_selection].use_type
 						
-						audio_play(snd_ui_select);
+						audio_play(snd_ui_select_CT);
 					}
 					if i_pselection == 1 
 						i_mode = 1
@@ -144,11 +144,11 @@ if !only_hp {
 			
 			if InputPressed(INPUT_VERB.RIGHT) && i_mode != 1 {
 				i_pmselection ++
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.LEFT) && i_mode != 1 {
 				i_pmselection --
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if i_pmselection < 0 
@@ -193,11 +193,11 @@ if !only_hp {
 		if state == 1 { // character selector
 			if InputPressed(INPUT_VERB.RIGHT) {
 				e_pmselection ++; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.LEFT) {
 				e_pmselection --; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if e_pmselection < 0
@@ -212,17 +212,17 @@ if !only_hp {
 			if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 				state ++
 				buffer = 1
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 			}
 		}
 		if state == 2 { // equipment type selector
 			if InputPressed(INPUT_VERB.DOWN){
 				e_pselection ++; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.UP){
 				e_pselection --; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if e_pselection < 0
@@ -237,7 +237,7 @@ if !only_hp {
 			if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 				state ++
 				buffer = 1
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 			}
 		}
 		if state == 3 { // list
@@ -251,14 +251,14 @@ if !only_hp {
 				if e_selection > e_move + 5 && e_selection < array_length(arr_mod)
 					e_move++
 				
-				audio_play(snd_ui_move); 
+				audio_play(snd_ui_move_CT); 
 			}
 			if InputRepeat(INPUT_VERB.UP) && e_selection > 0 {
 				e_selection -- 
 				if e_selection < e_move && e_selection >= 0
 					e_move --
 				
-				audio_play(snd_ui_move); 
+				audio_play(snd_ui_move_CT); 
 			}
 			
 			if e_selection < 0 {
@@ -337,7 +337,7 @@ if !only_hp {
 					audio_play(snd_equip)
 				}
 				else {
-					audio_play(snd_ui_cant_select)
+					audio_play(snd_ui_cant_select_CT)
 					if !customreaction 
 						item_menu_reaction(arr_mod[e_selection], e_pmselection)
 				}
@@ -348,11 +348,11 @@ if !only_hp {
 		if state == 1 { // character selector
 			if InputPressed(INPUT_VERB.RIGHT) { 
 				p_pmselection++; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.LEFT) { 
 				p_pmselection--; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if p_pmselection < 0 
@@ -367,7 +367,7 @@ if !only_hp {
 			if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 				state ++
 				buffer = 1
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 			}
 		}
 		if state == 2 { // spell list
@@ -375,11 +375,11 @@ if !only_hp {
 			
 			if InputPressed(INPUT_VERB.DOWN) { 
 				p_selection++; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			if InputPressed(INPUT_VERB.UP) { 
 				p_selection--; 
-				audio_play(snd_ui_move)
+				audio_play(snd_ui_move_CT)
 			}
 			
 			if InputPressed(INPUT_VERB.CANCEL) {
@@ -397,16 +397,16 @@ if !only_hp {
         if state == 1 { // config menu
             if InputPressed(INPUT_VERB.DOWN) {
                 c_selection ++
-                audio_play(snd_ui_move)
+                audio_play(snd_ui_move_CT)
             }
             if InputPressed(INPUT_VERB.UP) {
                 c_selection --
-                audio_play(snd_ui_move)
+                audio_play(snd_ui_move_CT)
             }
             c_selection = (c_selection + array_length(c_config)) % array_length(c_config)
             
             if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
                 buffer = 2
                 
                 switch c_config[c_selection].type {
@@ -459,7 +459,7 @@ if !only_hp {
             if (InputPressed(INPUT_VERB.SELECT) || InputPressed(INPUT_VERB.CANCEL)) && buffer == 0 {
                 state = 1
                 buffer = 1
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
             }
         }
         if state == 3 { // controls
@@ -480,7 +480,7 @@ if !only_hp {
                             InputDeviceSetRebinding(__inputdevice, false);
                             
                             audio_play(snd_ui_cancel_small)
-                            audio_play(snd_ui_select)
+                            audio_play(snd_ui_select_CT)
                             c_controls_changing = false
                             buffer = 1
                         }
@@ -490,16 +490,16 @@ if !only_hp {
             else {
                 if InputPressed(INPUT_VERB.DOWN) {
                     c_controls_selection ++
-                    audio_play(snd_ui_move)
+                    audio_play(snd_ui_move_CT)
                 }
                 if InputPressed(INPUT_VERB.UP) {
                     c_controls_selection --
-                    audio_play(snd_ui_move)
+                    audio_play(snd_ui_move_CT)
                 }
                 c_controls_selection = (c_controls_selection + (array_length(c_controls) + 2)) % (array_length(c_controls) + 2)
                 
                 if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-                    audio_play(snd_ui_select)
+                    audio_play(snd_ui_select_CT)
                     
                     if c_controls_selection < array_length(c_controls) {
                         c_controls_changing = true
@@ -546,7 +546,7 @@ if !only_hp {
             if (InputPressed(INPUT_VERB.SELECT) || InputPressed(INPUT_VERB.CANCEL)) && buffer == 0 {
                 state = 1
                 buffer = 1
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
             }
         }
     }

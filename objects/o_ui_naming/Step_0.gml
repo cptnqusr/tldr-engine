@@ -82,10 +82,11 @@ else if state == NAMING_STATE.CONFIRM {
         }
         else if confirm_selection == 1 { // yes
             state = NAMING_STATE.START_SAVE
-            flash_fade(0, 1, 60)
-            audio_play(snd_dtrans_lw)
+            //flash_fade(0, 1, 60)
+			fader_fade(0,1,60)
+            audio_play(snd_idiopiece_trans)
             music_stop_all()
-            alarm[0] = 100
+            alarm[0] = 130
         }
     }
 }
@@ -93,4 +94,8 @@ else if state == NAMING_STATE.START_SAVE {
     name_angle = random(4)
     if confirm_alpha < 1
         confirm_alpha -= .1
+}
+
+if name == "GASTER" {
+	game_end()
 }

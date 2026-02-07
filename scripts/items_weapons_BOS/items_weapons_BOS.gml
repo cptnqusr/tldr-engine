@@ -35,7 +35,7 @@ function item_w_depressionedge() : item_weapon() constructor {
 		susie: "It didn't look that heavy...",
 		ralsei: "Couldn't lift it an inch.",
         noelle: "I'd need a crane.",
-		frog: "How long in thy possession?.",
+		frog: "How long in thy possession?",
 		scoot: "[Tastes salty.]",
 		bowie: "No, love, you're not alone..."
 	}  

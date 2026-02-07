@@ -384,7 +384,7 @@ function enemy_killercar() : enemy() constructor{
         cutscene_animate(0, 1, 3, "linear", actor_id, "flash")
         cutscene_sleep(3)
         
-        cutscene_audio_play(snd_heal)
+        cutscene_audio_play(snd_chrono_heal)
         cutscene_func(function(o) {
             instance_create(o_text_hpchange, o.x, o.s_get_middle_y(), o.depth-100, {
 				draw: 300, 

@@ -3,4 +3,4 @@ if text != ""
 	
 started = true
 
-audio_play(snd_heal)
+audio_play(snd_chrono_heal)

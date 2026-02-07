@@ -16,13 +16,13 @@ function enc_button() constructor {
 function enc_button_fight() : enc_button() constructor {
     name = "fight"
     press = function(_tp) {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         with other {
             battle_menu = BATTLE_MENU.ENEMY_SELECTION
             __enemy_highlight(party_enemy_selection[party_selection])
             
             battle_menu_enemy_proceed = function() {
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
                 
                 var __party_members = [global.party_names[other.party_selection]]
                 array_push(action_queue, new enc_action_fight(__party_members[0], party_enemy_selection[party_selection]))
@@ -52,13 +52,13 @@ function enc_button_fight() : enc_button() constructor {
 function enc_button_act() : enc_button() constructor {
     name = "act"
     press = function() {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         with other {
             battle_menu = BATTLE_MENU.ENEMY_SELECTION
             __enemy_highlight(party_enemy_selection[party_selection])
             
             battle_menu_enemy_proceed = function() {
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
                 
                 battle_menu = BATTLE_MENU.INV_SELECTION
                 battle_menu_inv_list = __act_sort(party_enemy_selection[party_selection])
@@ -97,7 +97,7 @@ function enc_button_act() : enc_button() constructor {
                     }
                     
                     if can_perform {
-                        audio_play(snd_ui_select)
+                        audio_play(snd_ui_select_CT)
                         __button.submit_action(item_struct)
                     }
                 }
@@ -150,7 +150,7 @@ function enc_button_act() : enc_button() constructor {
 function enc_button_power() : enc_button() constructor {
     name = "power"
     press = function() {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         with other {
             battle_menu = BATTLE_MENU.INV_SELECTION
             
@@ -170,7 +170,7 @@ function enc_button_power() : enc_button() constructor {
                 }
                 
                 if can_perform {
-                    audio_play(snd_ui_select)
+                    audio_play(snd_ui_select_CT)
                     switch spell_struct.use_type {
                         case ITEM_USE.EVERYONE: // continue right away
                             var __button = party_buttons[party_selection][party_button_selection[party_selection]]
@@ -181,7 +181,7 @@ function enc_button_power() : enc_button() constructor {
                             __ally_highlight(party_ally_selection[party_selection])
                             
                             battle_menu_party_proceed = function() {
-                                audio_play(snd_ui_select)
+                                audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
                                 var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
@@ -197,7 +197,7 @@ function enc_button_power() : enc_button() constructor {
                             __enemy_highlight(party_enemy_selection[party_selection])
                             
                             battle_menu_enemy_proceed = function() {
-                                audio_play(snd_ui_select)
+                                audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
                                 var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
@@ -251,11 +251,11 @@ function enc_button_item() : enc_button() constructor {
     name = "item"
     press = function() {
         if array_length(other.__item_sort()) == 0 {
-            audio_play(snd_ui_cant_select)
+            audio_play(snd_ui_cant_select_CT)
             return
         }
         else
-            audio_play(snd_ui_select)
+            audio_play(snd_ui_select_CT)
         
         with other {
             battle_menu = BATTLE_MENU.INV_SELECTION
@@ -276,7 +276,7 @@ function enc_button_item() : enc_button() constructor {
                 }
                 
                 if can_perform {
-                    audio_play(snd_ui_select)
+                    audio_play(snd_ui_select_CT)
                     switch item_struct.use_type {
                         case ITEM_USE.EVERYONE: // continue right away
                             var __button = party_buttons[party_selection][party_button_selection[party_selection]]
@@ -287,7 +287,7 @@ function enc_button_item() : enc_button() constructor {
                             __ally_highlight(party_ally_selection[party_selection])
                             
                             battle_menu_party_proceed = function() {
-                                audio_play(snd_ui_select)
+                                audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
                                 var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
@@ -303,7 +303,7 @@ function enc_button_item() : enc_button() constructor {
                             __enemy_highlight(party_enemy_selection[party_selection])
                             
                             battle_menu_enemy_proceed = function() {
-                                audio_play(snd_ui_select)
+                                audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
                                 var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
@@ -351,13 +351,13 @@ function enc_button_item() : enc_button() constructor {
 function enc_button_spare() : enc_button() constructor {
     name = "spare"
     press = function(_tp) {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         with other {
             battle_menu = BATTLE_MENU.ENEMY_SELECTION
             __enemy_highlight(party_enemy_selection[party_selection])
             
             battle_menu_enemy_proceed = function() {
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
                 
                 array_push(action_queue, new enc_action_spare(global.party_names[other.party_selection], other.party_enemy_selection[other.party_selection]))
                 enc_party_set_battle_sprite(global.party_names[other.party_selection], "actready")
@@ -379,7 +379,7 @@ function enc_button_spare() : enc_button() constructor {
 function enc_button_defend() : enc_button() constructor {
     name = "defend"
     press = function() {
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
         with other {
             battle_menu = BATTLE_MENU.BUTTON_SELECTION
             array_push(action_queue, new enc_action_defend(global.party_names[party_selection]))
