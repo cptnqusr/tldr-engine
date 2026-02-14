@@ -3,7 +3,7 @@
 One of the first independent 1:1 DELTARUNE Engines built in Gamemaker Studio 2, the software that was used to create DELTARUNE. This Engine is very customizable as well, and is being actively supported by its developers.
 The Engine is very straightforward and advanced at the same time. Encounters, cutscenes and menus are all there! (The Engine also includes all UI elements of base deltarune, like the chapter select screen and the save select menu.)
 
-This engine also has a [Gamejolt page](https://gamejolt.com/games/tldr_engine/1031570). Please follow it there if you like the engine!
+If you're serious about using the engine, I highly recommend you to join the [Discord Server](https://discord.gg/x3t8JTyC2p) for dev support from me and other knowledegable server members.
 
 
 <img width="2562" height="1964" alt="tldr-promo-pacify" src="https://github.com/user-attachments/assets/91b0fc9b-3af7-49c4-92c9-1c4fda95e53d" />
@@ -27,10 +27,11 @@ Please also link the engine somewhere on your game page or recordings and please
 Framing the engine as your own is not too cool, either.
 
 ## Jumpstart
-If you are planning to pull new versions once they are released, please open the repository with GitHub Desktop and clone it on your local device. Once you're all set, you'll be able to fetch and pull the new versions from origin.
-<img width="1845" height="899" alt="image" src="https://github.com/user-attachments/assets/4be9eb9e-87c2-4266-91cf-d38bd49cfaab" />
+<img width="1912" height="584" alt="image" src="https://github.com/user-attachments/assets/930500fa-cccc-4570-bb0d-f558d70c571e" />
+Create a new repository using the template. Press on the big green button as shown on the screeshot. It's highly recommended to use GitHub Desktop for everything.
+If you're not familliar with GitHub, please watch some tutorials. It will help substantially.
 
-If not, however, you can download the engine like a zip file or copy it as a template to a new repository. 
+[Read this Document if you'd like to update your Engine version without losing progress.](https://docs.google.com/document/d/14SpnU32P-_HLdNS17gwaIe8Z2mO8AG1KUUGMe_hNdzM/edit?tab=t.jbfyjpbv88jk)
 
 ---
 

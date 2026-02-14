@@ -72,31 +72,7 @@ function enc_button_act() : enc_button() constructor {
                 battle_menu_inv_proceed = function(item_struct) {
                     var __button = party_buttons[party_selection][party_button_selection[party_selection]]
                     
-                    var can_perform = true
-                    // disable the act if some member is not up
-                    if item_struct.party == -1 {
-                        for (var j = 0; j < array_length(global.party_names); j ++) {
-                            if !party_isup(global.party_names[j]) {
-                                can_perform = false
-                                break
-                            }
-                        }
-                    }
-                    else {
-                        for (var j = 0; j < array_length(item_struct.party); j ++) {
-                            var name = item_struct.party[j]
-                            if !party_isup(name) {
-                                can_perform = false
-                                break
-                            }
-                        }
-                    }
-                    if struct_exists(item_struct, "tp_cost") {
-                        if item_struct.tp_cost > tp
-                            can_perform = false
-                    }
-                    
-                    if can_perform {
+                    if enc_item_get_enabled(item_struct) {
                         audio_play(snd_ui_select_CT)
                         __button.submit_action(item_struct)
                     }
@@ -129,6 +105,8 @@ function enc_button_act() : enc_button() constructor {
         
         with other {
             array_push(action_queue, new enc_action_act(__party_members, party_enemy_selection[party_selection], item_struct))
+            if struct_exists(item_struct, "tp_cost")
+                tp -= item_struct.tp_cost
             
             for (var i = 0; i < array_length(__party_members); i ++) {
                 var index = party_get_index(__party_members[i])
@@ -163,13 +141,7 @@ function enc_button_power() : enc_button() constructor {
             }
             
             battle_menu_inv_proceed = function(spell_struct) {
-                var can_perform = true
-                if struct_exists(spell_struct, "tp_cost") {
-                    if spell_struct.tp_cost > tp
-                        can_perform = false
-                }
-                
-                if can_perform {
+                if enc_item_get_enabled(spell_struct){
                     audio_play(snd_ui_select_CT)
                     switch spell_struct.use_type {
                         case ITEM_USE.EVERYONE: // continue right away
@@ -269,13 +241,7 @@ function enc_button_item() : enc_button() constructor {
             }
             
             battle_menu_inv_proceed = function(item_struct) {
-                var can_perform = true
-                if struct_exists(item_struct, "tp_cost") {
-                    if item_struct.tp_cost > tp
-                        can_perform = false
-                }
-                
-                if can_perform {
+                if enc_item_get_enabled(item_struct) {
                     audio_play(snd_ui_select_CT)
                     switch item_struct.use_type {
                         case ITEM_USE.EVERYONE: // continue right away

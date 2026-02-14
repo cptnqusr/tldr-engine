@@ -3,13 +3,15 @@ var spr = sprite_index
 // set the hurt sprite if hurt
 if is_player || is_follower
 	s_hurt = party_getdata(name, "battle_sprites").hurt
+if is_enemy && struct_exists(enemy_struct, "s_hurt")
+    s_hurt = enemy_struct.s_hurt
 if hurt > 0 && is_in_battle || run_away && is_in_battle && is_enemy
 	spr = s_hurt
 	
-if (is_player || is_follower) && party_getdata(name, "is_down") 
+if (is_player || is_follower) && !party_isup(name)
 	spr = party_getdata(name, "battle_sprites").defeat
 
-var xx = x + xoff + sine(1, shake)
+var xx = x + xoff + sine(.5, shake)
 var yy = y + yoff
 
 var isave = image_blend
@@ -103,7 +105,7 @@ if instance_exists(o_eff_lighting_controller) && o_eff_lighting_controller.light
     if lighting_shadow_enabled
         s_drawer(spr, image_index, 
             xx, yy, 
-            image_xscale, lerp_type(0, -2, __l_alpha, "linear"), 
+            image_xscale, anime_curve_lerp(0, -2, __l_alpha, anime_curve.linear), 
             image_angle, c_black, image_alpha * o_eff_lighting_controller.lighting_alpha
         )
 }

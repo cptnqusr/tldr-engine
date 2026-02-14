@@ -12,6 +12,7 @@ selection = global.menu_page
 i_pselection = 0
 i_selection = 0
 i_pmselection = 0
+i_select_array = global.items
 
 // equip
 e_pmselection = 0
@@ -41,6 +42,8 @@ c_config = [
         call: method(self, function(delta) {
             o_world.volume_master += delta
             o_world.volume_master = clamp(o_world.volume_master, 0, 1)
+            
+            audio_master_gain(o_world.volume_master)
         }),
         display: function() {
             return $"{clamp(round(o_world.volume_master * 100), 0, 100)}%"
@@ -156,8 +159,6 @@ e_move = 0
 only_hp = false
 
 i_mode = 0 // 1 for everybody
-
-darkdollars = save_get("money")
 
 bcolor = merge_color(c_purple, c_black, 0.7)
 bcolor = merge_color(bcolor, c_dkgray, 0.5)

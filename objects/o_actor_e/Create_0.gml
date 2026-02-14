@@ -1,10 +1,12 @@
 event_inherited()
 
-s_hurt = spr_e_virovirokun_hurt	
-s_spared = spr_e_virovirokun_spare
+s_intro = spr_e_virovirokun_hurt
+s_intro_spd = 0
+s_frozen = undefined
 
 is_enemy = true
 chase_encounter = false
+enemy_struct = {}
 
 // idle_path, idle_path_spd, idle_path_autodir, sprite_facing_dir configured in variable difinitions
 // chase_zone, chase_zone_auto, chase_dist and chase_spd are configured in variable definitions
@@ -31,3 +33,4 @@ __start_chasing = function() {
 }
 
 xprev_real = 0
+alarm[0] = 1

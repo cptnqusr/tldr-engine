@@ -30,10 +30,12 @@ function enc_set() constructor { // base
     
     // miscellaneous config
     can_change_turnlen = true // by defending
-	display_target = true // whether to display the targets of the enemy's attack
+	display_target = false // whether to display the targets of the enemy's attack, like in chapter 1
     enc_var_struct = {}
 	
     // in-fight-events
+    ev_init =           -1 // called 1 frame after o_enc is created
+    ev_party_turn =     -1
     ev_pre_dialogue =   -1
 	ev_dialogue =	    -1
 	ev_turn =	  	    -1
@@ -44,7 +46,6 @@ function enc_set() constructor { // base
 	// methods
     _target_calculation = function() { // should return an array of indexes of party members who are targeted
         var __targets = []
-        
         for (var i = 0; i < array_length(global.party_names); ++i) {
 		    if party_getdata(global.party_names[i], "hp") > 0
 				array_push(__targets, global.party_names[i])
@@ -52,6 +53,10 @@ function enc_set() constructor { // base
         
         return __targets
     }
+    _target_recalculate_condition = function(__current_targets) {
+        return false
+    }
+    
 	_start = function() {
 		enc_start(self)
 	}
@@ -76,13 +81,17 @@ function enc_set_ex() : enc_set() constructor {
     
     _target_calculation = function() {
         var __targets = []
-        
         for (var i = 0; i < array_length(global.party_names); ++i) {
 		    if party_getdata(global.party_names[i], "hp") > 0
 				array_push(__targets, global.party_names[i])
 		}
         
+        if array_length(__targets) == 0
+            return -1
         return [array_shuffle(__targets)[0]]
+    }
+    _target_recalculate_condition = function(__current_targets) {
+        return (!party_isup(__current_targets[0]) ? true : false)
     }
 }
 function enc_set_virovirokun() : enc_set() constructor {

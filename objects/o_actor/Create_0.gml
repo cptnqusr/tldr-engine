@@ -10,6 +10,7 @@ is_follower = false
 is_in_battle = false
 is_selected_for_battle = false
 is_player = false
+is_party = false
 
 { // player specific
 	spd = 2
@@ -35,11 +36,12 @@ is_player = false
 { // actor variables
 	follow = true
 	hurt = 0 // the timer of the sprite switch
+    npc_id = undefined
 	
 	autoheight = true // whether the height is automatically determined
 	myheight = 0
 	
-	custom_depth = undefined
+	depth_override = undefined
 	pos = 0
     
     interaction_code = function() {}
@@ -169,7 +171,22 @@ is_player = false
 	}
 }
 
-alarm[0] = 1
+alarm[0] = 1 // initialize if not already initialized on the first frame
+__initialize = function() {
+    init = true
+    
+    if is_enemy 
+    	if autoheight 
+    		myheight = sprite_get_height(sprite_index)
+    
+    if is_party {
+        event_user(2)
+        
+    	s_hurt = party_getdata(name, "battle_sprites").hurt
+    	if autoheight 
+    		myheight = party_getbattleheight(name)
+    }
+}
 
 if !instance_exists(o_dodge_controller) 
 	instance_create(o_dodge_controller)

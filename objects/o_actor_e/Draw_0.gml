@@ -1,9 +1,9 @@
 if !is_in_battle && freeze == 0 && enable_chasing { // enemy aura, toby code
 	var spr = sprite_index
-	if hurt > 0  
-		spr = s_hurt
+	if hurt > 0 && struct_exists(enemy_struct, "s_hurt")
+        spr = enemy_struct.s_hurt
 	
-	var xx = x + xoff + sine(1, shake)
+	var xx = x + xoff + sine(.5, shake)
 	var yy = y + yoff
 	
 	if onscreen(id, 30) && hurt == 0 {
@@ -13,7 +13,7 @@ if !is_in_battle && freeze == 0 && enable_chasing { // enemy aura, toby code
 	    for (var i = 0; i < 5; i++) {
 	        var aura = ((i * 9) + ((drawsiner * 3) % 9))
 	        var aurax = ((aura * 0.75) + (sin((aura / 4)) * 4))/2 * sign(image_xscale)
-	        var auray = (45 * lerp_type(0, 1, (aura / 45), "sine_in"))/2
+	        var auray = (45 * anime_curve_lerp(0, 1, (aura / 45), anime_curve.sine_in))/2
 	        var aurayscale = min((80 / sprite_height), 1)/2
 			
 			s_drawer(spr, image_index,
@@ -31,9 +31,8 @@ if !is_in_battle && freeze == 0 && enable_chasing { // enemy aura, toby code
 	   image_angle, image_blend, image_alpha
     )
 }
-else {
+else
 	event_inherited()
-}
 
 if notice
     draw_sprite(spr_ui_exclamation, 0, x, y - sprite_height - 2)

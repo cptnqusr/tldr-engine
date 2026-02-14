@@ -18,7 +18,7 @@ if !only_hp { // top
 		if selection == i && state == 0
 			draw_sprite_ext(spr_ui_soul_small, 0, 128 + 100*i, 38 - 80 + roll, 2, 2, 0, c_white, 1)
 	}
-	draw_text_transformed(520, 20 - 80 + roll, string("G {0}", darkdollars), 2, 2, 0)
+	draw_text_transformed(520, 20 - 80 + roll, string("D$ {0}", save_get("money")), 2, 2, 0)
 }
 { // bottom
 	draw_sprite_ext(spr_pixel, 0, 0, 417 + 80 - roll, 640, 63, 0, c_black, 1)
@@ -112,14 +112,20 @@ if selection == 0 { // items
 			for (var i = 0; i < item_get_count(ITEM_TYPE.KEY); ++i) {
 				if i == i_selection && state == 2 
 					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_white, 1)
-				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.key_items[i]), (state == 1 ? c_gray : c_white))
+                if !item_check_useable(global.key_items[i])
+                    draw_set_colour(c_gray)
+				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.key_items[i]), (state == 1 ? c_gray : draw_get_colour()))
+                draw_set_colour(c_white)
 			}
 		}
 		else { // other
 			for (var i = 0; i < item_get_count(); ++i) {
 				if i == i_selection && state == 2 
 					draw_sprite_ext(spr_uisoul, 0, 120 + (i % 2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 160 + floor(i/2) * 30, 1, 1, 0, c_white, 1)
-				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.items[i]), (state == 1 ? c_gray : c_white))
+                if !item_check_useable(global.items[i])
+                    draw_set_colour(c_gray)
+				draw_text_shadow(146 + (i%2 == 1 ? 210 + _r_offset*2 : 0) + _l_offset*2, 152 + floor(i/2) * 30, item_get_name(global.items[i]), (state == 1 ? c_gray : draw_get_colour()))
+                draw_set_colour(c_white)
 			}
 		}    
 		

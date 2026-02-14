@@ -3,7 +3,18 @@ if tp_constrict
 else 
     tp_defend = 16
 
+// call the initializer event
+if !encounter_init {
+    __call_enc_event("ev_init")
+    encounter_init = true
+}
+
 if battle_state == BATTLE_STATE.MENU {
+    if !party_menu_init {
+        party_menu_init = true
+        __call_enc_event("ev_party_turn")
+    }
+    
     if battle_menu == BATTLE_MENU.BUTTON_SELECTION {
         if InputPressed(INPUT_VERB.RIGHT) {
             audio_play(snd_ui_move_CT)
@@ -46,7 +57,9 @@ if battle_state == BATTLE_STATE.MENU {
         }
         
         if !instance_exists(inst_flavor) {
-            inst_flavor = dialogue_start((flavor_seen ? "{instant}" : "") + enc_get_flavor(encounter_data) + "{stop}")
+            turn_flavor ??= enc_get_flavor(encounter_data)
+            
+            inst_flavor = dialogue_start((flavor_seen ? "{instant}" : "") + turn_flavor + "{stop}")
             inst_flavor.die_delay = 0
             flavor_seen = true
         }
@@ -203,7 +216,7 @@ else if battle_state == BATTLE_STATE.EXEC {
         action_queue = __order_action_queue()
         exec_init = true
     }
-    if !__check_waiting() {
+    else if !__check_waiting() {
         if buffer == 0 {
             if array_length(action_queue) > 0 {
                 var action = action_queue[0]
@@ -227,6 +240,7 @@ else if battle_state == BATTLE_STATE.DIALOGUE {
     if !__check_waiting() && buffer == 0 {
         if !dialogue_init {
             animate(0, .75, 15, "linear", o_eff_bg, "fade")
+            
             turn_objects = array_create(array_length(encounter_data.enemies), noone)
     		for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
     			if !enc_enemy_isfighting(i)
@@ -242,7 +256,7 @@ else if battle_state == BATTLE_STATE.DIALOGUE {
     			if is_callable(text)
     				text = text(i)
     			
-    			if is_string(text) || is_array(text) {
+    			if (is_string(text) && text != "") || (is_array(text) && array_length(text) > 0) {
                     var inst = actor_dialogue_create(text, encounter_data.enemies[i].actor_id,,, {
                         spr: encounter_data.enemies[i].dia_bubble_sprites
                     }, encounter_data.enemies[i].dia_bubble_off_x, encounter_data.enemies[i].dia_bubble_off_y, encounter_data.enemies[i].dia_bubble_off_type) 
@@ -351,6 +365,8 @@ else if battle_state == BATTLE_STATE.TURN {
 }
 else if battle_state == BATTLE_STATE.POST_TURN {
     if !post_turn_init {
+        turn_count ++
+        
         __call_enc_event("ev_post_turn")
         post_turn_init = true
         buffer = 2
@@ -392,10 +408,8 @@ else if battle_state == BATTLE_STATE.WIN {
 		for (var i = 0; i < array_length(global.party_names); ++i) {
 		    party_state[i] = PARTY_STATE.IDLE
 			
-			if party_getdata(global.party_names[i], "is_down") {
+			if !party_isup(global.party_names[i])
 				party_setdata(global.party_names[i], "hp", round(party_getdata(global.party_names[i], "max_hp") * .12))
-                party_setdata(global.party_names[i], "is_down", false)
-            }
             
 			enc_party_set_battle_sprite(global.party_names[i], "victory", 0, 1)
             
@@ -417,7 +431,8 @@ else if battle_state == BATTLE_STATE.WIN {
         animate(0, -80, 10, anime_curve.circ_out, inst_tp_bar, "x_offset")
         
 		cutscene_create()
-		cutscene_dialogue(string(loc("enc_win"), __exp, __dd) + win_message)
+        if win_dialogue_show
+		  cutscene_dialogue(string(loc("enc_win"), __exp, __dd) + win_message)
         cutscene_set_variable(self, "win_hide_ui", true)
 		cutscene_sleep(5)
         
@@ -439,7 +454,7 @@ else if battle_state == BATTLE_STATE.WIN {
         for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
             if is_struct(encounter_data.enemies[i]) {
                 var o = encounter_data.enemies[i].actor_id
-                var a = marker_getpos("enemy_defeated", encounter_data.enemies[i].defeat_marker)
+                var a = marker_get("enemy_defeated", encounter_data.enemies[i].defeat_marker)
                 
                 if !is_undefined(a) && instance_exists(o) {
                     cutscene_animate(o.x, a.x, 12, "linear", o, "x")

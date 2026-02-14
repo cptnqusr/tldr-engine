@@ -11,7 +11,7 @@ function party_init() {
 	global.party_names = []
 }
 function party_m_initialize(_name, _constructor) {
-    struct_set(global.party, _name, new _constructor())
+    struct_set(global.party, _name, new _constructor(_name))
 }
 
 /// @desc applies the equipment to party members (only for raw saves)
@@ -31,8 +31,9 @@ function party_m_calculate_hp(base_hp, level) {
         return base_hp + 30 + 40*level
 }
     
-function party_m() constructor {
+function party_m(_initialized_name) constructor {
 	name = "???"
+    initialized_name = _initialized_name
     action_letter = "?"
     obj = {
 		obj: o_actor,
@@ -71,13 +72,21 @@ function party_m() constructor {
 		new item_s_testdmg(),
 	]
 	
-	// sprites
-	s_state =		""
-	s_substate =	""
+	// sprites config
+    s_name = ""
+    s_prefix = ""
+    s_scheme = "spr_{0}_{1}_{2}"
+    s_scheme_addelements = []
+    s_fallback = spr_default
+    
 	s_icon =		spr_ui_default_icon
 	s_icon_ow =		spr_ui_default_head
 	s_icon_weapon = spr_ui_menu_weapon_axe
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
+    
+    // states
+	s_state =		""
+	s_substate =	""
 	
 	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bsusie_act, true],
@@ -98,15 +107,17 @@ function party_m() constructor {
 		victory: [spr_bsusie_victory, true],
 		spare: [spr_bsusie_act, "idle", 1],
 		attack_eff: spr_bsusie_attackeff,
-		
-		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 		
 	// system
 	actor_id = noone
+    
+    // methods
+    __get_cardinal = party_m_get_cardinal
+    __get_sprite = party_m_get_sprite
 }
 
-function party_m_kris() : party_m() constructor {
+function party_m_kris(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_kris_name"
     action_letter = "party_kris_action_letter"
 	obj = o_actor_kris
@@ -142,6 +153,7 @@ function party_m_kris() : party_m() constructor {
 	]
 	
 	// sprites
+    s_name = "kris"
 	s_state =		""
 	s_substate =	""
 	s_icon =		spr_ui_kris_icon
@@ -168,7 +180,7 @@ function party_m_kris() : party_m() constructor {
 		attack_eff: spr_bkris_attackeff,
 	}
 }
-function party_m_susie() : party_m() constructor {
+function party_m_susie(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_susie_name"
     action_letter = "party_susie_action_letter"
 	obj = o_actor_susie
@@ -205,6 +217,7 @@ function party_m_susie() : party_m() constructor {
 	]
 	
 	// sprites
+    s_name = "susie"
 	s_state =		"" // serious, eyes, serious_eyes, bangs
 	s_substate =	""
 	s_icon =		spr_ui_susie_icon
@@ -235,7 +248,7 @@ function party_m_susie() : party_m() constructor {
 		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 }
-function party_m_ralsei() : party_m() constructor {
+function party_m_ralsei(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_ralsei_name"
     action_letter = "party_ralsei_action_letter"
 	obj = o_actor_ralsei
@@ -272,12 +285,13 @@ function party_m_ralsei() : party_m() constructor {
 	]
 	
 	// sprites
+    s_name = "ralsei"
 	s_state =		"" // sad, sad_subtle, hat
 	s_substate =	""
 	s_icon =		spr_ui_ralsei_icon
 	s_icon_ow =		spr_ui_ralsei_head
 	s_icon_weapon = spr_ui_menu_weapon_scarf
-	s_battle_intro =	1 // 1 for attack, 0 for full intro	
+	s_battle_intro =	0 // 1 for attack, 0 for full intro	
 	
 	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
 		act: [spr_bralsei_act, true],
@@ -300,7 +314,7 @@ function party_m_ralsei() : party_m() constructor {
 		attack_eff: spr_bralsei_attackeff,
 	}
 }
-function party_m_noelle() : party_m() constructor {
+function party_m_noelle(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_noelle_name"
     action_letter = "party_noelle_action_letter"
 	obj = o_actor_noelle
@@ -338,6 +352,7 @@ function party_m_noelle() : party_m() constructor {
 	]
 	
 	// sprites
+    s_name = "noelle"
 	s_state =		""
 	s_substate =	""
 	s_icon =		spr_ui_noelle_icon

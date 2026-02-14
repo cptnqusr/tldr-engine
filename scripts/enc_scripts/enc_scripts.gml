@@ -23,6 +23,8 @@ function enc_getparty_sprite(party_name, sprname) {
 function enc_hurt_enemy(target, hurt, user, sfx = snd_damage, fatal = false, seed = "") {
 	var enemy_struct = o_enc.encounter_data.enemies[target]
     
+    if !is_struct(enemy_struct)
+        exit
     if enemy_struct.hp <= 0 || !enc_enemy_isfighting(target)
 		exit
 	enemy_struct.hp -= hurt
@@ -69,6 +71,9 @@ function enc_hurt_enemy(target, hurt, user, sfx = snd_damage, fatal = false, see
 /// @arg {real} percent the amount of percent to add
 /// @arg {Asset.GMSound} sfx the sfx to play upon adding the percentage
 function enc_enemy_add_spare(target, percent, sfx = snd_mercyadd) {
+    if !enc_enemy_isfighting(target)
+        exit
+    
 	o_enc.encounter_data.enemies[target].mercy += percent
 	if o_enc.encounter_data.enemies[target].mercy >= 100
 		percent = 100
@@ -92,8 +97,10 @@ function enc_enemy_add_spare(target, percent, sfx = snd_mercyadd) {
 			
         audio_play(sfx,, 0.8, _pitch, 1)
 	}
-	if o_enc.encounter_data.enemies[target].mercy >= 100 
-		o.sprite_index = o.s_spared
+	if o_enc.encounter_data.enemies[target].mercy >= 100 {
+        o_enc.encounter_data.enemies[target].s_idle = o_enc.encounter_data.enemies[target].s_spare
+        o.sprite_index = o_enc.encounter_data.enemies[target].s_spare
+    }
 }
 
 /// @desc adds to the mercy bar and spawns a text indicator
@@ -111,9 +118,9 @@ function enc_enemy_add_spare_from_var(target, instance, variable, sfx = snd_merc
 /// @arg {bool} _tired whether the enemy should become tired or not
 function enc_enemy_set_tired(enemy_index, _tired) {
     if !instance_exists(o_enc)
-        return
+        exit
     if !enc_enemy_isfighting(enemy_index)
-        return
+        exit
     
     o_enc.encounter_data.enemies[enemy_index].tired = _tired
 }
@@ -126,6 +133,9 @@ function tp_clamp(tp) {
 /// @desc returns whether an enemy is still fighting
 /// @arg enemy_slot
 function enc_enemy_isfighting(target) {
+    if target >= array_length(o_enc.encounter_data.enemies) || target < 0
+        return false
+    
 	var ret = is_struct(o_enc.encounter_data.enemies[target])
 	if ret && o_enc.encounter_data.enemies[target].hp <= 0 
 		ret = false
@@ -207,4 +217,79 @@ function enc_get_flavor(data) {
     if is_callable(data.flavor)
         return data.flavor()
     return data.flavor
+}
+
+/// @desc returns the amount of enemies that are currently fighting
+function enc_count_fighting_enemies() {
+    var count = 0
+    for (var i = 0; i < array_length(o_enc.encounter_data.enemies); i ++) {
+        if enc_enemy_isfighting(i)
+            count ++
+    }
+    return count
+}
+
+/// @arg {struct.enc_set|function} set_or_ref the encounter set struct or its reference
+/// @arg {function} enemy_ref the enemy we're looking for
+function enc_set_contains_enemy(set_or_ref, enemy_ref) {
+    if !is_struct(set_or_ref)
+        set_or_ref = new set_or_ref()
+    
+    for (var i = 0; i < array_length(set_or_ref.enemies); i ++) {
+        if enc_enemy_isfighting(i) && is_instanceof(set_or_ref.enemies[i], enemy_ref)
+            return true
+    }
+}
+/// @arg {struct.enc_set|function} set_or_ref the encounter set struct or its reference
+/// @arg {function} enemy_ref the enemy we're counting
+function enc_set_count_enemy(set_or_ref, enemy_ref) {
+    if !is_struct(set_or_ref)
+        set_or_ref = new set_or_ref()
+    
+    var counter = 0
+    for (var i = 0; i < array_length(set_or_ref.enemies); i ++) {
+        if enc_enemy_isfighting(i) && is_instanceof(set_or_ref.enemies[i], enemy_ref)
+            counter ++
+    }
+    return counter
+}
+
+/// @desc returns whether an item in the item selector page of the encounter ui can be used
+/// @arg {struct} item_struct the struct of the item you'd like to check
+function enc_item_get_enabled(item_struct) {
+    var can_perform = true
+    
+    // disable the act if some member is not up
+    if struct_exists(item_struct, "party") {
+        if item_struct.party == -1 {
+            for (var j = 0; j < array_length(global.party_names); j ++) {
+                if !party_isup(global.party_names[j]) {
+                    can_perform = false
+                    break
+                }
+            }
+        }
+        else {
+            for (var j = 0; j < array_length(item_struct.party); j ++) {
+                var name = item_struct.party[j]
+                if !party_isup(name) {
+                    can_perform = false
+                    break
+                }
+            }
+        }
+    }
+    
+    if struct_exists(item_struct, "tp_cost") {
+        if item_struct.tp_cost > o_enc.tp
+            can_perform = false
+    }
+    if struct_exists(item_struct, "enabled") {
+        if is_callable(item_struct.enabled)
+            can_perform = item_struct.enabled()
+        else 
+            can_perform = item_struct.enabled
+    }
+    
+    return can_perform
 }

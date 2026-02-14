@@ -71,31 +71,51 @@ function enc_action_fight(_party_names, _enemy_target) : enc_action(_party_names
 function enc_action_act(_party_names, _enemy_target, _act) : enc_action(_party_names) constructor {
     target = _enemy_target
     target_act = _act
+    tp_taken = (struct_exists(_act, "tp_cost") ? _act.tp_cost : 0)
     
     perform = function(_action_queue) {
         if enc_enemy_isfighting(target) {
             // set the party sprites accordingly
-            for (var i = 0; i < array_length(party_names); i ++) {
-                enc_party_set_battle_sprite(party_names[i], "act")
+            if !struct_exists(target_act, "perform_act_anim") 
+                || (struct_exists(target_act, "perform_act_anim") && target_act.perform_act_anim)
+            {
+                for (var i = 0; i < array_length(party_names); i ++) {
+                    enc_party_set_battle_sprite(party_names[i], "act")
+                }
             }
         
             // perform the act
-            script_execute(target_act.exec, target, acting_member)
+            var exec_args = []
+            var back_to_idle = (struct_exists(target_act, "return_to_idle_sprites") ? target_act.return_to_idle_sprites : true)
+            if struct_exists(target_act, "exec_args")
+                exec_args = target_act.exec_args
+            
+            method_call(target_act.exec, array_concat([target, acting_member], exec_args))
             
             cutscene_create()
             cutscene_wait_until(function() {
                 return !o_enc.__check_waiting()
             })
-            cutscene_func(function(party_names) {
+            cutscene_func(function(party_names, back_to_idle) {
                 for (var i = 0; i < array_length(party_names); i ++) {
                     var p_inst = party_get_inst(party_names[i])
-                    if instance_exists(p_inst) && party_get_inst(party_names[i]).sprite_index == enc_getparty_sprite(party_names[i], "act")
-                        enc_party_set_battle_sprite(party_names[i], "actend")
+                    
+                    if instance_exists(p_inst) {
+                        if p_inst.sprname == "act"
+                            enc_party_set_battle_sprite(party_names[i], "actend")
+                        else if back_to_idle
+                            enc_party_set_battle_sprite(party_names[i], "idle")
+                    } 
+                    
                     o_enc.party_state[party_get_index(party_names[i])] = PARTY_STATE.IDLE
                 }
-            }, [party_names])
+            }, [party_names, back_to_idle])
             cutscene_play()
         }
+    }
+    cancel_effects = function() {
+        with other
+            tp += other.tp_taken
     }
 }
 
@@ -119,29 +139,33 @@ function enc_action_power(_party_names, _target, _spell, _spell_index) : enc_act
                         break
                     }
                 }
+            if !enc_enemy_isfighting(target)
+                exit
         }
         
         cutscene_create()
         cutscene_set_variable(o_enc, "waiting_internal", true)
         
         if target_spell.is_party_act {
-            // set the party sprites accordingly
-            for (var i = 0; i < array_length(party_names); i ++) {
-                enc_party_set_battle_sprite(party_names[i], "act")
-            }
-            
-            var act_execer = -1
-            var __default_action = true
+            var target_act = -1
             with o_enc
-                act_execer = encounter_data.enemies[party_enemy_selection[party_get_index(other.acting_member)]].acts_special
+                target_act = encounter_data.enemies[party_enemy_selection[party_get_index(other.acting_member)]].acts_special
             
-            if struct_exists(act_execer, acting_member){
-                act_execer = struct_get(act_execer, acting_member)
-                if struct_exists(act_execer, "exec") {
-                    script_execute(act_execer.exec, 
+            // set the party sprites accordingly
+            if struct_exists(target_act, "perform_act_anim") && target_act.perform_act_anim {
+                for (var i = 0; i < array_length(party_names); i ++) {
+                    enc_party_set_battle_sprite(party_names[i], "act")
+                }
+            }
+           
+            var __default_action = true
+            if struct_exists(target_act, acting_member){
+                target_act = struct_get(target_act, acting_member)
+                if struct_exists(target_act, "exec") {
+                    method_call(target_act.exec, [
                         other.party_enemy_selection[party_get_index(acting_member)], 
-                        acting_member
-                    )
+                        acting_member 
+                    ])
                     __default_action = false
                 }
             }
@@ -206,6 +230,8 @@ function enc_action_item(_party_names, _target, _item, _item_index) : enc_action
                         break
                     }
                 }
+            if !enc_enemy_isfighting(target)
+                exit
         }
         
         cutscene_create()
@@ -262,6 +288,8 @@ function enc_action_spare(_party_names, _enemy_target) : enc_action(_party_names
                         break
                 }
             }
+        if !enc_enemy_isfighting(target)
+            exit
         
         with other {
             var __enemy = o_enc.encounter_data.enemies[other.target]

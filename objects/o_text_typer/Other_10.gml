@@ -157,17 +157,29 @@ if command == "eff" || command == "effect" { // eff(real) out of 0 (shake)
 if command == "god" { // god(bool)  whether it's god (gaster) text
 	god = bool(arg[0])
 }
-if command == "npc_link" { // npc_link(real)  you can link an npc to this and they will be animated when the text is playing
+if command == "npc_link" { // npc_link(real, unlink_previous=bool)  you can link an npc to this and they will be animated when the text is playing (argument is npc id, second argument is true by default)
 	var o_link = real(arg[0])
-	
 	var o = noone
-	with(o_ow_npc) {
-		if o_link == npc_id {
+	with (o_ow_npc) {
+		if o_link == npc_id
 			o = id
-		}
+	}
+    
+	if array_length(arg) > 1 && arg[1] // unlink previous talk links
+        talk_link = []
+	if !array_contains(talk_link, o)
+        array_push(talk_link, o)
+}
+if command == "npc_unlink" { // npc_unlink(real)  you can link an npc to this and they will be animated when the text is playing (argument is npc id)
+    var o_link = real(arg[0])
+	var o = noone
+	with (o_ow_npc) {
+		if o_link == npc_id
+			o = id
 	}
 	
-	npc_link = o
+	if array_contains(talk_link, o)
+        array_delete(talk_link, array_get_index(talk_link, o), 1)
 }
 if command == "choice" { // choice(`choice1`, `choice2`, ...)  create a choice box for the player
     _facechange("none")
@@ -175,6 +187,7 @@ if command == "choice" { // choice(`choice1`, `choice2`, ...)  create a choice b
 	choice_inst = instance_create(o_text_choice, x, y, depth, {
 		choices: arg,
 		caller: id,
+        box_height: (caller.object_index == o_ui_dialogue ? caller.height : 151)
 	})
     
 	pause = -2
@@ -249,6 +262,9 @@ if command == "can_skip" { // can_skip(bool)
         skipping = false
         superskipping = false
     }
+    else {
+        allow_skip_internal = true
+    }
 }
 if command == "can_superskip" { // can_superskip(bool)
 	can_superskip = bool(arg[0])
@@ -256,6 +272,9 @@ if command == "can_superskip" { // can_superskip(bool)
         allow_skip_internal = false
         skipping = false
         superskipping = false
+    }
+    else {
+        allow_skip_internal = true
     }
 }
 

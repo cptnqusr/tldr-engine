@@ -82,7 +82,7 @@
 	}
 	
 	///@desc updates a loaded save
-	function save_update_loaded(slot, data){
+	function save_update_read(slot, data){
 		global.saves[slot] = data
 	}
 	///@desc updates the save on pc
@@ -90,7 +90,7 @@
 		save_export_to_loaded()
         
 		var data = global.save
-		save_update_loaded(slot, data)
+		save_update_read(slot, data)
 		save_write(slot, data, chapter)
 		
 		save_reload()
@@ -205,14 +205,16 @@
     /// @desc creates a new save entry and automatically adds it to the save recording global variable
     /// @arg {string} _name the name you will use as reference in save_get to retrieve the data
     /// @arg {any} _default_value the default value of the entry
-    /// @arg {function|undefined} _import_method a function the save system will use to import the raw data. argument 0 is the raw data of the hash, should return nothing and set the variable in it
+    /// @arg {function|undefined} _import_method a function the save system will use to import the converted data. argument 0 is the converted data (or raw data if `_convert_method` is undefined), should return nothing and set the variable in it
     /// @arg {function|undefined} _export_method a function the save system will use to export the raw data. should return what will be stored in the hash
-    function save_entry(_name, _default_value, _import_method = undefined, _export_method = undefined) {
+    /// @arg {function|undefined} _convert_method a method the save system will use to convert the raw data into converted data that will be fed into the `_import_method`
+    function save_entry(_name, _default_value, _import_method = undefined, _export_method = undefined, _convert_method = undefined) {
         var __entry_struct = {
             name: _name,
-            default_value: _default_value,
+            default_value: variable_clone(_default_value),
             __import: _import_method,
-            __export: _export_method
+            __export: _export_method,
+            __convert: _convert_method,
         }
         
         array_push(global.save_recording, __entry_struct)
@@ -235,19 +237,20 @@
     /// @arg {real} chapter the chapter to look in
     /// @arg {bool} to_default_values whether to set all variables to their default values
 	function save_load(slot, chapter = global.chapter, to_default_values = false) {
-		music_stop_all()
-		
 		if global.saves[slot] != -1 
             global.save = global.saves[slot]
+        else 
+            to_default_values = true
         
         save_set_slot(slot)
         for (var i = 0; i < array_length(global.save_recording); i ++) {
             var __recording = global.save_recording[i]
-            if to_default_values {
-                struct_set(global.save, string_upper(__recording.name), variable_clone(__recording.default_value))
-                continue
-            }
+            var __value = (to_default_values ? variable_clone(__recording.default_value) : variable_clone(save_get(__recording.name)))
             
+            if !to_default_values && is_callable(__recording.__convert)
+                __value = __recording.__convert(variable_clone(save_get(__recording.name)))
+            
+            struct_set(global.save, string_upper(__recording.name), __value)
             if is_callable(__recording.__import)
                 __recording.__import(save_get(__recording.name))
         }
@@ -264,6 +267,12 @@
 	///@desc delete a save slot from the machine
 	function save_delete(slot, chapter = global.chapter){
 		file_delete(save_get_fname(slot, chapter))
+        global.saves[slot] = -1
+        
+        if global.save_slot == slot {
+            save_load(slot, global.chapter, true)
+            save_export_to_loaded()
+        }
 	}
     
     /// @desc wipe off saves and settings you previously had. irreversible. use sparingly
@@ -335,6 +344,9 @@
             o_world.volume_master = global.settings.VOL_MASTER
             o_world.volume_sfx = global.settings.VOL_SFX
             o_world.volume_bgm = global.settings.VOL_BGM
+            audio_master_gain(o_world.volume_master)
+            audio_emitter_gain(o_world.emitter_sfx, o_world.volume_sfx)
+            audio_emitter_gain(o_world.emitter_music, o_world.volume_bgm)
             
             if struct_exists(global.settings, "CONTROLS_KEY")
                 InputBindingsImport(false, global.settings.CONTROLS_KEY)
