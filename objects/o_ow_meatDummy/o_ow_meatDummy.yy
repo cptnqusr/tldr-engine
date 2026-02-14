@@ -33,8 +33,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_meat_dummy",
-    "path":"sprites/spr_meat_dummy/spr_meat_dummy.yy",
+    "name":"spr_meatdummy",
+    "path":"sprites/spr_meatdummy/spr_meatdummy.yy",
   },
   "spriteMaskId":null,
   "visible":true,

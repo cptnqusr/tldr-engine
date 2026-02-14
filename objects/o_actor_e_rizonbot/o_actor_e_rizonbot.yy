@@ -35,8 +35,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_e_rizon_bot",
-    "path":"sprites/spr_e_rizon_bot/spr_e_rizon_bot.yy",
+    "name":"spr_e_rizonbot",
+    "path":"sprites/spr_e_rizonbot/spr_e_rizonbot.yy",
   },
   "spriteMaskId":null,
   "visible":true,

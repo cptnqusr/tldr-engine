@@ -1,5 +1,7 @@
-event_inherited()
-s_hurt = spr_meat_dummy
-s_spared = spr_e_virovirokun_spare
+/// @description Insert description here
+// You can write your code in this editor
 
-chaser = false
+// Inherit the parent event
+event_inherited()
+s_intro = undefined
+

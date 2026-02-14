@@ -6,6 +6,7 @@ function party_init() {
     party_m_initialize("susie", party_m_susie)
     party_m_initialize("ralsei", party_m_ralsei)
     party_m_initialize("noelle", party_m_noelle)
+	//party_m_initialize("sponge", party_m_sponge)
 	
     
 	global.party_names = []
@@ -381,14 +382,9 @@ function party_m_noelle(_initialized_name) : party_m(_initialized_name) construc
 		attack_eff: spr_bnoelle_attackeff,
 	}
 }
-function party_m_sponge() : party_m() constructor {
+function party_m_sponge(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_sponge_name"
-	obj = {
-		obj: o_actor_sponge,
-		var_struct: {
-			name: "sponge"
-		},
-	}
+	obj = o_actor_sponge
 	
 	// colors
 	color = c_orange
@@ -421,6 +417,7 @@ function party_m_sponge() : party_m() constructor {
 	]
 	
 	// sprites
+	s_name = "sponge"
 	s_state =		""
 	s_substate =	""
 	s_icon =		spr_ui_susie_icon
@@ -449,7 +446,7 @@ function party_m_sponge() : party_m() constructor {
 		attack_eff: spr_bkris_attackeff,
 	}
 }
-function party_m_frog() : party_m() constructor {
+function party_m_frog(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_frog_name"
 	obj = {
 		obj: o_actor_frog,
@@ -519,7 +516,7 @@ function party_m_frog() : party_m() constructor {
 		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 }
-function party_m_bowie() : party_m() constructor {
+function party_m_bowie(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_bowie_name"
 	obj = o_actor_bowie
 	
@@ -584,7 +581,7 @@ function party_m_bowie() : party_m() constructor {
 		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 }
-function party_m_scoot() : party_m() constructor {
+function party_m_scoot(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_scoot_name"
 	obj = o_actor_scoot
 	
