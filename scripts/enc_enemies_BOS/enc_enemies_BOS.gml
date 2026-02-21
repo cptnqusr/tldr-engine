@@ -31,6 +31,11 @@ function enemy_rizonbot() : enemy() constructor {
 	acts_special_desc = loc("enc_ui_label_standard")
 	
 	
+	// sprites
+	s_idle = spr_e_rizonbot
+	s_spare = spr_e_rizonbot
+	s_hurt = spr_e_rizonbot
+	
 	
 	// text
 	dialogue =				function(slot) { return array_shuffle(["YOUR CALL IS VERY IMPORTANT TO US","ert2"])[0]} // can be a function (can accept slot argument as arg0)
@@ -41,6 +46,7 @@ function enemy_rizonbot() : enemy() constructor {
 	
     // misc
     freezable = false
+	run_away = false
 	
 	//recruit
 	recruit = new enemy_recruit()
@@ -80,7 +86,7 @@ function enemy_meatdummy() : enemy() constructor {
 	
 	
 	// text
-	dialogue =				undefined
+	dialogue =				"Yow"
 	dia_bubble_offset =		[-5, 0, 0] // x, y, relative to (1 for enemy and 0 for default box pos)
 	dia_bubble_sprites =	[spr_ui_enc_dialogue_box, spr_ui_enc_dialogue_spike]
 	

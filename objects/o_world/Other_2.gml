@@ -55,6 +55,12 @@ global.time = 0
 global.save_slot = global.settings.SAVE_SLOT
 global.save_recording = []
 global.save = {}
+
+// load the default items
+array_push(global.key_items, new item_key_locket())
+array_push(global.items, new item_nine_key())
+array_push(global.items, new item_revivemint())
+
 #region create the save entries
     // base player data
     save_entry("NAME", "PLAYER")
@@ -158,10 +164,7 @@ global.font_ui_hp = font_add_sprite_ext(spr_ui_hpfont, "1234567890-", true, 2);
 global.font_numbers_w = font_add_sprite_ext(spr_ui_numbers_wfont,"0123456789+-%/", false, 1);
 global.font_numbers_g = font_add_sprite_ext(spr_ui_numbers_gfont,"0123456789+-%/", false, 1);
 
-// load the default items
-array_push(global.key_items, new item_key_locket())
-array_push(global.items, new item_nine_key())
-array_push(global.items, new item_revivemint())
+
 
 
 // create entries for the party stuff later since we must first apply their equipment
