@@ -1,9 +1,7 @@
-color = 0
-graze = 1
-att = 6
-inv = ENC_SETUP_SOUL_INV
-destroy = true
-element = ""
+/// @description Insert description here
+// You can write your code in this editor
 
-inside = false
-alarm[0] = 1
+// Inherit the parent event
+event_inherited();
+
+destroy = false

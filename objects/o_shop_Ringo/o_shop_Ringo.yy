@@ -1,21 +1,19 @@
 {
   "$GMObject":"",
-  "%Name":"o_enc_frog_body_bullet",
+  "%Name":"o_shop_Ringo",
   "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"o_enc_frog_body_bullet",
+  "name":"o_shop_Ringo",
   "overriddenProperties":[],
   "parent":{
-    "name":"bullets",
-    "path":"folders/Objects/enc/bullets.yy",
+    "name":"tldr-engine",
+    "path":"tldr-engine.yyp",
   },
   "parentObjectId":{
-    "name":"o_enc_bullet",
-    "path":"objects/o_enc_bullet/o_enc_bullet.yy",
+    "name":"o_shop",
+    "path":"objects/o_shop/o_shop.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -34,10 +32,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{
-    "name":"spr_e_frogEnemy_idle",
-    "path":"sprites/spr_e_frogEnemy_idle/spr_e_frogEnemy_idle.yy",
-  },
+  "spriteId":null,
   "spriteMaskId":null,
   "visible":true,
 }

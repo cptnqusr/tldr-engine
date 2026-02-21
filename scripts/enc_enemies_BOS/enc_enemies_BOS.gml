@@ -83,7 +83,10 @@ function enemy_meatdummy() : enemy() constructor {
 	}
 	acts_special_desc = loc("enc_ui_label_standard")
 	
-	
+	// sprites
+	s_idle = spr_meatdummy
+	s_spare = spr_meatdummy
+	s_hurt = spr_meatdummy
 	
 	// text
 	dialogue =				"Yow"
@@ -131,7 +134,10 @@ function enemy_frog() : enemy() constructor {
 	}
 	acts_special_desc = loc("enc_ui_label_standard")
 	
-	
+	// sprites
+	s_idle = spr_e_frogEnemy_idle
+	s_spare = spr_e_frogEnemy_idle
+	s_hurt = spr_e_frogEnemy_hurt
 	
 	// text
 	dialogue =				undefined

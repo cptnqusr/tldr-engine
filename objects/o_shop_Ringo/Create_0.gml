@@ -1,8 +1,8 @@
 shop_data = {
     flavor: function() {
-        return "* Welcome to Color Cafe.{br}{resetx}* Let us warm your day."
+        return "Peace and Love, Peace and Love!"
     },
-    shopkeeper: o_ex_shop_shopkeep_swatch,
+    shopkeeper: o_shop_shopkeep_ringo,
     options: [
         new shop_option_buy(),
         new shop_option_sell(),
@@ -16,9 +16,9 @@ inst_flavor = noone
 
 option_selection = 0
 
-//enum SHOP_MENU {
-//    OPTIONS,
-//}
+enum SHOP_MENU {
+    OPTIONS,
+}
 menu = SHOP_MENU.OPTIONS
 
 __get_flavor = function() {

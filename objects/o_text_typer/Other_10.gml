@@ -161,7 +161,7 @@ if command == "npc_link" { // npc_link(real, unlink_previous=bool)  you can link
 	var o_link = real(arg[0])
 	var o = noone
 	with (o_ow_npc) {
-		if o_link == npc_id
+		if o_link == link_id
 			o = id
 	}
     
@@ -174,7 +174,7 @@ if command == "npc_unlink" { // npc_unlink(real)  you can link an npc to this an
     var o_link = real(arg[0])
 	var o = noone
 	with (o_ow_npc) {
-		if o_link == npc_id
+		if o_link == link_id
 			o = id
 	}
 	
