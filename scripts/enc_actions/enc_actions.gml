@@ -71,7 +71,7 @@ function enc_action_fight(_party_names, _enemy_target) : enc_action(_party_names
 function enc_action_act(_party_names, _enemy_target, _act) : enc_action(_party_names) constructor {
     target = _enemy_target
     target_act = _act
-    tp_taken = (struct_exists(_act, "tp_cost") ? _act.tp_cost : 0)
+    tp_taken = 0
     
     perform = function(_action_queue) {
         if enc_enemy_isfighting(target) {
@@ -115,7 +115,7 @@ function enc_action_act(_party_names, _enemy_target, _act) : enc_action(_party_n
     }
     cancel_effects = function() {
         with other
-            tp += other.tp_taken
+            tp -= other.tp_taken
     }
 }
 
@@ -127,7 +127,7 @@ function enc_action_power(_party_names, _target, _spell, _spell_index) : enc_act
     target = _target
     target_spell = _spell
     target_spell_index = _spell_index
-    tp_taken = _spell.tp_cost
+    tp_taken = 0
     
     perform = function(_action_queue) {
         // find other enemies if the target is not fighting
@@ -201,7 +201,7 @@ function enc_action_power(_party_names, _target, _spell, _spell_index) : enc_act
     }
     cancel_effects = function() {
         with other
-            tp += other.tp_taken
+            tp -= other.tp_taken
     }
 }
 
@@ -213,7 +213,7 @@ function enc_action_item(_party_names, _target, _item, _item_index) : enc_action
     target = _target
     target_item = _item
     item_index = _item_index
-    tp_taken = _item.tp_cost
+    tp_taken = 0
     
     perform = function(_action_queue) {
         // set the party sprites accordingly
@@ -237,12 +237,23 @@ function enc_action_item(_party_names, _target, _item, _item_index) : enc_action
         cutscene_create()
         cutscene_set_variable(o_enc, "waiting_internal", true)
         
-        cutscene_sleep(4)
-        cutscene_dialogue(string(loc("item_use"), 
-            party_getname(acting_member), 
-            string_upper(item_get_name(target_item))), 
-            "{s(20)}{p}{e}", false
+        var ut = target_item.use_encounter_text
+        if is_callable(ut)
+            ut = ut()
+        
+        var use_text = (!is_undefined(ut) 
+            ? string(loc(ut), 
+                party_getname(acting_member), 
+                string_upper(item_get_name(target_item))
+            )
+            : ""
         )
+        
+        cutscene_sleep(4)
+        if string_length(use_text) > 0
+           cutscene_dialogue(use_text, 
+               "{s(20)}{p}{e}", false
+           )
         
         cutscene_func(function(target_item, item_index, target) {
             with o_enc
@@ -268,8 +279,11 @@ function enc_action_item(_party_names, _target, _item, _item_index) : enc_action
         cutscene_play()
     }
     cancel_effects = function() {
+        if struct_exists(target_item, "use_instant_cancel") && is_callable(target_item.use_instant_cancel)
+            target_item.use_instant_cancel(item_index, target)
+        
         with other {
-            tp += other.tp_taken
+            tp -= other.tp_taken
             array_pop(items_using)
         }
     }
@@ -323,7 +337,7 @@ function enc_action_spare(_party_names, _enemy_target) : enc_action(_party_names
                 if __enemy.tired {
                     var tgt_spell = -1
                     var spellowner = ""
-                    for (var i = 0; i < array_length(global.party_names); ++i) { // if party has a person who can use a mercy spell
+                    for (var i = 0; i < party_length(); ++i) { // if party has a person who can use a mercy spell
                         for (var j = 0; j < array_length(party_getdata(global.party_names[i], "spells")); ++j) {
                             if party_getdata(global.party_names[i], "spells")[j].is_mercyspell {
                                 tgt_spell = party_getdata(global.party_names[i], "spells")[j]

@@ -26,5 +26,9 @@
     "font_text_DR": {
         "en": "font_main_mono",
         "ja": "font_main_ja"
+    },
+    "font_8bit": {
+        "en": "font_8bit",
+        "ja": "font_8bit_ja"
     }
 }

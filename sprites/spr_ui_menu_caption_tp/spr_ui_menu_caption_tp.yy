@@ -26,8 +26,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"menu",
-    "path":"folders/@Engine/sprites/ui/menu/menu.yy",
+    "name":"overworld menu",
+    "path":"folders/@Engine/sprites/ui/menus/overworld menu.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

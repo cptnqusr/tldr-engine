@@ -5,16 +5,19 @@
 /// @arg {Asset.GMSound} sfx the sound effect that will play when the hp is changed
 /// @arg {bool} spawn_text whether text should be spawned
 function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true) {
-	if heal > 0 { // heal
+	heal = round(heal) // to avoid artifacts
+    
+    if heal > 0 { // heal
 		if sfx == -1
 			sfx = snd_chrono_heal
         if audio_exists(sfx)
             audio_play(sfx,,,,1)
 		
-		struct_set(party_nametostruct(name), "hp", min(party_getdata(name, "hp") + heal, party_getdata(name, "max_hp")))
+        var will_be_up = party_get_will_up(name, heal)
+		party_setdata(name, "hp", min(party_getdata(name, "hp") + heal, party_getdata(name, "max_hp")))
 		
-		if instance_exists(caller) && caller.object_index == o_ui_menu { // if in menu
-			var xoff = 319.5 + array_length(global.party_names) * -213/2
+		if (caller == o_ui_menu || instance_exists(caller) && caller.object_index == o_ui_menu) { // if in menu
+			var xoff = 319.5 + party_length() * -213/2
 			var inst = instance_create(o_ui_menu_healeffect, xoff + 70 + 213*array_get_index(global.party_names, name))
 			
 			inst.text = string("+{0}", heal)
@@ -23,9 +26,9 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 			var o = party_get_inst(name)
 			var txt = heal
 			
-			if !party_isup(name) && o_enc.battle_state == "post_turn" {
+			if will_be_up {
 				txt = "up"
-				party_setdata(name, "hp", round(party_getdata(name, "max_hp") * .17))
+				party_setdata(name, "hp", max(round(party_getdata(name, "max_hp") * .17), party_getdata(name, "hp")))
 			}
 			if party_getdata(name, "hp") >= party_getdata(name, "max_hp")
 				txt = "max"
@@ -43,7 +46,7 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 		}
 	}
 	else if heal == 0 { // miss
-        if instance_exists(caller) && caller.object_index == o_ui_menu {} // if in menu, do nothing
+        if (caller == o_ui_menu || instance_exists(caller) && caller.object_index == o_ui_menu) {} // if in menu, do nothing
 		else if spawn_text {
 			var o = party_get_inst(name)
             if spawn_text && instance_exists(o)
@@ -54,9 +57,10 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 		if sfx == -1
 			sfx = snd_hurt
 		
-		struct_set(party_nametostruct(name), "hp", min(party_getdata(name, "hp") + heal, party_getdata(name, "max_hp")))
+        var will_be_down = party_get_will_down(name, heal)
+		party_setdata(name, "hp", min(party_getdata(name, "hp") + heal, party_getdata(name, "max_hp")))
 		
-        if instance_exists(caller) && caller.object_index == o_ui_menu {} // if in menu, do nothing
+        if (caller == o_ui_menu || instance_exists(caller) && caller.object_index == o_ui_menu) {} // if in menu, do nothing
 		else {
 			var txt = heal
 			var o = party_get_inst(name)
@@ -69,7 +73,7 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
                 screen_shake(5)
 				animate(6, 0, 10, anime_curve.linear, o, "shake")
 				
-				if party_got_downed(name) {
+				if will_be_down {
 					party_setdata(name, "hp", round(party_getdata(name, "max_hp") / -2))
 					txt = "down"
 				}
@@ -91,7 +95,7 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 				
 				if party_getdata(name, "hp") <= 1 {
 					var alive = false
-					for (var i = 0; i < array_length(global.party_names); ++i) {
+					for (var i = 0; i < party_length(); ++i) {
 					    if party_getdata(global.party_names[i], "hp") > 1 {
 							alive = true
 							break
@@ -147,7 +151,7 @@ function party_attack(name, enemy_attack, caller = noone, element = "", sfx = -1
 /// @arg {real} heal the amount to heal a party member for
 /// @arg {Id.Instance|Asset.GMObject} caller the object that will be used as the reference point for the visual response
 function party_heal_all(heal, caller = noone) {
-	for (var i = 0; i < array_length(global.party_names); ++i) {
+	for (var i = 0; i < party_length(); ++i) {
 		party_heal(global.party_names[i], heal, caller)
 	}
 }
@@ -156,7 +160,7 @@ function party_heal_all(heal, caller = noone) {
 /// @arg {Id.Instance|Asset.GMObject} caller the object that will be used as the reference point for the visual response
 /// @arg {string} element the element of the attack that will be used for calculation
 function party_hurt_all(hurt, caller = noone) {
-	for (var i = 0; i < array_length(global.party_names); ++i) {
+	for (var i = 0; i < party_length(); ++i) {
 		party_hurt(global.party_names[i], hurt, caller)
 	}
 }
@@ -165,7 +169,7 @@ function party_hurt_all(hurt, caller = noone) {
 /// @arg {Id.Instance|Asset.GMObject} caller the object that will be used as the reference point for the visual response\
 /// @arg {string} element the element of the attack that will be used for calculation
 function party_attack_all(att, caller = noone, element = "", enemy_index = noone) {
-	for (var i = 0; i < array_length(global.party_names); ++i) {
+	for (var i = 0; i < party_length(); ++i) {
 		var dmg = damage(att, global.party_names[i], element)
 		party_hurt(global.party_names[i], dmg, caller)
 	}
@@ -185,8 +189,8 @@ function party_hurt_targets(hurt, caller = noone) {
 /// @arg {string} element the element of the attack that will be used for calculation
 function party_attack_targets(att, caller = noone, element = "") {
 	for (var i = 0; i < array_length(o_enc.turn_targets); ++i) {
-        if o_enc.encounter_data._target_recalculate_condition(o_enc.turn_targets)
-            o_enc.turn_targets = o_enc.encounter_data._target_calculation()
+        if enc_recalculate_condition(o_enc.encounter_data, o_enc.turn_targets)
+            o_enc.turn_targets = enc_calculate_target(o_enc.encounter_data)
         
 		if party_isup(o_enc.turn_targets[i]) {
 			var dmg = damage(att, o_enc.turn_targets[i], element)
@@ -199,7 +203,7 @@ function party_attack_targets(att, caller = noone, element = "") {
 function party_check_gameover() {
 	var res_ow = true
     var res_enc = true
-	for (var i = 0; i < array_length(global.party_names); ++i) {
+	for (var i = 0; i < party_length(); ++i) {
 		if party_getdata(global.party_names[i], "hp") > 1 && res_ow
 			res_ow = false
 		if party_getdata(global.party_names[i], "hp") > 0 && res_enc
