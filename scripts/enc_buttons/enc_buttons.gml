@@ -269,8 +269,8 @@ function enc_button_item() : enc_button() constructor {
                                 audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
-                                var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
-                                __button.submit_action(__target_spell, party_ally_selection[party_selection])
+                                var __target_item = battle_menu_inv_list[party_item_selection[party_selection]]
+                                __button.submit_action(__target_item, party_ally_selection[party_selection])
                             }
                             battle_menu_party_cancel = function() {
                                 battle_menu = BATTLE_MENU.INV_SELECTION
@@ -285,8 +285,8 @@ function enc_button_item() : enc_button() constructor {
                                 audio_play(snd_ui_select_CT)
                                 
                                 var __button = party_buttons[party_selection][party_button_selection[party_selection]]
-                                var __target_spell = battle_menu_inv_list[party_spell_selection[party_selection]]
-                                __button.submit_action(__target_spell, party_enemy_selection[party_selection])
+                                var __target_item = battle_menu_inv_list[party_item_selection[party_selection]]
+                                __button.submit_action(__target_item, party_enemy_selection[party_selection])
                             }
                             battle_menu_enemy_cancel = function() {
                                 battle_menu = BATTLE_MENU.INV_SELECTION
@@ -333,7 +333,7 @@ function enc_button_item() : enc_button() constructor {
         
         
         if struct_exists(item_struct, "use_instant") && is_callable(item_struct.use_instant)
-            item_struct.use_instant(other.party_item_selection[other.party_selection], target)
+            item_struct.use_instant(other.party_item_selection[other.party_selection - 1], target)
     }
     
     __determine_sprite()
