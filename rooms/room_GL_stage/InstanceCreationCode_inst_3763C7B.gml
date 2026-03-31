@@ -11,7 +11,7 @@ trigger_code = function() {
     
 	cutscene_sleep(10)
 	cutscene_set_variable(o_actor_greyleno,"sprite_index",spr_greyleno_saiyan)
-	cutscene_actor_move(o_actor_greyleno, new actor_movement(
+	cutscene_actor_move_old(o_actor_greyleno, new actor_movement(
 	193,
 	81,
 	15,

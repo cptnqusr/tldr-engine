@@ -13,12 +13,12 @@ dinktroduction = function() {
     cutscene_set_variable(o_camera, "target", noone)
 	
 	cutscene_camera_pan(538, 397, 30, false)
-	cutscene_actor_move(party_get_inst("sponge"), new actor_movement(
+	cutscene_actor_move_old(party_get_inst("sponge"), new actor_movement(
         488,
         397,
         20,,, DIR.RIGHT, true
     ), 1, false)
-	cutscene_actor_move(party_get_inst("frog"), new actor_movement(
+	cutscene_actor_move_old(party_get_inst("frog"), new actor_movement(
         630,
         397,
         20,,, DIR.LEFT, true
@@ -28,7 +28,7 @@ dinktroduction = function() {
 	"DINK: Have you come to rot alongside me?", 
 	"{choice(`Pay goee may`,`Uh oh`)}{e}",])
 	cutscene_dialogue(["{npc_link(1)}DINK: Wait a minute...", "DINK: You're the brat who {speed(3)}BROKE MY GRILL."])
-	cutscene_actor_move(party_get_inst("frog"), new actor_movement(
+	cutscene_actor_move_old(party_get_inst("frog"), new actor_movement(
         -30,
         0,
         10,,2, DIR.LEFT, false
@@ -49,7 +49,7 @@ dinktroduction = function() {
 	cutscene_sleep(20)
 	cutscene_set_variable(party_get_inst("sponge"), "dir", DIR.LEFT)
 	cutscene_sleep(10)
-	cutscene_actor_move(party_get_inst("frog"), new actor_movement(
+	cutscene_actor_move_old(party_get_inst("frog"), new actor_movement(
         0,
         20,
         30,,2, DIR.DOWN, false

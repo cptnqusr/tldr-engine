@@ -30,7 +30,10 @@ if !allow_incompatible_saves {
     
     borders_toggle(global.border_mode != BORDER_MODE.OFF)
     borders_window_resize()
-    window_center()
+    
+    call_later(1, time_source_units_frames, function() {
+        window_center()
+    })
     
 	application_surface_draw_enable(false)
 }
@@ -41,7 +44,6 @@ enum WORLD_TYPE {
     LIGHT
 }
 global.world = WORLD_TYPE.DARK // 0 for dark, 1 for light
-global.charmove_insts = array_create(party_getpossiblecount() + 10, undefined)
 
 if !progress 
     exit
