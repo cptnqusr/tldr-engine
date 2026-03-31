@@ -19,8 +19,6 @@
   "height":40,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"af3a82d7-69ac-4523-b5bf-8c02d14ad4fd","blendMode":0,"displayName":"default (2)","isLocked":false,"name":"af3a82d7-69ac-4523-b5bf-8c02d14ad4fd","opacity":46.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
-    {"$GMImageLayer":"","%Name":"ef8408b9-aba0-4b8d-b60b-2560727825b8","blendMode":0,"displayName":"default (2)","isLocked":false,"name":"ef8408b9-aba0-4b8d-b60b-2560727825b8","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
     {"$GMImageLayer":"","%Name":"7ecee789-641c-4631-812e-7b1b88382379","blendMode":0,"displayName":"default","isLocked":false,"name":"7ecee789-641c-4631-812e-7b1b88382379","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_enc_box",
