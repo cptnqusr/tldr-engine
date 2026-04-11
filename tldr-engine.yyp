@@ -304,7 +304,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.4.221",
+    "IDEVersion":"2024.14.4.222",
   },
   "name":"tldr-engine",
   "resources":[
@@ -525,6 +525,7 @@
     {"id":{"name":"room_DL_throne_room","path":"rooms/room_DL_throne_room/room_DL_throne_room.yy",},},
     {"id":{"name":"room_DL_village","path":"rooms/room_DL_village/room_DL_village.yy",},},
     {"id":{"name":"room_DO_entrance","path":"rooms/room_DO_entrance/room_DO_entrance.yy",},},
+    {"id":{"name":"room_dream_sequence","path":"rooms/room_dream_sequence/room_dream_sequence.yy",},},
     {"id":{"name":"room_end_of_time","path":"rooms/room_end_of_time/room_end_of_time.yy",},},
     {"id":{"name":"room_ex_church","path":"rooms/room_ex_church/room_ex_church.yy",},},
     {"id":{"name":"room_ex_city","path":"rooms/room_ex_city/room_ex_city.yy",},},
@@ -1182,6 +1183,8 @@
     {"id":{"name":"spr_dracula_left","path":"sprites/spr_dracula_left/spr_dracula_left.yy",},},
     {"id":{"name":"spr_dracula_npc","path":"sprites/spr_dracula_npc/spr_dracula_npc.yy",},},
     {"id":{"name":"spr_dracula_right","path":"sprites/spr_dracula_right/spr_dracula_right.yy",},},
+    {"id":{"name":"spr_dream_bg_2_small_export","path":"sprites/spr_dream_bg_2_small_export/spr_dream_bg_2_small_export.yy",},},
+    {"id":{"name":"spr_dream_bg_2","path":"sprites/spr_dream_bg_2/spr_dream_bg_2.yy",},},
     {"id":{"name":"spr_e_frogEnemy_hurt","path":"sprites/spr_e_frogEnemy_hurt/spr_e_frogEnemy_hurt.yy",},},
     {"id":{"name":"spr_e_frogEnemy_idle","path":"sprites/spr_e_frogEnemy_idle/spr_e_frogEnemy_idle.yy",},},
     {"id":{"name":"spr_e_killercar_hurt","path":"sprites/spr_e_killercar_hurt/spr_e_killercar_hurt.yy",},},
@@ -1698,6 +1701,7 @@
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
     {"roomId":{"name":"room_init","path":"rooms/room_init/room_init.yy",},},
+    {"roomId":{"name":"room_dream_sequence","path":"rooms/room_dream_sequence/room_dream_sequence.yy",},},
     {"roomId":{"name":"room_save_select","path":"rooms/room_save_select/room_save_select.yy",},},
     {"roomId":{"name":"room_intro_cutscene","path":"rooms/room_intro_cutscene/room_intro_cutscene.yy",},},
     {"roomId":{"name":"room_start_area","path":"rooms/room_start_area/room_start_area.yy",},},
