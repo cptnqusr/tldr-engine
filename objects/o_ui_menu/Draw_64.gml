@@ -50,7 +50,7 @@ if !only_hp { // top
 		draw_text_transformed(51 + 213*i + xoff, 430 + 80 - roll, string_upper(party_getname(global.party_names[i], false)), 1, 1, 0)
 		
 		draw_set_font(global.font_ui_hp)
-		draw_sprite_ext(spr_ui_hp_text, 0, 110 + 213*i + xoff, 441 + 80 - roll, 1, 1, 0, c_white, 1)
+		draw_sprite_ext(loc_sprite("menu_caption_hp"), 0, 110 + 213*i + xoff, 441 + 80 - roll, 1, 1, 0, c_white, 1)
 		
 		draw_sprite_ext(spr_pixel, 0, 128 + 213*i + xoff, 441 + 80 - roll, 76, 9, 0, c_maroon, 1)
 		draw_sprite_ext(spr_pixel, 0, 128 + 213*i + xoff, 441 + 80 - roll, 76*(party_getdata(global.party_names[i], "hp")/party_getdata(global.party_names[i], "max_hp")), 9, 0,party_getdata(global.party_names[i], "color"), 1)
@@ -140,7 +140,7 @@ if selection == 0 { // items
 			
 			var txt = item_get_desc(arr[i_selection], ITEM_DESC_TYPE.FULL)
 			if i_pselection == 1 && state == 3
-				txt = string(loc("menu_item_toss_confirm"), item_get_name(arr[i_selection]))
+				txt = loc_string("menu_item_toss_confirm", item_get_name(arr[i_selection]))
 			
 			draw_text_ext_transformed(20, 10, txt, 16, __top_txt_len, 2, 2, 0)
 		}
@@ -463,7 +463,7 @@ if selection == 2 { // power
 		}
 		
 		draw_set_color(c_gray)
-		draw_sprite_ext(spr_ui_menu_caption_tp, 0, 340 + _l_offset*3, 225, 1, 1, 0, c_white, 1)
+		draw_sprite_ext(loc_sprite("menu_caption_tp_spr"), 0, 340 + _l_offset*3, 225, 1, 1, 0, c_white, 1)
 		
 		for (var i = 0; i < array_length(party_getdata(global.party_names[p_pmselection], "spells")); ++i) {
 		    draw_text_transformed(340 + _l_offset*3, 230 + i*25, string("{0}%", party_getdata(global.party_names[p_pmselection], "spells")[i].tp_cost), 2, 2, 0)
@@ -537,14 +537,15 @@ if selection == 3 && state > 0 { // config
             draw_text_transformed(435, 100, loc("menu_controls_gamepad"), 2, 2, 0)
         
         draw_sprite_ext(spr_soul, 0, 88, 156 + 28 * c_controls_selection, 1, 1, 0, c_white, 1)
-        for (var i = 0; i < array_length(c_controls); i ++) {
+		var i = 0
+        for (i = 0; i < array_length(c_controls); i ++) {
             if c_controls_selection == i {
                 draw_set_color(c_aqua)
                 if c_controls_changing
                     draw_set_color(c_red)
             }
             
-            draw_text_transformed(105, 140 + 28*i, loc("menu_controls_" + string_lower(InputVerbGetExportName(c_controls[i]))), 2, 2, 0)
+            draw_text_transformed(105, 140 + 28*i, input_verb_get_name(c_controls[i]), 2, 2, 0)
             draw_text_transformed(325, 140 + 28*i, input_binding_to_string(InputBindingGet(false, c_controls[i]), false, false), 2, 2, 0)
             
             draw_set_color(c_white)

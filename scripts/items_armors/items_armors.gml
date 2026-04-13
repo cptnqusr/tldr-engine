@@ -1,6 +1,8 @@
 function item_armor() : item() constructor {
 	type = ITEM_TYPE.ARMOR
 	icon = spr_ui_menu_icon_armor
+    
+    armor_blacklist = []
 }
 
 function item_a_ambercard() : item_armor() constructor {
@@ -236,4 +238,19 @@ function item_a_shadowmantle() : item_armor() constructor {
     can_sell = false
     
     item_localize("item_a_shadowmantle")
+}
+
+function item_a_lw_bandage() : item_armor() constructor {
+    name = ["Bandage"]
+    desc = ["", "--"]
+	
+	stats = {
+		defense: 0,
+	}
+    unequipped = function(index) {
+        item_delete(index, ITEM_TYPE.LIGHT);
+        item_add(new item_lw_bandage(), ITEM_TYPE.LIGHT);
+    }
+    
+    item_localize("item_c_lw_bandage")
 }

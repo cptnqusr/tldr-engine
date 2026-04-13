@@ -114,7 +114,7 @@ function audio_play(sound, loop = 0, gain = 1, pitch = 1, nonstack = false, type
             target_emitter = o_world.emitter_sfx;
             break
         case AUDIO.MUSIC:
-            target_emitter = o_world.emitter_music
+            target_emitter = o_world.emitter_bgm
             break
     }
     
@@ -156,6 +156,34 @@ function audio_sound_reset_effect(slot = 0){
 function draw_text_xfit(xx, yy, str, xfit, xscale, yscale) {
 	draw_text_transformed(xx, yy, str, min(xscale, xfit / (string_width(str)*xscale)), yscale, 0)
 }
+/// @desc draws text with a slightly opaque white border around it if `_highlight` is true
+function draw_text_highlighted(_text, _x, _y, _highlight, _xscale = 1, _yscale = 1, _padding = 2, _highlight_color = c_white, _highlight_alpha = .25) {
+    if _highlight {
+        var pad = 2;
+        var i_w = string_width(_text) * _xscale;
+        var i_h = string_height(_text) * _yscale;
+        
+        var xx = _x;
+        var yy = _y;
+        
+        if draw_get_halign() == fa_center 
+            xx -= i_w/2;
+        else if draw_get_halign() == fa_right
+            xx -= i_w;
+        
+        if draw_get_valign() == fa_middle
+            yy -= i_h/2;
+        else if draw_get_valign() == fa_bottom
+            yy -= i_h;
+        
+        i_w += _padding*2;
+        i_h += _padding*2;
+        
+        draw_sprite_ext(spr_pixel, 0, xx - _padding, yy - _padding, i_w, i_h, 0, _highlight_color, _highlight_alpha);
+    }
+    
+    draw_text_transformed(_x, _y, _text, _xscale, _yscale, 0);
+}
 
 function draw_rectangle_ext(x1, y1, x2, y2, color, outline_width) {
 	for (var i = 0; i < outline_width; i += 1) {
@@ -181,6 +209,8 @@ function draw_sprite_looped(offset, amp, sprite, image, xx, yy, xscale = 1, ysca
 	    }
 	}
 }
+
+
 /// @desc returns an image index depending on the image count and accounting for the passage of time. useful for drawing multiple things with one instance
 /// @arg {asset.GMSprite} sprite the sprite to get the `img_spd` and `img_number` arguments automatically
 /// @arg {real} timer the timer that will be used for account for the passing of time (`o_world.frames` by default)
@@ -324,6 +354,11 @@ function string_pad_end(_string, _substring, _required_length) {
     return _string
 }
 
+/// @desc checks whether a given struct is empty
+function struct_empty(_struct) {
+    return struct_names_count(_struct) > 0
+}
+
 /// @desc	rounds value with cerain percision
 /// @arg	{real} value
 /// @arg	{real} precision    works like round(value/precision) * precision
@@ -354,6 +389,18 @@ function struct_merge(primary, secondary, shared) {
 /// @desc returns the sum of two angles within the angle range
 function angle_add(x, y) {
     return (x + y + 360) % 360
+}
+
+/// @desc converts the string data type into bool, accounting for typing the boolean in as a word
+/// @arg {string} _string the string you'd like to convert to boolean
+/// @returns {bool}
+function string_to_bool(_string) {
+    if string_lower(_string) == "true"
+        return true
+    else if string_lower(_string) == "false"
+        return false
+    else 
+        return real(string_digits(_string)) > .5
 }
 
 
@@ -470,11 +517,15 @@ function input_binding_to_string(bind, upper = true, _is_gamepad = InputDeviceIs
     
     if string_contains("arrow", __bindname) {
         __ret = string_split(__bindname, " ")[1]
-        __ret = string_upper(string_copy(__ret, 1, 1)) + string_delete(__ret, 1, 1);
+        __ret = string_lower(string_copy(__ret, 1, 1)) + string_delete(__ret, 1, 1);
     }
     else {
-    	__ret = string_upper(__bindname)
+    	__ret = string_lower(__bindname);
     }
+    
+    var __loc_id = $"menu_bind_{string_lower(__ret)}";
+    if loc_exists(__loc_id)
+        __ret = loc(__loc_id)
     
 	return (upper ? string_upper(__ret) : __ret)
 }
@@ -494,9 +545,10 @@ function input_binding_intext(verb) {
 	if is_array(verb){
 		var res = ""
 		for (var i = 0; i < array_length(verb); ++i) {
-			res += input_binding_to_string(InputBindingGet(false, verb[i])) + "/"
+			res += input_binding_to_string(InputBindingGet(false, verb[i]))
+            if i < array_length(verb) - 1
+                res += "/"
 		}
-		res = string_delete(res, string_width(res)-1, 1)
 		
 		return $"[{res}]"
 	}

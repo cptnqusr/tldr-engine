@@ -265,6 +265,14 @@ else if battle_state == BATTLE_STATE.DIALOGUE {
     			    array_push(inst_dialogues, inst)
     			}
     		}
+            for (var i = 0; i < array_length(turn_objects); ++i) {
+                if instance_exists(turn_objects[i]) {
+                    // call the initialize event for turn objects
+                    with turn_objects[i] {
+                        event_user(0)
+                    }
+                }
+            }
             
             __call_enc_event("ev_dialogue")
             
@@ -277,7 +285,9 @@ else if battle_state == BATTLE_STATE.DIALOGUE {
                     if array_contains(turn_targets, global.party_names[i]) {
                         if encounter_data.display_target {
                             var o = party_get_inst(global.party_names[i])
-                            instance_create(o_enc_target, o.x, o.s_get_middle_y(), o.depth-10)
+                            instance_create(o_enc_target, o.x, o.s_get_middle_y(), o.depth-10,{
+                                sprite_index: loc_sprite("enc_target_spr")
+                            })
                         }
                     }
                     else {
@@ -438,13 +448,13 @@ else if battle_state == BATTLE_STATE.WIN {
         
 		cutscene_create()
         if win_dialogue_show {
-            var win_text = string(loc("enc_win"), __exp, __dd) + win_message
+            var win_text = loc_string("enc_win", __exp, __dd) + win_message
             
             if is_string(win_got_stronger) {
                 if win_got_stronger == global.party_names[0] 
-                    win_text = string(loc("enc_win_no_exp"), __exp, __dd) + "{br}{resetx}" + string(loc("enc_win_stronger"))
+                    win_text = loc_string("enc_win_no_exp", __exp, __dd) + "{br}{resetx}" + loc("enc_win_stronger")
                 else 
-                    win_text = string(loc("enc_win_no_exp"), __exp, __dd) + "{br}{resetx}" + string(loc("enc_win_char_stronger"), party_getname(win_got_stronger))
+                    win_text = loc_string("enc_win_no_exp", __exp, __dd) + "{br}{resetx}" + loc_string("enc_win_char_stronger", party_getname(win_got_stronger))
             }
             
             cutscene_dialogue(win_text)

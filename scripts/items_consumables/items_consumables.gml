@@ -108,7 +108,7 @@ function item_lw_shit() : item() constructor {
 		can: true,
 		execute_code: function(index, item_index){
 			dialogue_start("* You dropped the shit. Now the room stinks. Thanks.")
-			item_delete(item_index, 6)
+			item_delete(item_index, ITEM_TYPE.LIGHT)
 		}
 	}
 }

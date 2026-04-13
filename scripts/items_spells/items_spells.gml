@@ -1,5 +1,6 @@
 function item_spell() : item() constructor {
 	type = ITEM_TYPE.SPELL
+	is_mercyspell = false // does it allow to spare enemies?
     
     use = function(spell_user, target, caller = -1) {}
 }
@@ -22,7 +23,7 @@ function item_s_rudebuster() : item_spell() constructor {
         var __e_obj = o_enc.encounter_data.enemies[target].actor_id
         
         cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), string_upper(loc("spell_rude_buster_name"))),, false)
+		cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), string_upper(loc("spell_rude_buster_name"))),, false)
         cutscene_sleep(20)
         cutscene_set_partysprite(spell_user, "rudebuster")
         cutscene_wait_until(function(__name) {
@@ -116,7 +117,7 @@ function item_s_susieheal(data = {
     
     use = function(spell_user, target, caller, _name, _calc, _use) {
         cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), _name),, false)
+		cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), _name),, false)
         
         cutscene_sleep(10)
         cutscene_func(function(spell_user, target, _name, _calc, _use) {
@@ -139,8 +140,8 @@ function item_s_testdmg() : item_spell() constructor {
 	
 	use = function(spell_user, target, caller = -1) {
 		cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_func(enc_hurt_enemy, [target, 100, spell_user])
-		cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), "TEST DAMAGE"),, true)
+		cutscene_func(enc_hurt_enemy, [target, 100, user])
+		cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), "TEST DAMAGE"),, true)
 		cutscene_set_variable(o_enc, "waiting", false)
 	}
 	
@@ -179,7 +180,7 @@ function item_s_pacify() : item_spell() constructor {
         cutscene_set_variable(o_enc, "waiting", true)
         
         if o_enc.encounter_data.enemies[target].tired {
-		    cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), _name),, false)
+		    cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), _name),, false)
            
             cutscene_sleep(10)
             cutscene_instance_create(o_eff_pacify, __e_obj.x, __e_obj.s_get_middle_y(), __e_obj.depth - 10)
@@ -214,7 +215,7 @@ function item_s_healprayer() : item_spell() constructor {
 	
     use = function(spell_user, target, caller, _name) {
         cutscene_set_variable(o_enc, "waiting", true)
-		cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), _name),, false)
+		cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), _name),, false)
         
         cutscene_sleep(10)
         cutscene_func(function(spell_user, target, _name) {
@@ -258,7 +259,7 @@ function item_s_sleepmist() : item_spell() constructor {
     use = function(spell_user, target, caller, _name) {
         cutscene_set_variable(o_enc, "waiting", true)
     
-        cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), _name),, false)
+        cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), _name),, false)
     
         cutscene_sleep(10)
         cutscene_audio_play(snd_ghostappear)
@@ -305,7 +306,7 @@ function item_s_iceshock() : item_spell() constructor {
         var __e_obj = o_enc.encounter_data.enemies[target].actor_id
         cutscene_set_variable(o_enc, "waiting", true)
     
-        cutscene_dialogue(string(loc("spell_cast"), party_getname(spell_user), _name),, false)
+        cutscene_dialogue(loc_string("spell_cast", party_getname(spell_user), _name),, false)
     
         cutscene_sleep(10)
         cutscene_audio_play(snd_icespell)
@@ -335,12 +336,12 @@ function item_s_iceshock() : item_spell() constructor {
 }
 
 function item_s_defaultaction(nname) : item_spell() constructor {
-	name = string(loc("spell_party_action_name"), loc(party_getdata(nname, "action_letter")))
+	name = loc_string("spell_party_action_name", loc(party_getdata(nname, "action_letter")))
 	desc = ["", "", loc("spell_party_action_desc")]
 	
 	use_type = ITEM_USE.ENEMY
+	is_party_act = true
 	
 	color = merge_color(party_getdata(nname, "color"), c_white, 0.5)
 	tp_cost = 0
-	is_party_act = true
 }

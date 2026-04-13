@@ -11,7 +11,7 @@ function item() constructor {
 	can_use = true // can also be a function that returns boolean
 	throw_scripts = {
 		can: true,
-		execute_code: function() { //executes this INSTEAD of the default item_delete
+		execute_code: function(_index) { //executes this INSTEAD of the default item_delete
 		},
 	}
 	
@@ -28,16 +28,8 @@ function item() constructor {
 	effect = undefined // (struct with the sprite key and text key)
 	icon = spr_ui_menu_icon_exclamation
 	
-	weapon_fatal = false
-	weapon_whitelist = []
-	armor_blacklist = []
-	
-	// spell specific
 	tp_cost = 0
 	color = c_white
-	is_party_act = false
-	is_mercyspell = false // does it allow to spare enemies?
-	party = [] // who is using the spell?
     
     // party act specific
     perform_act_anim = true
@@ -50,11 +42,12 @@ function item() constructor {
     use_encounter_text = "item_use" // will be localized. {0} is the party member name and {1} is the item name. can also be callable
 	use = function(item_index, target_index, caller = -1) {}
 	use_args = []
+    
+    unequipped = function(new_item_index) {}
 	
 	buy_price = 0 // can be callable
     // sell_price = 0 // can be callable
-    
-    shop_in_stock = infinity // determines whether a shop item is in stock. if set to real, shows how much of it can be sold
+     shop_in_stock = infinity // determines whether a shop item is in stock. if set to real, shows how much of it can be sold
     can_sell = true // determines whether it can be sold to vendors
 }
 
@@ -115,7 +108,7 @@ function item_add(item_struct, type = undefined) {
 		if item_get_count(type) + 1 > item_get_maxcount(type) 
 			can = false  
     
-	var txt = string(loc("item_added"), item_get_name(item_struct), item_get_store_name(type))
+	var txt = loc_string("item_added", item_get_name(item_struct), item_get_store_name(type))
 	if can {
 		if type == ITEM_TYPE.STORAGE {
             var index = 0
@@ -473,7 +466,7 @@ function item_get_equipped(_item_ref, _party_name = undefined) {
 		}
 	}
 	else {
-		if !party_ismember(_party_name) {
+		if !party_contains(_party_name) {
 			show_debug_message($"item_get_equipped: \"{_party_name}\" not found in global.party_names")
 			return 0
 		}
@@ -542,7 +535,7 @@ function item_spell_get_index(_item_ref, _party_name) {
     var __iteminst = (is_struct(_item_ref) ? instanceof(_item_ref) : script_get_name(_item_ref))
     
     var __index = undefined
-    if !party_ismember(_party_name) {
+    if !party_contains(_party_name) {
         show_debug_message($"item_spell_get_index: \"{_party_name}\" not found in global.party_names")
         return undefined
     }
@@ -609,8 +602,12 @@ function item_check_useable(item_struct) {
  */
 function item_localize(_loc) {
     var __data = loc(_loc)
-    var __names = struct_get_names(__data)
+    if !is_struct(__data) {
+        show_debug_message($"attempted to localize an item with the loc id of {_loc}, but the localized string didn't return a struct. aborted localization")
+        return false
+    }
     
+    var __names = struct_get_names(__data)
     for (var i = 0; i < array_length(__names); i ++) {
         var __value = struct_get(__data, __names[i])
         if is_struct(__value) && is_struct(struct_get(__data, __names[i])) { // loop through the struct and avoid deleting already existing hashes

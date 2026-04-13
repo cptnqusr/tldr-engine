@@ -129,6 +129,7 @@ if state == 1 {
 	if InputPressed(INPUT_VERB.SELECT) && selection_hor == 0 && buffer == 0 { // load file
         if files[selection] != -1 {
             music_stop_all()
+            
             save_load(selection, global.chapter)
             
     		room_goto(save_get("room"))
@@ -220,8 +221,8 @@ if state == 21 {
 				audio_play(snd_ui_scary)
 				state = 0
 				buffer = 1
-			
-				save_write(subselection, files[copy_from])
+                
+                save_export_to_file(subselection,, files[copy_from])
 				event_user(0)
 				
 				copy_from = 0
@@ -294,7 +295,7 @@ if state == 22 {
 		state = 0
 		buffer = 1
 			
-		save_write(subselection, files[copy_from])
+		save_export_to_file(subselection,, files[copy_from])
 		event_user(0)
 			
 		copy_from = 0
@@ -499,7 +500,9 @@ if state == 41 {
 		audio_play(snd_ui_select_CT)
         
         music_stop_all()
+        
         save_load(subselection, global.chapter - 1) // load the previous chapter
+        
         room_goto(save_get("room"))
         fader_fade(1, 0, 15)
 	}

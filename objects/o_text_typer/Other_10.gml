@@ -62,7 +62,7 @@ if command == "auto_pauses" { // auto_pauses(bool)
 		|| __a == "0"
 		|| __a == "1"
 	{
-		auto_pauses = bool(__a)
+		auto_pauses = string_to_bool(__a)
 	}
 	else
 		show_error("Command auto_pauses recieved a non-boolean argument", true)
@@ -74,7 +74,7 @@ if command == "auto_breaks" { // auto_breaks(bool)
 		|| __a == "0"
 		|| __a == "1"
 	{
-		auto_breaks = bool(__a)
+		auto_breaks = string_to_bool(__a)
 	}
 	else
 		show_error("Command auto_breaks recieved a non-boolean argument", true)
@@ -91,7 +91,7 @@ if command == "instant" { // instant(bool = true)
 	skipping = __arg
 }
 if command == "break_tabulation" { // break_tabulation(bool)
-	break_tabulation = bool(arg[0])
+	break_tabulation = string_to_bool(arg[0])
 }
 if command == "preset" { // preset(`type`) out of `enemy_text`, `god_text`, `light_world`
 	if arg[0] == "enemy_text" {
@@ -132,30 +132,51 @@ if command == "col" || command == "color" { // col(string) OR color(string)
 		xcolor = merge_color(c_aqua, c_blue, 0.3)
 }
 if command == "solid_col" || command = "solid_color" { // solid_col(bool)
-    solid_color = arg[0]
+    solid_color = string_to_bool(arg[0])
 }
 if command == "reset_col" { // reset_col() OR reset_col
 	xcolor = saved_color
 }
-if command == "font" { // font(`string`) out of `main`, `text`, `enc`
-	if arg[0] == "enc"
-		font = loc_font("enc")
-	else if arg[0] == "text"
-		font = loc_font("text")
-	else if arg[0] == "main"
-		font = loc_font("main")
-	else{
+if command == "font" { // font(`string`) out of the localized fonts or a reference to an asset by its name
+	if loc_exists($"font_{arg[0]}")
 		font = loc_font(arg[0])
-	}
+	else
+		font = asset_get_index(arg[0])
 }
 if command == "shadow" { // shadow(bool)
-	shadow = bool(arg[0])
+	shadow = string_to_bool(arg[0])
 }
-if command == "eff" || command == "effect" { // eff(real) out of 0 (shake)
-    effect = real(arg[0])
+
+/// available effects:
+/// shake (power = 1.0)
+/// light_shake  --  will shake rarely as it's being rounded to the nearest round number. power equals to 0.51
+/// wave (power = 1.0, frequency = 4.0)
+
+if command == "eff" || command == "effect" { // eff(string, [effect_arguments])  assigns an effect to all symbols after the command is called until eff(reset) is called. all arguments are given as string type
+    effect = string_lower(arg[0])
+    
+    // support older versions
+    if arg[0] == "-1"
+        effect = undefined
+    else if arg[0] == "1"
+        effect = "wave"
+    else if arg[0] == "2"
+        effect = "shake"
+    
+    if array_length(arg) > 1 {
+        effect_arguments = []
+        array_copy(effect_arguments, 0, arg, 1, array_length(arg) - 1)
+    }
 }
+if command == "eff_reset" || command == "effect_reset" { // eff_reset(reset_arguments = true)  resets the current effect. if the argument is false, the effect_arguments will not be reset. true by default, though
+    effect = undefined
+    
+    if array_length(arg) > 0 && !string_to_bool(arg[0])
+        effect_arguments = []
+}
+
 if command == "god" { // god(bool)  whether it's god (gaster) text
-	god = bool(arg[0])
+	god = string_to_bool(arg[0])
 }
 
 if command == "link" || command == "npc_link" { // link(real, unlink_previous=bool, object=o_ow_npc)  you can link an npc to this and they will be animated when the text is playing (argument is npc id, second argument is true by default)
@@ -266,7 +287,7 @@ if command == "sound" || command == "snd" { // snd(sound_index) OR sound(sound_i
 }
 
 if command == "can_skip" { // can_skip(bool)
-	can_skip = bool(arg[0])
+	can_skip = string_to_bool(arg[0])
     if !can_skip {
         allow_skip_internal = false
         skipping = false
@@ -277,7 +298,7 @@ if command == "can_skip" { // can_skip(bool)
     }
 }
 if command == "can_superskip" { // can_superskip(bool)
-	can_superskip = bool(arg[0])
+	can_superskip = string_to_bool(arg[0])
     if !can_superskip {
         allow_skip_internal = false
         skipping = false
@@ -294,17 +315,32 @@ if command == "speed" { // speed(real)
 
 if command == "char" { // char(`char_preset_string`, face_expression = undefined)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
 	var __exp = (array_length(arg) > 1 ? real(arg[1]) : 0)
-	_facechange(arg[0], __exp)
-	
-	voice = struct_get(struct_get(char_presets, arg[0]), "voice")
-	voice_pitch_calc = struct_get(struct_get(char_presets, arg[0]), "voice_pitch_calc")
-	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
-	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
-    voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
-	font = struct_get(struct_get(char_presets, arg[0]), "font")
-	
-	char = arg[0]
-	looping = false
+    
+    if arg[0] == char && array_length(arg) > 1 { // the user is misusing the char command. refer to face_ex (im crying)
+        face_expression = __exp
+        if string_length(face_expression) == string_length(string_digits(face_expression))
+            face_expression = real(face_expression)
+    }
+    else {
+    	_facechange(arg[0], __exp)
+    	
+    	voice = struct_get(struct_get(char_presets, arg[0]), "voice")
+    	voice_pitch_calc = struct_get(struct_get(char_presets, arg[0]), "voice_pitch_calc")
+    	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
+    	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
+        voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
+        
+        var __char_font = struct_get(struct_get(char_presets, arg[0]), "font");
+        if !is_undefined(__char_font) {
+            if is_string(__char_font) 
+                font = loc_font(__char_font);
+            else if font_exists(__char_font)
+                font = __char_font;
+        }
+    	
+    	char = arg[0]
+    	looping = false
+    }
 }
 if command == "face" { // face(`face_preset_string`, face_expression)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
 	var __exp = (array_length(arg) > 1 ? real(arg[1]) : 0)
@@ -331,9 +367,9 @@ if command == "voice" { // voice(asset OR nil, pitch_range = undefined, interrup
 		voice_pitchrange = string_split(voice_pitchrange, ",")
 	}
 	if array_length(arg) > 2 && arg[2] != "nil" 
-		voice_interrupt = bool(arg[2])
+		voice_interrupt = string_to_bool(arg[2])
 	if array_length(arg) > 3 && arg[3] != "nil" 
-		voice_skip = bool(arg[3])
+		voice_skip = string_to_bool(arg[3])
 }
 
 if command == "mini" { // mini(`text`, char = undefined, face_expression = undefined, x = `auto`, y = `auto`)

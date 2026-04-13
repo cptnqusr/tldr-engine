@@ -14,7 +14,7 @@ if is_struct(item_inside) && is_instanceof(item_inside, item) {
     
     screen_shake(5)
     
-    var txt = string(loc("item_chest_get"), item_get_name(item_inside)) + "{p}{c}"
+    var txt = loc_string("item_chest_get", item_get_name(item_inside)) + "{p}{c}"
     txt += item_add(item_inside)
 	if !state_get("progress","firstChestOpened")
 		txt += "{p}{c}Press the C Key or Y button to open the menu."
@@ -29,4 +29,4 @@ else {
     dialogue_start(loc("item_chest_empty"))
 }
 
-state_add(state_group, id)
+memory_flick(state_group, id, true)

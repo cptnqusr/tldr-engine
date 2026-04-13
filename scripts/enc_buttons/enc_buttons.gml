@@ -9,7 +9,7 @@ function enc_button() constructor {
     submit_action = function() {} // called when finishing the target menu and submitting the action
     
     __determine_sprite = function() { // internal
-        sprite = asset_get_index(string(loc("enc_ui_spr_buttons"), name))
+        sprite = asset_get_index(loc_string("enc_ui_spr_buttons", name))
     }
 }
 
@@ -210,7 +210,7 @@ function enc_button_power() : enc_button() constructor {
             for (var i = 0; i < array_length(__party_members); i ++) {
                 var index = party_get_index(__party_members[i])
                 
-                if spell_struct.is_party_act {
+                if struct_exists(spell_struct, "is_party_act") && spell_struct.is_party_act {
                     party_state[index] = PARTY_STATE.ACT
                     enc_party_set_battle_sprite(__party_members[i], "actready")
                 }
