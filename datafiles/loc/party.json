@@ -108,5 +108,13 @@
     "party_frog_stat_frog": {
         "en": "Is frog",
         "ja": "Is frog"
+    },
+    "party_atlas_name": {
+        "en": "ATLAS",
+        "ja": "ATLAS"
+    },
+    "party_atlas_desc": {
+        "en": "Scapegoat\nHe who holds\nthe world.",
+        "ja": "Sponge\nSoaks up the world's\nsadness. Lonely."
     }
 }

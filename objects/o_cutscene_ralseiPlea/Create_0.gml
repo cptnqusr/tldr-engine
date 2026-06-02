@@ -21,7 +21,7 @@ function cutscene_RalseiPlea() {
 		inst_dialogue = text_typer_create("Can anyone h", 160, 140, DEPTH_UI.DIALOGUE_UI, "{can_skip(false)}{speed(3)}{xspace(3)}{yspace(18)}{break_tabulation(false)}{font(`text_DR`)}", "{p}{e}", {
 			gui: true,can_superskip: false,caller: id,},)
 	}))
-	cutscene_sleep(45)
+	cutscene_sleep(30)
 	cutscene_func(function(){room_goto_next()})
 	cutscene_func(fader_fade,[1,0,1]) 
 	

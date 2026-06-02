@@ -646,3 +646,67 @@ function party_m_scoot(_initialized_name) : party_m(_initialized_name) construct
 		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 }
+function party_m_atlas(_initialized_name) : party_m(_initialized_name) constructor {
+	name = "party_atlas_name"
+	obj = o_actor_atlas
+	
+	// colors
+	color = c_orange
+	darkcolor = c_orange
+	iconcolor = #ffa040
+	
+	// stats
+	lv =	2
+	desc =	"party_atlas_desc"
+	power_stats = [
+		"???",
+		"???",
+		"???",
+	]
+	
+	max_hp =	party_m_calculate_hp(100, lv)
+    hp =        max_hp
+	attack =	4
+	defense =	2
+	magic =		3
+	element_resistance = {
+	}
+	
+	// inventory
+    weapon = new item_w_wood_blade()
+    armor1 = undefined
+    armor2 = undefined
+	spells = [
+		new item_s_testdmg()
+	]
+	
+	// sprites
+	s_name = "atlas"
+	s_state =		""
+	s_substate =	""
+	s_icon =		spr_ui_susie_icon
+	s_icon_ow =		spr_ui_susie_head
+	s_icon_weapon = spr_ui_menu_weapon_sword
+	s_battle_intro =	1 // 1 for attack, 0 for full intro	
+	
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
+		act: [spr_bsusie_act, true],
+		actready: spr_bsusie_actready,
+		actend: [spr_bsusie_actend, "idle", 1],
+		attack: [spr_bsponge_attack, true],
+		attackready: spr_bsponge_attackready,
+		defeat: spr_bsponge_defeat,
+		defend: [spr_bsponge_defend, true],
+		hurt: spr_bsponge_hurt,
+		idle: spr_bsponge_idle,
+		intro: spr_susie_right,
+		introb: spr_susie_right,
+		itemuse: [spr_bsponge_item, "idle", 1],
+		itemready: spr_bsponge_itemready,
+		spell: [spr_bsponge_spell, "idle", 1],
+		spellready: spr_bsponge_spellready,
+		victory: [spr_sponge_right, true],
+		spare: [spr_sponge_duck_speak, "idle", 1],
+		attack_eff: spr_bkris_attackeff,
+	}
+}

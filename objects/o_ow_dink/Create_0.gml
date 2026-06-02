@@ -37,7 +37,7 @@ dinktroduction = function() {
 	cutscene_dialogue("FROG: Hold thy tongue, impostor! Sponge hath not merited thy aspersions.")
 	cutscene_dialogue(["{npc_link(1)}DINK: I'll have you know that the grill this man broke...", 
 	"DINK: ...was VERY EXPENSIVE.", 
-	"DINK: As much as I want a rematch, there's more pressing matters to discuss.",
+	"DINK: ... there are more pressing matters to discuss.",
 	"DINK: I forgo the vengeance of my grill... for now."])
 	cutscene_dialogue("FROG: If thou art not Gaspar, then where are my comrades?")
 	cutscene_dialogue(["{npc_link(1)}DINK: I don't think the people you're looking for are here.",
