@@ -33,14 +33,14 @@
   "properties":[
     {"$GMObjectProperty":"v2","%Name":"item_inside","filters":[
         "GMScript",
-      ],"listItems":[],"multiselect":false,"name":"item_inside","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"new item_a_pink_ribbon()","varType":4,},
+      ],"listItems":[],"multiselect":false,"name":"item_inside","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"noone","varType":4,},
   ],
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"spr_ow_chest",
-    "path":"sprites/spr_ow_chest/spr_ow_chest.yy",
+    "name":"spr_ow_chest_CT",
+    "path":"sprites/spr_ow_chest_CT/spr_ow_chest_CT.yy",
   },
   "spriteMaskId":null,
   "visible":true,

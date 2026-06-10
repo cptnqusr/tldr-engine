@@ -43,7 +43,7 @@
         "en": {
             "main": "CONTINGENCY ACTIVATED.",
 
-            "copy": "MELPERT.",
+            "copy": "FROM WHERE?",
             "copy_returned": "THERE IS LITTLE TIME.",
             
             "copyto": "WHICH ONE?", 
@@ -60,12 +60,12 @@
 
             "copy_overwritewarn": "SHALL THIS ONE BE CONDEMNED?", 
 
-            "erase": "WHAT?", 
-            "erase_interesting": "IS THIS DERISION?", 
+            "erase": "WHICH?", 
+            "erase_interesting": "I SEE.", 
             "erase_cancel": "HURRY.", 
 
             "erase_warn1": "ARE YOU CERTAIN?", 
-            "erase_warn2": "MELPERT, I BEG YOU.", 
+            "erase_warn2": "THERE WILL BE NOTHING LEFT.", 
             "erasesuccess": "THEN WE WILL BEGIN AGAIN.", 
 
             "eraseempty": "THERE IS NOBODY HERE.",

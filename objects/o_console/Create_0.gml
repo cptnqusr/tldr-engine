@@ -47,18 +47,18 @@ registred_commands = {
         desc: "Lets you end an encounter instantly.",
         execute: function() {
             if instance_exists(o_enc) {
-                if o_enc.battle_state == "turn" {
+                if o_enc.battle_state == BATTLE_STATE.TURN {
                     for (var i = 0; i < array_length(o_enc.turn_objects); i ++) {
                         if enc_enemy_isfighting(i)
                             instance_destroy(o_enc.turn_objects[i])
                     }
                 }
                 else if o_enc.battle_state == "dialogue" {
-                    o_enc.battle_state = "turn"
+                    o_enc.battle_state = BATTLE_STATE.TURN
                     with o_enc {
-                        for (var i = 0; i < array_length(dialogueinstances); ++i) {
+                        for (var i = 0; i < array_length(inst_dialogues); ++i) {
                             if enc_enemy_isfighting(i)
-                    	        instance_destroy(dialogueinstances[i])
+                    	        instance_destroy(inst_dialogues[i])
                     	}
                     }
                     
@@ -70,8 +70,7 @@ registred_commands = {
                     })
                 }
                 else {
-                    instance_destroy(o_enc.menutext)
-                    o_enc.battle_state = "win"
+                    o_enc.battle_state = BATTLE_STATE.WIN
                     
                     // destroy the enemy actors
                     for (var i = 0; i < array_length(o_enc.encounter_data.enemies); i ++) {
@@ -79,6 +78,7 @@ registred_commands = {
                             instance_destroy(o_enc.encounter_data.enemies[i].actor_id)
                     }
                 }
+                instance_destroy(o_enc_target)
             }
             else 
                 show_debug_message("CONSOLE: o_enc not found, no encounter ended")
@@ -86,7 +86,7 @@ registred_commands = {
     },
     l: {
         name: "language_switch",
-        desc: "switches the language of the session",
+        desc: "switches the language of the session. will set you back to your last save",
         execute: function() {
             loc_switch_lang()
         }

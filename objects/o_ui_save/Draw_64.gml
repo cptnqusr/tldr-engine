@@ -3,7 +3,7 @@ draw_set_font(loc_font("main"))
 if page == 0 { // main menu
 	var time = time_format(global.time)
 	
-	ui_dialoguebox_create(100, 106, 539-100, 308-106)
+    ui_dialoguebox_create(100 - size_increment, 106 - size_increment, 540-100 + size_increment*2, 308-106 + size_increment*2)
 	draw_text_transformed(120, 120, save_get("name"), 2, 2, 0)
 	
 	draw_set_halign(fa_right)
@@ -23,14 +23,14 @@ if page == 0 { // main menu
 		draw_set_color(c_white)
 	}
 
-	draw_sprite_ext(spr_uisoul, 0, (m_selection % 2 == 0 ? 170 : 350) - 28, 228 + floor(m_selection/2) * 40, 1, 1, 0, c_red, 1)
+	draw_sprite_ext(spr_ui_soul, 0, (m_selection % 2 == 0 ? 170 : 350) - 28, 228 + floor(m_selection/2) * 40, 2, 2, 0, c_white, 1)
 }
 if page == 1 { // save menu
 	if prog != 2 
 		draw_sprite_ext(spr_pixel,0, 0, 0, 640, 480, 0, c_black, .8)
 	
-	ui_dialoguebox_create(68, 20, 573 - 68, 110 - 20)
-	ui_dialoguebox_create(68, 132, 573 - 68, 438 - 132 - (prog == 1 ? 48 : 0))
+	ui_dialoguebox_create(68, 20, 574 - 68, 110 - 20)
+	ui_dialoguebox_create(68, 132, 574 - 68, 438 - 132 - (prog == 1 ? 48 : 0))
 	
 	if prog == 1 
 		draw_set_color(c_yellow)
@@ -53,12 +53,12 @@ if page == 1 { // save menu
 	var spacing = 112
 	for (var i = 0; i < maxslots; ++i) {
 		var space = 84
-		if array_length(global.saves) <= i || global.saves[i] == -1 {
+		if array_length(global.save_files) <= i || global.save_files[i] == -1 {
 			if prog == 1 
 				draw_set_color(c_dkgray)
 			if i == s_selection {
 				if prog != 1 
-					draw_sprite_ext(spr_uisoul, 0, 235, 168 + i*space, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 235, 168 + i*space, 1, 1, 0, c_white, 1)
 				draw_set_color(c_yellow)
 			}
 			
@@ -71,11 +71,11 @@ if page == 1 { // save menu
 		}
 		else {
 			if prog != 2 
-				time = time_format(save_s_get(i, "time"))
+				time = time_format(global.save_files[i].TIME)
 			
 			if i == s_selection{
 				if prog != 1 
-					draw_sprite_ext(spr_uisoul, 0, 92, 152 + i*space, 1, 1, 0, c_red, 1)
+					draw_sprite_ext(spr_uisoul, 0, 92, 152 + i*space, 1, 1, 0, c_white, 1)
 				draw_set_color(c_yellow)
 			}
 			
@@ -90,13 +90,13 @@ if page == 1 { // save menu
 				
 				draw_set_halign(fa_center)
 				if prog != 2 
-					draw_text_transformed(320,32 + i*space + spacing, save_s_get(i, "name"), 2, 2, 0)
+					draw_text_transformed(320,32 + i*space + spacing, global.save_files[i].NAME, 2, 2, 0)
 				if prog != 2 
-					draw_text_transformed(320,64 + i*space + spacing, loc(save_s_get(i, "room_name")), 2, 2, 0)
+					draw_text_transformed(320,64 + i*space + spacing, loc(global.save_files[i].ROOM_NAME), 2, 2, 0)
 				
 				draw_set_halign(fa_left)
 				if prog != 2 
-					draw_text_transformed(124, 32 + i*space + spacing, $"LV {save_s_get(i, "chapter")}", 2, 2, 0)
+					draw_text_transformed(124, 32 + i*space + spacing, $"LV {global.save_files[i].CHAPTER}", 2, 2, 0)
 				
 				draw_set_halign(fa_right)
 				if prog != 2 
@@ -116,7 +116,7 @@ if page == 1 { // save menu
 	draw_set_halign(fa_center)
 	
 	if s_selection == 3 {
-		draw_sprite_ext(spr_uisoul, 0, 236, 402, 1, 1, 0, c_red, 1)
+		draw_sprite_ext(spr_uisoul, 0, 236, 402, 1, 1, 0, c_white, 1)
 		draw_set_color(c_yellow)
 	}
 	if prog != 1 
@@ -134,14 +134,14 @@ if page == 1 { // save menu
 		// local save draw
 		{
 			draw_set_halign(fa_center)
-			draw_text_transformed(320, 131 - 8, string(loc("save_menu_overwrite_query"), s_selection + 1), 2, 2, 0)
-			draw_text_transformed(320, 173 - 8, save_s_get(s_selection, "name"), 2, 2, 0)
-			draw_text_transformed(320, 203 - 8, loc(save_s_get(s_selection, "room_name")), 2, 2, 0)
+			draw_text_transformed(320, 131 - 8, loc_string("save_menu_overwrite_query", s_selection + 1), 2, 2, 0)
+			draw_text_transformed(320, 173 - 8, global.save_files[s_selection].NAME, 2, 2, 0)
+			draw_text_transformed(320, 203 - 8, loc(global.save_files[s_selection].ROOM_NAME), 2, 2, 0)
 			draw_set_halign(fa_left)
 		
-			draw_text_transformed(80, 173 - 8, $"LV {save_s_get(s_selection, "chapter")}", 2, 2, 0)
+			draw_text_transformed(80, 173 - 8, $"LV {global.save_files[s_selection].CHAPTER}", 2, 2, 0)
 			draw_set_halign(fa_right)
-			draw_text_transformed(557, 173 - 8, time_format(save_s_get(s_selection, "time")), 2, 2, 0)
+			draw_text_transformed(557, 173 - 8, time_format(global.save_files[s_selection].TIME), 2, 2, 0)
 			draw_set_halign(fa_left)
 		}
 		
@@ -164,14 +164,14 @@ if page == 1 { // save menu
 		draw_set_color(c_white)
 		if s_o_selection == 0 {
 			draw_set_color(c_yellow)
-			draw_sprite_ext(spr_uisoul, 0, 170 - 28, 332, 1, 1, 0, c_red, 1)
+			draw_sprite_ext(spr_uisoul, 0, 170 - 28, 332, 1, 1, 0, c_white, 1)
 		}
 		draw_text_transformed(170, 332 - 8, loc("save_menu_save"), 2, 2, 0)
 		
 		draw_set_color(c_white)
 		if s_o_selection == 1 {
 			draw_set_color(c_yellow)
-			draw_sprite_ext(spr_uisoul, 0, 350 - 28, 332, 1, 1, 0, c_red, 1)
+			draw_sprite_ext(spr_uisoul, 0, 350 - 28, 332, 1, 1, 0, c_white, 1)
 		}
 		
 		draw_text_transformed(350, 332 - 8, loc("save_menu_return"), 2, 2, 0)
@@ -194,11 +194,11 @@ if page == 2 { // storage
 	var desc = "---"
 	if st_page == 0 {
 		if st_selection[0] < array_length(global.items) 
-			desc = item_get_desc(global.items[st_selection[0]])
+			desc = item_get_desc(global.items[st_selection[0]], ITEM_DESC_TYPE.FULL)
 	}
 	else {
 		if st_selection[1] < array_length(global.storage) && global.storage[st_selection[1]] != undefined 
-			desc = item_get_desc(global.storage[st_selection[1]])
+			desc = item_get_desc(global.storage[st_selection[1]], ITEM_DESC_TYPE.FULL)
 	}
 	draw_text_ext_transformed(20, 20, desc, 16, 300, 2, 2, 0)
 	
@@ -207,7 +207,7 @@ if page == 2 { // storage
 	draw_text_transformed(61, 141, loc("save_menu_s_pocket"), 1, 1, 0)
 	draw_set_color((st_page == 1 ? c_gray : c_dkgray))
 	draw_text_transformed(61, 291, loc("save_menu_s_storage"), 1, 1, 0)
-	draw_text_ext_transformed(61, 361, string(loc("save_menu_s_page"), st_stpage + 1, st_maxstpage), 20, -1, 1, 1, 0)
+	draw_text_ext_transformed(61, 361, loc_string("save_menu_s_page", st_stpage + 1, st_maxstpage), 20, -1, 1, 1, 0)
 	draw_set_color(c_white)
 	
 	for (var i = 0; i < item_get_maxcount(); ++i) { // pocket
@@ -240,10 +240,22 @@ if page == 2 { // storage
 	}
 	
 	draw_set_color(c_white)
-	draw_sprite_ext(spr_ui_soul, 0, st_soulx, st_souly, 1, 1, 0, c_red, 1)
+	draw_sprite_ext(spr_ui_soul, 0, st_soulx, st_souly, 1, 1, 0, c_white, 1)
 	
 	if st_page == 1 {
 		draw_sprite_ext(spr_ui_arrow_flat, 0, 40 + round(sine(5, 2)), 352, -2, 2, 0, c_white, 1)
 		draw_sprite_ext(spr_ui_arrow_flat, 0, 600 - round(sine(5, 2)), 352, 2, 2, 0, c_white, 1)
 	}
+}
+if page == 4 {  // return to title
+    ui_dialoguebox_create(100 - size_increment, 106 - size_increment, 540-100 + size_increment*2, 308-106 + size_increment*2)
+    draw_text_transformed(170, 130, loc("save_menu_return_confirm"), 2, 2, 0)
+    
+    if return_selection == 0 && !fading_out
+        draw_sprite_ext(spr_ui_soul, 0, 170 - 28, 268, 2, 2, 0, c_white, 1)
+    draw_text_transformed(170, 260, loc("save_menu_return_yes"), 2, 2, 0)
+    
+    if return_selection == 1 && !fading_out
+        draw_sprite_ext(spr_ui_soul, 0, 350 - 28, 268, 2, 2, 0, c_white, 1)
+    draw_text_transformed(350, 260, loc("save_menu_return_no"), 2, 2, 0)
 }

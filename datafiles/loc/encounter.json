@@ -4,6 +4,26 @@
         "ja": "spr_ui_enc_bt_{0}_ja"
     },
 
+    "enc_ui_spr_tp": {
+        "en": "spr_ui_enc_tpbar_caption"
+    },
+
+    "enc_ui_spr_damage": {
+        "en": "spr_ui_damage_{0}"
+    },
+    "enc_ui_spr_recruit": {
+        "en": "spr_ui_damage_recruit",
+        "ja": "spr_ui_damage_recruit_ja"
+    },
+
+    "enc_fight_press_spr": {
+        "en": "spr_ui_enc_press"
+    },
+
+    "enc_target_spr": {
+        "en": "spr_enc_target"
+    },
+
     "enc_ui_label_hp": {
         "en": "HP",
         "ja": "HP"
@@ -19,9 +39,23 @@
     },
 
     "enc_win": {
-        "en": "* You won!{br}{resetx}* Got {0} EXP and {1} D$.",
+        "en": "* You won!{br}{resetx}* Got {0} EXP and {1}G.",
         "ja": "＊ YOU WIN！{br}{resetx}＊ {0} EXPと　{1} D$を獲得！"
     },
+    "enc_no_exp": {
+        "en": "* You won!{br}{resetx}* Got {1} D$.",
+        "ja": "＊ YOU WIN！{br}{resetx}＊ {1} D$を獲得！"
+    },
+
+    "enc_win_stronger": {
+        "en": "* You became stronger.",
+        "ja": "＊ 強くなった。"
+    },
+    "enc_win_char_stronger": {
+        "en": "* {0} became stronger.",
+        "ja": "＊ {0}は　強くなった。"
+    },
+    
     "enc_win_msg_susieheal": {
         "en": "* Susie's heal power increased!",
         "ja": "* Susie's heal power increased!"

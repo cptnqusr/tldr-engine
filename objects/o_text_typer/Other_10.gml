@@ -9,7 +9,7 @@ for (var i = 1; i <= string_length(argstrings); i ++) {
     if __char == "`"
         __string_mode = !__string_mode
     else if __char == "," && !__string_mode {
-        __temp_arg = string_trim_start(__temp_arg)
+        __temp_arg = string_trim(__temp_arg)
         array_push(arg, __temp_arg)
         
         __temp_arg = ""
@@ -20,7 +20,7 @@ for (var i = 1; i <= string_length(argstrings); i ++) {
 
 // add the last recorded argument as well
 if __temp_arg != "" {
-    __temp_arg = string_trim_start(__temp_arg)
+    __temp_arg = string_trim(__temp_arg)
     array_push(arg, __temp_arg)
 }
 
@@ -48,6 +48,11 @@ if command == "e" || command == "end" { // end() OR end
 }
 if command == "stop" { // stop() or stop
 	pause = -2
+    
+    looping = false
+    allow_skip_internal = false
+    skipping = false
+    superskipping = false
 }
 	
 if command == "auto_pauses" { // auto_pauses(bool)
@@ -57,7 +62,7 @@ if command == "auto_pauses" { // auto_pauses(bool)
 		|| __a == "0"
 		|| __a == "1"
 	{
-		auto_pauses = bool(__a)
+		auto_pauses = string_to_bool(__a)
 	}
 	else
 		show_error("Command auto_pauses recieved a non-boolean argument", true)
@@ -69,12 +74,12 @@ if command == "auto_breaks" { // auto_breaks(bool)
 		|| __a == "0"
 		|| __a == "1"
 	{
-		auto_breaks = bool(__a)
+		auto_breaks = string_to_bool(__a)
 	}
 	else
 		show_error("Command auto_breaks recieved a non-boolean argument", true)
 }
-if command == "break_system" { // break_system(language_id = string)
+if command == "break_system" { // break_system(`language_id`)
 	break_system = arg[0]
 }
 
@@ -86,9 +91,9 @@ if command == "instant" { // instant(bool = true)
 	skipping = __arg
 }
 if command == "break_tabulation" { // break_tabulation(bool)
-	break_tabulation = bool(arg[0])
+	break_tabulation = string_to_bool(arg[0])
 }
-if command == "preset" { // preset(type) out of "enemy_text", "god_text", "light_world"
+if command == "preset" { // preset(`type`) out of `enemy_text`, `god_text`, `light_world`
 	if arg[0] == "enemy_text" {
 		break_tabulation = false
 		font = loc_font("enc")
@@ -102,7 +107,7 @@ if command == "preset" { // preset(type) out of "enemy_text", "god_text", "light
 		break_tabulation = false
 		shadow = false
 		god = true
-		
+		font = loc_font("main_DR")
 		xspace = 5
 		yspace = 20
 		
@@ -115,6 +120,9 @@ if command == "preset" { // preset(type) out of "enemy_text", "god_text", "light
 }
 if command == "box_pos" { // box_pos(bool)
     caller._reposition_self_to(arg[0])
+    
+    if instance_exists(face_inst)
+        face_inst.y = y
 }
 
 if command == "col" || command == "color" { // col(string) OR color(string)
@@ -124,47 +132,93 @@ if command == "col" || command == "color" { // col(string) OR color(string)
 		xcolor = merge_color(c_aqua, c_blue, 0.3)
 }
 if command == "solid_col" || command = "solid_color" { // solid_col(bool)
-    solid_color = arg[0]
+    solid_color = string_to_bool(arg[0])
 }
 if command == "reset_col" { // reset_col() OR reset_col
 	xcolor = saved_color
 }
-if command == "font" { // font(string) out of "main", "text", "enc"
-	if arg[0] == "enc"
-		font = loc_font("enc")
-	else if arg[0] == "text"
-		font = loc_font("text")
-	else if arg[0] == "main"
-		font = loc_font("main")
-	else{
-		font=asset_get_index(arg[0])
-	}
+if command == "font" { // font(`string`) out of the localized fonts or a reference to an asset by its name
+	if loc_exists($"font_{arg[0]}")
+		font = loc_font(arg[0])
+	else
+		font = asset_get_index(arg[0])
 }
 if command == "shadow" { // shadow(bool)
-	shadow = bool(arg[0])
+	shadow = string_to_bool(arg[0])
 }
-if command == "eff" || command == "effect" { // eff(real) out of 0 (shake)
-    effect = real(arg[0])
+
+/// available effects:
+/// shake (power = 1.0)
+/// light_shake  --  will shake rarely as it's being rounded to the nearest round number. power equals to 0.51
+/// wave (power = 1.0, frequency = 4.0)
+
+if command == "eff" || command == "effect" { // eff(string, [effect_arguments])  assigns an effect to all symbols after the command is called until eff(reset) is called. all arguments are given as string type
+    effect = string_lower(arg[0])
+    
+    // support older versions
+    if arg[0] == "-1"
+        effect = undefined
+    else if arg[0] == "1"
+        effect = "wave"
+    else if arg[0] == "2"
+        effect = "shake"
+    
+    if array_length(arg) > 1 {
+        effect_arguments = []
+        array_copy(effect_arguments, 0, arg, 1, array_length(arg) - 1)
+    }
 }
+if command == "eff_reset" || command == "effect_reset" { // eff_reset(reset_arguments = true)  resets the current effect. if the argument is false, the effect_arguments will not be reset. true by default, though
+    effect = undefined
+    
+    if array_length(arg) > 0 && !string_to_bool(arg[0])
+        effect_arguments = []
+}
+
 if command == "god" { // god(bool)  whether it's god (gaster) text
-	god = bool(arg[0])
+	god = string_to_bool(arg[0])
 }
-if command == "npc_link" { // npc_link(real)  you can link an npc to this and they will be animated when the text is playing
+
+if command == "link" || command == "npc_link" { // link(real, unlink_previous=bool, object=o_ow_npc)  you can link an npc to this and they will be animated when the text is playing (argument is npc id, second argument is true by default)
 	var o_link = real(arg[0])
-	
 	var o = noone
-	with(o_ow_npc) {
-		if o_link == npc_id {
+    var target = (array_length(arg) > 2 ? asset_get_index(arg[2]) : o_ow_npc)
+    
+	with (target) {
+        if !variable_instance_exists(self, "link_id")
+            continue
+		if o_link == link_id
 			o = id
-		}
+	}
+    
+	if array_length(arg) > 1 && arg[1] // unlink previous talk links
+        talk_link = []
+	if !array_contains(talk_link, o)
+        array_push(talk_link, o)
+}
+if command == "unlink" || command == "npc_unlink" { // unlink(real)  you can link an npc to this and they will be animated when the text is playing (argument is npc id)
+    var o_link = real(arg[0])
+	var o = noone
+	var target = (array_length(arg) > 2 ? asset_get_index(arg[2]) : o_ow_npc)
+    
+	with (target) {
+        if !variable_instance_exists(self, "link_id")
+            continue
+		if o_link == link_id
+			o = id
 	}
 	
-	npc_link = o
+	if array_contains(talk_link, o)
+        array_delete(talk_link, array_get_index(talk_link, o), 1)
 }
-if command == "choice" { // choice(choice1, choice2, ...)  create a choice box for the player
+
+if command == "choice" { // choice(`choice1`, `choice2`, ...)  create a choice box for the player
+    _facechange("none")
+    
 	choice_inst = instance_create(o_text_choice, x, y, depth, {
 		choices: arg,
 		caller: id,
+        box_height: (caller.object_index == o_ui_dialogue ? caller.height : 151)
 	})
     
 	pause = -2
@@ -198,7 +252,7 @@ if command == "resetx" { // resetx() OR resetx  reset the x position of the type
 	chars ++
 }
 
-if command == "spr" || command == "sprite" { // spr(sprite_index) OR sprite(sprite_index)  inserts a sprite into the text
+if command == "spr" || command == "sprite" { // spr(sprite_index, image_speed=0, image_index=0) OR sprite(sprite_index, image_speed=0, image_index=0)  inserts a sprite into the text
 	var spr = asset_get_index(arg[0])
 	var inst = instance_create(o_text_single, x + xoff, y + yoff, depth)
 	
@@ -216,7 +270,12 @@ if command == "spr" || command == "sprite" { // spr(sprite_index) OR sprite(spri
 	inst.timer = chartimeroff * chars
 	inst.god = god
 	inst.sprite = spr
-			
+    
+    if array_length(arg) > 1
+        inst.img_spd = arg[1]
+    if array_length(arg) > 2
+        inst.img_index = arg[2]
+     
 	xoff += sprite_get_width(spr)*xscale
 	xoff += xspace * xscale
 }
@@ -228,31 +287,62 @@ if command == "sound" || command == "snd" { // snd(sound_index) OR sound(sound_i
 }
 
 if command == "can_skip" { // can_skip(bool)
-	can_skip = bool(arg[0])
+	can_skip = string_to_bool(arg[0])
     if !can_skip {
         allow_skip_internal = false
         skipping = false
         superskipping = false
     }
+    else {
+        allow_skip_internal = true
+    }
 }
+if command == "can_superskip" { // can_superskip(bool)
+	can_superskip = string_to_bool(arg[0])
+    if !can_superskip {
+        allow_skip_internal = false
+        skipping = false
+        superskipping = false
+    }
+    else {
+        allow_skip_internal = true
+    }
+}
+
 if command == "speed" { // speed(real)
 	typespd = real(arg[0])
 }
 
-if command == "char" { // char(char_preset_string, face_expression = undefined)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
+if command == "char" { // char(`char_preset_string`, face_expression = undefined)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
 	var __exp = (array_length(arg) > 1 ? real(arg[1]) : 0)
-	_facechange(arg[0], __exp)
-	
-	voice = struct_get(struct_get(char_presets, arg[0]), "voice")
-	voice_pitch_calc = struct_get(struct_get(char_presets, arg[0]), "voice_pitch_calc")
-	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
-	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
-    voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
-	
-	char = arg[0]
-	looping = false
+    
+    if arg[0] == char && array_length(arg) > 1 { // the user is misusing the char command. refer to face_ex (im crying)
+        face_expression = __exp
+        if string_length(face_expression) == string_length(string_digits(face_expression))
+            face_expression = real(face_expression)
+    }
+    else {
+    	_facechange(arg[0], __exp)
+    	
+    	voice = struct_get(struct_get(char_presets, arg[0]), "voice")
+    	voice_pitch_calc = struct_get(struct_get(char_presets, arg[0]), "voice_pitch_calc")
+    	voice_interrupt = struct_get(struct_get(char_presets, arg[0]), "voice_interrupt")
+    	voice_skip = struct_get(struct_get(char_presets, arg[0]), "voice_skip")
+        voice_pitchrange = struct_get(struct_get(char_presets, arg[0]), "voice_pitchrange")
+        
+        var __char_font = struct_get(struct_get(char_presets, arg[0]), "font");
+        if !is_undefined(__char_font) {
+            if is_string(__char_font) 
+                font = loc_font(__char_font);
+            else if font_exists(__char_font)
+                font = __char_font;
+        }
+    	
+    	char = arg[0]
+    	looping = false
+    }
 }
-if command == "face" { // face(face_preset_string, face_expression)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
+if command == "face" { // face(`face_preset_string`, face_expression)  optional argument 1 for changing the expression - could be either the name of the expression or the index of it in the sprite
 	var __exp = (array_length(arg) > 1 ? real(arg[1]) : 0)
 	_facechange(arg[0], __exp)
 	looping = false
@@ -277,33 +367,74 @@ if command == "voice" { // voice(asset OR nil, pitch_range = undefined, interrup
 		voice_pitchrange = string_split(voice_pitchrange, ",")
 	}
 	if array_length(arg) > 2 && arg[2] != "nil" 
-		voice_interrupt = bool(arg[2])
+		voice_interrupt = string_to_bool(arg[2])
 	if array_length(arg) > 3 && arg[3] != "nil" 
-		voice_skip = bool(arg[3])
+		voice_skip = string_to_bool(arg[3])
 }
 
-if command == "mini" { // mini(text, char = undefined, face_expression = undefined, x = auto, y = auto)
+if command == "mini" { // mini(`text`, char = undefined, face_expression = undefined, x = `auto`, y = `auto`)
+    draw_set_font(loc_font("main"))
+    
     var __char = undefined
     var __face_ex = 0
-    var __xx = x + 386 - string_width(arg[0])
+    var __xx = x + 500 - string_width(arg[0]) - face_xoff
     var __yy = y + 64
     
     if array_length(arg) > 1 __char = arg[1]
     if array_length(arg) > 2 __face_ex = arg[2]
-    if array_length(arg) > 3 __xx += real(arg[3])
-    if array_length(arg) > 4 __yy += real(arg[4])
+    if array_length(arg) > 3 && arg[3] != "auto" __xx += real(arg[3])
+    if array_length(arg) > 4 && arg[4] != "auto" __yy += real(arg[4])
         
     if string_length(string_digits(__face_ex)) == string_length(__face_ex)
         __face_ex = real(__face_ex)
     
     array_push(mini_faces, 
         instance_create(o_text_mini, __xx, __yy, depth, {
-            x: __xx, y: __yy,
             face_creator: struct_get(struct_get(char_presets, __char), "face_create"),
             face_expression: __face_ex,
             text: arg[0]
         })
     )
+}
+
+if command == "link_var_set" { // link_var_set(variable_name, value, is_real = false)
+    for (var i = 0; i < array_length(talk_link); i ++) {
+        if instance_exists(talk_link[i]) {
+            var val = arg[1]
+            if array_length(arg) > 2 && arg[2]
+                val = real(val)
+            
+            variable_instance_set(talk_link[i], arg[0], val)
+        }
+            
+    }
+}
+if command == "link_sprite_set" { // link_sprite_set(sprite_name)
+    for (var i = 0; i < array_length(talk_link); i ++) {
+        var asset = asset_get_index(arg[0])
+        if instance_exists(talk_link[i]) && asset != -1
+            variable_instance_set(talk_link[i], "sprite_index", asset)
+    }
+}
+
+if command == "money_display" { // money_display(sell_type)      sell_type can be one of the following: "consumable", "weapon", "armor"
+    var sell_type = ITEM_TYPE.CONSUMABLE
+    switch arg[0] {
+        case "consumable":
+            sell_type = ITEM_TYPE.CONSUMABLE
+            break
+        case "weapon":
+            sell_type = ITEM_TYPE.WEAPON
+            break
+        case "armor":
+            sell_type = ITEM_TYPE.ARMOR
+            break
+    }
+    
+    instance_create(o_ui_money_display,,,, {sell_type: sell_type})
+}
+if command == "money_display_hide" { // money_display_hide
+    instance_destroy(o_ui_money_display)
 }
 
 argstrings = ""

@@ -1,0 +1,43 @@
+{
+  "$GMObject":"",
+  "%Name":"o_actor_e_frog",
+  "eventList":[
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+  ],
+  "managed":true,
+  "name":"o_actor_e_frog",
+  "overriddenProperties":[
+    {"$GMOverriddenProperty":"v1","%Name":"","name":"","objectId":{"name":"o_actor_e","path":"objects/o_actor_e/o_actor_e.yy",},"propertyId":{"name":"encounter","path":"objects/o_actor_e/o_actor_e.yy",},"resourceType":"GMOverriddenProperty","resourceVersion":"2.0","value":"new enc_set_rizonbot()",},
+  ],
+  "parent":{
+    "name":"enemies",
+    "path":"folders/Objects/actors/enemies.yy",
+  },
+  "parentObjectId":{
+    "name":"o_actor_e",
+    "path":"objects/o_actor_e/o_actor_e.yy",
+  },
+  "persistent":false,
+  "physicsAngularDamping":0.1,
+  "physicsDensity":0.5,
+  "physicsFriction":0.2,
+  "physicsGroup":1,
+  "physicsKinematic":false,
+  "physicsLinearDamping":0.1,
+  "physicsObject":false,
+  "physicsRestitution":0.1,
+  "physicsSensor":false,
+  "physicsShape":1,
+  "physicsShapePoints":[],
+  "physicsStartAwake":true,
+  "properties":[],
+  "resourceType":"GMObject",
+  "resourceVersion":"2.0",
+  "solid":false,
+  "spriteId":{
+    "name":"spr_e_frogEnemy_idle",
+    "path":"sprites/spr_e_frogEnemy_idle/spr_e_frogEnemy_idle.yy",
+  },
+  "spriteMaskId":null,
+  "visible":true,
+}

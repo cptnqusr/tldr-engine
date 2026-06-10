@@ -1,5 +1,5 @@
 if die {
-	image_alpha-=.2
+	image_alpha -= .2
 	
 	if image_alpha <= 0 
 		instance_destroy()
@@ -59,7 +59,7 @@ else if !fading {
 	}
 	if life % 2 == 0 
 		afterimage(,,1)
-	x -= 3
+	x -= 4
 	
 	life ++
 }

@@ -1,5 +1,12 @@
 function item_weapon() : item() constructor {
 	type = ITEM_TYPE.WEAPON
+    
+    weapon_fatal = false
+	weapon_whitelist = []
+    weapon_element = {
+        element: undefined,
+        multiplier: 1.0
+    }
 }
 
 // swords
@@ -25,6 +32,9 @@ function item_w_spookysword() : item_weapon() constructor {
         noelle: "(It's kinda cool...)"
 	}
     
+    buy_price = 200
+    sell_price = 100
+    
     item_localize("item_w_spookysword")
 }
 function item_w_lw_halloween_pencil() : item_weapon() constructor {
@@ -46,6 +56,8 @@ function item_w_wood_blade() : item_weapon() constructor {
 	stats = {}
 	icon = spr_ui_menu_icon_sword
 	weapon_whitelist = ["kris", "sponge", "frog"]
+	
+	weapon_fatal = true
 	
 	reactions = {
 		susie: "(Has it only been 4 days?)",
@@ -85,6 +97,8 @@ function item_w_saber10() : item_weapon() constructor {
 		noelle: "(I'm not against using it, but...)",
 	}
     
+    sell_price = 355
+    
     item_localize("item_w_saber10")
 }
 function item_w_lw_cactusneedle() : item_weapon() constructor {
@@ -119,6 +133,8 @@ function item_w_jingleblade() : item_weapon() constructor {
 		ralsei: "Mmm! Minty and festive!",
 		noelle: "What is this, a barber pole?",
 	}
+    
+    sell_price = 617
     
     item_localize("item_w_jingleblade")
 }
@@ -168,6 +184,8 @@ function item_w_mane_ax() : item_weapon() constructor {
 		noelle: "It... smells nice...",
 	}
     
+    sell_price = 40
+    
     item_localize("item_w_mane_ax")
 }
 function item_w_devilsknife() : item_weapon() constructor {
@@ -191,6 +209,8 @@ function item_w_devilsknife() : item_weapon() constructor {
 		noelle: "...? It smiled at me?",
 	}
     
+    can_sell = false
+    
     item_localize("item_w_devilsknife")
 }    
 function item_w_absorbax() : item_weapon() constructor {
@@ -213,6 +233,8 @@ function item_w_absorbax() : item_weapon() constructor {
 		noelle: "That red... is that blood?",
 	}
     
+    sell_price = 617
+    
     item_localize("item_w_absorbax")
 }  
 
@@ -230,6 +252,8 @@ function item_w_red_scarf() : item_weapon() constructor {
 		ralsei: "Comfy! Touch it, Kris!",
 		noelle: "Huh? No, I'm not cold.",
 	}
+    
+    sell_price = 50
     
     item_localize("item_w_red_scarf")
 }
@@ -250,6 +274,8 @@ function item_w_flexscarf() : item_weapon() constructor {
 		noelle: "Twist it and... it's a wreath!",
 	}
     
+    sell_price = 360
+    
     item_localize("item_w_flexscarf")
 }
 function item_w_puppetscarf() : item_weapon() constructor {
@@ -269,6 +295,8 @@ function item_w_puppetscarf() : item_weapon() constructor {
 		noelle: "(Feels like guitar strings...)",
 	}
     
+    can_sell = false
+    
     item_localize("item_w_puppetscarf")
 } 
 
@@ -286,6 +314,8 @@ function item_w_snowring() : item_weapon() constructor {
 		ralsei: "Are you... proposing?",
 		noelle: "(Thank goodness...)",
 	}
+    
+    sell_price = 50
     
     item_localize("item_w_snowring")
 }
@@ -305,6 +335,8 @@ function item_w_freezering() : item_weapon() constructor {
 		ralsei: "It's beautiful...",
 		noelle: "...",
 	}
+    
+    sell_price = 500
     
     item_localize("item_w_freezering")
 }  

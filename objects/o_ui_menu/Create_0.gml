@@ -5,13 +5,15 @@ menuroll = 0
 close = false
 timer = 80
 surf = -1
+fading_out = false
 
-selection = 0
+selection = global.menu_page
 
 // item
 i_pselection = 0
 i_selection = 0
 i_pmselection = 0
+i_select_array = global.items
 
 // equip
 e_pmselection = 0
@@ -30,7 +32,8 @@ c_holdtimer = 0
 enum C_CONFIG_TYPE {
     SLIDER,
     BUTTON,
-    SWITCH
+    SWITCH,
+    SINGLE_SLIDER,
 }
 c_config = [
     {
@@ -40,6 +43,8 @@ c_config = [
         call: method(self, function(delta) {
             o_world.volume_master += delta
             o_world.volume_master = clamp(o_world.volume_master, 0, 1)
+            
+            audio_master_gain(o_world.volume_master)
         }),
         display: function() {
             return $"{clamp(round(o_world.volume_master * 100), 0, 100)}%"
@@ -62,17 +67,7 @@ c_config = [
             global.settings.SIMPLIFY_VFX = _bool
         })
     },
-    {
-        name: loc("menu_config_fullscreen"),
-        state: function() {
-            return window_get_fullscreen()
-        },
-        type: C_CONFIG_TYPE.SWITCH,
-    
-        call: method(self, function(_bool) {
-            window_set_fullscreen(_bool)
-        }),
-    },
+    // fullscreen ?
     {
         name: loc("menu_config_auto_run"),
         state: function() {
@@ -84,12 +79,18 @@ c_config = [
             global.settings.AUTO_RUN = _bool
         })
     },
+    // border ?
     {
         name: loc("menu_config_return_title"),
         type: C_CONFIG_TYPE.BUTTON,
         call: method(self, function() {
-            music_stop_all()
-            room_goto(room_save_select)
+            audio_play(snd_ui_select)
+            
+            fader_fade(0, 1, 20, DEPTH_UI.HIGHEST)
+            music_fade_all(0, 20)
+            
+            alarm[2] = 40
+            fading_out = true
         })
     },
     {
@@ -100,6 +101,48 @@ c_config = [
         })
     },
 ]
+
+if !global.can_use_borders {
+    array_insert(c_config, 3, {
+        name: loc("menu_config_fullscreen"),
+        state: function() {
+            return window_get_fullscreen()
+        },
+        type: C_CONFIG_TYPE.SWITCH,
+    
+        call: method(self, function(_bool) {
+            window_set_fullscreen(_bool)
+        }),
+    })
+}
+else {
+    array_insert(c_config, 5, {
+        name: loc("menu_config_border"),
+        display: function() {
+            return loc($"menu_config_border_mode_{global.border_mode}")
+        },
+        type: C_CONFIG_TYPE.SINGLE_SLIDER,
+    
+        call: method(self, function(delta) {
+            global.border_mode += delta
+            global.border_mode = (global.border_mode + global.border_mode_count) % global.border_mode_count
+            
+            if global.border_mode == BORDER_MODE.OFF
+                borders_toggle(false)
+            else
+                borders_toggle(true)
+            
+            if global.border_mode == BORDER_MODE.DYNAMIC
+                border_set(global.current_dynamic_border)
+            else if global.border_mode == BORDER_MODE.SIMPLE
+                border_set(border_simple)
+            else if global.border_mode == BORDER_MODE.NONE
+                border_set(border_none)
+        }),
+    })
+}
+
+
 c_controls = [
     INPUT_VERB.DOWN,
     INPUT_VERB.RIGHT,
@@ -122,8 +165,6 @@ e_move = 0
 only_hp = false
 
 i_mode = 0 // 1 for everybody
-
-darkdollars = save_get("money")
 
 bcolor = merge_color(c_purple, c_black, 0.7)
 bcolor = merge_color(bcolor, c_dkgray, 0.5)

@@ -1,3 +1,9 @@
+if memory_get("cutscenes", id) {
+    instance_destroy()
+    instance_activate_object(inst_3CB25A36)
+    exit
+}
+
 global.party_names = ["kris", "susie", "ralsei"]
 
 var inst = actor_create(party_get_obj("noelle"), 110, 270)
@@ -20,21 +26,21 @@ trigger_code = function() {
         party_set_state("susie", "serious")
     })
     cutscene_dialogue("{char(susie, 6)}* Woah... Is that...",, false)
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(true); i ++) {
         cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(
-            110 - (array_length(global.party_names) - 1) * 20 + i * 40,
+            110 - (party_length(true) - 1) * 20 + i * 40,
             150,
             30,,, DIR.DOWN
-        ), i, (i == array_length(global.party_names) - 1 ? true : false))
+        ), (i == party_length(true) - 1 ? true : false))
     }
     cutscene_wait_dialogue_finish()
     
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(true); i ++) {
         cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(
             0,
             90,
             20,,, DIR.DOWN, false
-        ), i, false)
+        ), false)
     }
     cutscene_camera_pan(undefined, 220, 30)
     cutscene_func(music_pause, 0)
@@ -43,7 +49,7 @@ trigger_code = function() {
         0,
         5,
         10,,, DIR.DOWN, false
-    ), i, false)
+    ), false)
     cutscene_dialogue([
         "{char(susie, 11)}* Noelle??",
         "{char(noelle, 20)}* NOELLE??"
@@ -97,8 +103,8 @@ trigger_code = function() {
     
     cutscene_sleep(30)
     cutscene_dialogue([
-        "{char(noelle, 0)}* I just got really lost in this test place and... fell asleep, haha!",
-        "{char(susie, 7)}* Oh, did you have like, any dreams??",
+        "{auto_breaks(false)}{char(noelle, 0)}* I just got really lost{br}in this test place and...{br}fell asleep, haha!",
+        "{auto_breaks(true)}{char(susie, 7)}* Oh, did you have like, any dreams??",
         "{char(noelle, 8)}* Yeah! The dream was cool... there was, like...",
         "{face_ex(25)}* Um...",
     ],, false, false)
@@ -124,11 +130,11 @@ trigger_code = function() {
     cutscene_camera_pan(undefined, 320, 30, false)
     
     cutscene_set_variable(o_actor_noelle, "sprite_index", spr_noelle_down)
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(true); i ++) {
         cutscene_actor_move(party_get_inst(global.party_names[i]), [
             new actor_movement(80, 150 + 90, 20),
             new actor_movement(110, 340 - i * 25, 40)
-        ], i, (i == array_length(global.party_names) - 1 ? true : false))
+        ], (i == party_length(true) - 1 ? true : false))
         cutscene_sleep(10)
     }
     
@@ -147,10 +153,11 @@ trigger_code = function() {
     cutscene_sleep(10)
     
     cutscene_func(music_resume, 0)
-    cutscene_func(function() {
+    cutscene_func(method(self, function() {
         music_resume(0)
         music_fade(0, 1, 30)
-    })
+        memory_flick("cutscenes", id)
+    }))
     
     cutscene_party_follow(true)
     cutscene_party_interpolate()

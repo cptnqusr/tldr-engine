@@ -1,14 +1,20 @@
 if instance_exists(o_enc) 
 	encounter_mode = true
+else if instance_exists(o_shop)
+    shop_mode = true
 
 if encounter_mode {
-	textinst = instance_create(o_text_typer, 30, 376, depth-10)
-	prefix = "{yspace(14)}"
+    prefix = "{yspace(14)}" + prefix
+	textinst = text_typer_create(text, 30, 376, depth-10, prefix, postfix, {max_width: 540})
+    height = 130
+}
+else if shop_mode {
+    textinst = text_typer_create(text, 30, 270, depth-10, prefix, postfix, {max_width: 540})
+    height = 170
 }
 else 
-	textinst = instance_create(o_text_typer, xx + 26, yy + 20, depth-10)
+	textinst = text_typer_create(text, xx + 26, yy + 20, depth-10, prefix, postfix, {max_width: 540})
 	
-textinst.text = prefix + text + postfix
 textinst.gui = true
 textinst.caller = id
 textinst.destroy_caller = true

@@ -11,6 +11,9 @@
     "save_menu_recruits": {
         "en": "Recruits", "ja": "なかま"
     },
+    "save_menu_to_title": {
+        "en": "Return To Title", "ja": "タイトル画面へ"
+    },
 
     "save_menu_file_saved": {
         "en": "File Saved", "ja": "セーブしました"
@@ -30,5 +33,15 @@
     },
     "save_menu_s_page": {
         "en": "Page\n{0}/{1}", "ja": "PAGE\n{0}/{1}"
+    },
+
+    "save_menu_return_confirm": {
+        "en": "Really return to title?", "ja": "タイトル画面にもどる？"
+    },
+    "save_menu_return_yes": {
+        "en": "Yes", "ja": "はい"
+    },
+    "save_menu_return_no": {
+        "en": "No", "ja": "いいえ"
     }
 }

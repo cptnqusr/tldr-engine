@@ -6,7 +6,7 @@ function party_nametostruct(name) {
 }
 
 ///@arg {String} name
-///@arg {String} value
+///@arg {String} hash
 ///@return {Any}
 ///@desc returns a value from the party struct
 function party_getdata(name, value) {
@@ -23,7 +23,7 @@ function party_getname(name, full = true) {
 }
 ///@arg {String} name
 ///@desc returns the index of a party member using their name
-function party_getpos(name) {
+function party_get_index(name) {
 	return array_get_index(global.party_names, name)
 }
 
@@ -71,4 +71,24 @@ function party_get_obj(name) {
 ///@desc returns whether a party member is up
 function party_isup(name) {
 	return party_getdata(name, "hp") > 0
+}
+
+///@desc returns whether a party member will be down when getting a certain amount of healing/damage
+///@arg {string} name the name of the party member we're checking
+///@arg {real} hp_change the amount the hp will be changed by
+function party_get_will_down(name, hp_change) {
+    if party_getdata(name, "hp") > 0 && party_getdata(name, "hp") + hp_change <= 0
+        return true
+}
+///@desc returns whether a party member will be up when getting a certain amount of healing/damage
+///@arg {string} name the name of the party member we're checking
+///@arg {real} hp_change the amount the hp will be changed by
+function party_get_will_up(name, hp_change) {
+    if party_getdata(name, "hp") < 0 && party_getdata(name, "hp") + hp_change >= 0
+        return true
+}
+
+/// @desc returns the struct of the party member
+function party_get_struct(name) {
+    return struct_get(global.party, name)
 }

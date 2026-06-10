@@ -12,18 +12,18 @@ trigger_code = function() {
         "* Is your HP not full??",
         "{char(noelle, 1)}* Oh, is it??? Umm... Do you have... any items?"
     ])
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(true); i ++) {
         if global.party_names[i] != "susie" && global.party_names[i] != "noelle" {
             cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(
                 get_leader().x + 40 - get_leader().spacing*3 * i, get_leader().y - 15,
                 30,,, DIR.DOWN
-            ), i, false)
+            ), false)
         }
         else
             cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(
                 get_leader().x + 40 - get_leader().spacing*3 * i, get_leader().y,
                 30,,, DIR.RIGHT
-            ), i, false)
+            ), false)
     }
     
     cutscene_sleep(40)
@@ -52,11 +52,11 @@ trigger_code = function() {
     cutscene_sleep(6)
     
     cutscene_func(function(__healdir) {
-        var inst = instance_create(o_dummy, party_get_inst("susie").x + 20 * __healdir, party_get_inst("susie").y - party_get_inst("susie").myheight/2, party_get_inst("susie").depth - 10, {
-            sprite_index: spr_susieheal_beam,
+        var inst = instance_create(o_dummy, party_get_inst("susie").x + 20 * __healdir, party_get_inst("susie").s_get_middle_y(), party_get_inst("susie").depth - 10, {
+            sprite_index: spr_ex_susieheal_beam,
             image_xscale: __healdir,
         })
-        do_animate(inst.x, party_get_inst("noelle").x, 30, "linear", inst, "x")
+        animate(inst.x, party_get_inst("noelle").x, 30, "linear", inst, "x")
     }, [__healdir])
     cutscene_sleep(30)
     

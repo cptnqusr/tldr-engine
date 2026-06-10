@@ -1,31 +1,24 @@
-save_follow = array_create(array_length(global.party_names))
+save_follow = array_create(party_length(true))
 
-for (var i = 0; i < array_length(global.party_names); i ++) {
+for (var i = 0; i < party_length(true); i ++) {
     var inst = party_get_inst(global.party_names[i])
     save_follow[i] = inst.follow
 }
 party_setfollow(false)
 
 // animate the party in
-for (var i = 0; i < array_length(global.party_names); ++i) {
+for (var i = 0; i < party_length(); ++i) {
 	var obj = party_get_inst(global.party_names[i])
 	
-	do_anime(obj.x, encounter_data.party_pos(i)[0], 10, "linear", function(v, obj) {
-		if instance_exists(obj) 
-			obj.x = v
-	}, obj)
-	do_anime(obj.y, encounter_data.party_pos(i)[1], 10, "linear", function(v, obj) {
-		if instance_exists(obj) 
-			obj.y = v
-	}, obj)
+    animate(obj.x, encounter_data.party_pos(i)[0], 10, anime_curve.linear, obj, "x")
+    animate(obj.y, encounter_data.party_pos(i)[1], 10, anime_curve.linear, obj, "y")
 	
 	var m = party_getdata(global.party_names[i], "s_battle_intro")
-	
 	if m == 0 
-		obj.sprite_index = enc_getparty_sprite(i, "intro")
+		obj.sprite_index = enc_getparty_sprite(global.party_names[i], "intro")
 	else if m == 1 {}
 	else if m == 2 
-		obj.sprite_index = enc_getparty_sprite(i, "introb")
+		obj.sprite_index = enc_getparty_sprite(global.party_names[i], "introb")
 	
 	obj.image_speed = 1
 	obj.trail = true
@@ -57,29 +50,23 @@ for (var i = 0; i < array_length(encounter_data.enemies); ++i) {
         }
 	}
 	
-	var obj = noone
-	var a = actor_find(encounter_data.enemies[i].obj, x, y)
+	var obj = enemy_objects[i]
+    var enemy_struct = encounter_data.enemies[i]
+    if !instance_exists(obj)
+        obj = actor_create(enemy_struct.obj, guipos_x() + 320 + 100, guipos_y() + 120, 0)
 	
-	var create = true // whether to create the actors
+	animate(obj.x, xx, 10, "linear", obj, "x")
+	animate(obj.y, yy, 10, "linear", obj, "y")
 	
-	if a != noone {
-		if !a.is_in_battle {
-			obj = a
-			create = false
-		}
-	}
-	if create 
-		obj = actor_create(encounter_data.enemies[i].obj, guipos_x() + 320 + 100,guipos_y() + 120, 0)
-	
-	do_animate(obj.x, xx, 10, "linear", obj, "x")
-	do_animate(obj.y, yy, 10, "linear", obj, "y")
-	
+    obj.sprite_index = encounter_data.enemies[i].s_idle
 	obj.image_index = 0
-	obj.hurt = 0
+    obj.image_speed = 1
 	obj.is_in_battle = true
+    obj.enemy_slot = i
+    obj.enemy_struct = enemy_struct
 	
-	encounter_data.enemies[i].actor_id = obj
-	encounter_data.enemies[i].slot = i
+	enemy_struct.actor_id = obj
+	enemy_struct.slot = i
 }
 
 var inst = instance_create(o_eff_bg,,,DEPTH_ENCOUNTER.BACKGROUND)

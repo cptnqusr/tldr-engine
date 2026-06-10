@@ -22,11 +22,14 @@ function typer_char() constructor {
         return inst
     }
     
-    voice = snd_text // the voice sound
+    font = undefined; // the font the character will use. can be a loc ID for a font or a reference to an asset (undefined will just not change the font)
+    
+    voice = snd_text // the voice sound (can be a callable, is fed the argument of the displayed characters)
     voice_pitch_calc = 1 // the pitch of the voice (could be either a function or a real number)
     voice_interrupt = false // whether to stop the voice sound every time a new blip is played
     voice_skip = 1 // every (how many?) frames to play the sound
 	voice_pitchrange = undefined
+	font = loc_font("text")
     
     /// @desc initialize the typer char - add to the typer's char presets
     __initialize = method(self, function(typer) {
@@ -75,7 +78,7 @@ function typer_char_noelle() : typer_char() constructor {
 function typer_char_ralsei_noface() : typer_char() constructor {
     name = "ralsei_noface"
     
-    voice = snd_text_ralsei
-	voice_pitchrange = [0.09, 0.13]
-	voice_skip = 9
+    voice = snd_txtral_trippy
+	voice_pitchrange = [0.9, 1.1]
+	voice_skip = 11
 }

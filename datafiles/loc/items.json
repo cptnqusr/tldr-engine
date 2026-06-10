@@ -13,18 +13,34 @@
         "ja": "＊ (もちものが　いっぱいだった)"
     },
 
-    "item_type_items": {
+    "item_type_item": {
+        "en": "Item", "ja": "アイテム"
+    },
+    "item_type_item_plural": {
         "en": "ITEMs", "ja": "アイテム"
     },
-    "item_type_key_items": {
+
+    "item_type_key_item": {
+        "en": "Key Item", "ja": "だいじなもの"
+    },
+    "item_type_key_item_plural": {
         "en": "KEY ITEMs", "ja": "だいじなもの"
     },
-    "item_type_weapons": {
+
+    "item_type_weapon": {
+        "en": "Weapon", "ja": "ぶき"
+    },
+    "item_type_weapon_plural": {
         "en": "WEAPONS", "ja": "ぶき"
     },
-    "item_type_armors": {
+
+    "item_type_armor": {
+        "en": "Armor", "ja": "ぼうぐ"
+    },
+    "item_type_armor_plural": {
         "en": "ARMORS", "ja": "ぼうぐ"
     },
+
     "item_type_storage": {
         "en": "STORAGE", "ja": "そうこ"
     },
@@ -32,6 +48,10 @@
     "item_chest_get": {
         "en": "* (You opened the treasure chest.){s(10)}{br}{resetx}* (Inside was {col(y)}{0}{col(w)}.)",
         "ja": "＊ (宝箱を開けた){s(10)}{br}{resetx}＊ ({col(y)}{0}{col(w)}が{br}　 入っていた)"
+    },
+    "item_chest_empty": {
+        "en": "* (The chest is empty.)",
+        "ja": "＊ (宝箱は　からっぽだ)"
     },
 
     "item_susie_comment": {

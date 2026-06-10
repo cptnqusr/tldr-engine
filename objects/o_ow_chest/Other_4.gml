@@ -1,2 +1,2 @@
-if state_get("chests_open")
+if memory_get(state_group, id)
 	image_index = 1

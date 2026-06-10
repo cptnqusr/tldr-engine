@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"typer_chars_BOS",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"typer_chars_BOS",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

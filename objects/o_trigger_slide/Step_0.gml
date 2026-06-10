@@ -1,15 +1,15 @@
 event_inherited()
 if triggered {
 	with target 
-		y += 4
-	if timer % 6 == 0 && target.y < y + sprite_height - 30 
+		y += global.slide_speed
+	if timer % 4 == 0 && target.y < y + sprite_height && target.y > y + 20
 		instance_create(o_eff_slidedust, target.x, target.y - 30, target.depth)
 	
 	timer ++
 }
 
 if instance_exists(target){
-	for (var i = 1; i < array_length(global.party_names); ++i) {
+	for (var i = 1; i < party_length(true); ++i) {
 		var o = party_get_inst(global.party_names[i])
 		
 		if o.sliding && !o.prevsliding {

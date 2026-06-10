@@ -1,5 +1,7 @@
 function item_key() : item() constructor {
 	type = ITEM_TYPE.KEY
+    
+    shop_max_sell = 1
 }
 
 function item_key_cell_phone() : item_key() constructor {
@@ -15,7 +17,7 @@ function item_key_cell_phone() : item_key() constructor {
 		cutscene_dialogue("{can_skip(false)}" + loc("item_key_cell_phone_cutscene")[0], "", false)
 		cutscene_sleep(40)
 		
-		cutscene_func(music_stop_all)
+		cutscene_func(music_pause, [0])
 		cutscene_audio_play(snd_smile)
 		cutscene_sleep(1)
 		cutscene_wait_until(function() {
@@ -25,6 +27,7 @@ function item_key_cell_phone() : item_key() constructor {
 		cutscene_func(function() {
 			instance_destroy(o_ui_dialogue)
 		})
+		cutscene_func(music_resume, [0])
 		cutscene_dialogue(loc("item_key_cell_phone_cutscene")[1])
 		
 		cutscene_player_canmove(true)
@@ -32,4 +35,29 @@ function item_key_cell_phone() : item_key() constructor {
 	}
     
     item_localize("item_key_cell_phone")
+}
+function item_key_locket() : item_key() constructor {
+	name = ["Locket"]
+	desc = ["Holds a picture.", "--"]
+	
+	use = function() {
+		instance_destroy(o_ui_menu)
+		
+		cutscene_create()
+		cutscene_player_canmove(false)
+		
+		cutscene_dialogue(loc("item_key_locket_cutscene"),,)
+		//cutscene_sleep(40)
+		
+		//cutscene_func(music_stop_all)
+		//cutscene_audio_play(snd_smile)
+		//cutscene_sleep(1)
+		//cutscene_wait_until(function() {
+			//return !audio_is_playing(snd_smile)
+		//})
+		
+		
+		cutscene_player_canmove(true)
+		cutscene_play()
+	}
 }

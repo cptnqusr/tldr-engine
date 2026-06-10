@@ -9,24 +9,21 @@ if global.console
 if state == -1 {
 	if InputPressed(INPUT_VERB.DOWN) {
 		sselection = 1
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	else if InputPressed(INPUT_VERB.UP) {
 		sselection = 0
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	if InputPressed(INPUT_VERB.SELECT) {
-		audio_play(snd_ui_select)
+		audio_play(snd_ui_select_CT)
 		if sselection == 0 {
 			chapters[tselec-1].exec(id) // run the chapter start script
 			lock = true
 		}
 		else {
 			yadd = -80
-			do_anime(0, 1, 20, "linear", function(v){
-				if instance_exists(id) 
-					id.alpha = v
-			})
+            animate(0, 1, 20, anime_curve.linear, id, "alpha")
 			
 			state = 0
 		}
@@ -42,12 +39,12 @@ else {
 	if InputPressed(INPUT_VERB.DOWN) && !confirming {
 		if selection >= total + 1 {
 			selection = 1
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		else {
 			selection ++
 			
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			while selection < total + 1 && !is_struct(chapters[selection-1]) 
 				selection++
 		}
@@ -56,7 +53,7 @@ else {
 		if selection > 1 {
 			var save = selection
 			selection --
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			
 			while selection > 0 && !is_struct(chapters[selection-1]) 
 				selection--
@@ -65,27 +62,27 @@ else {
 		}
 		else {
 			selection = total+1
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 	}
 
 	if InputPressed(INPUT_VERB.RIGHT) && confirming {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		confirmselection = 1
 	}
 	if InputPressed(INPUT_VERB.LEFT) && confirming {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		confirmselection = 0
 	}
 	
 	if languages {
 		if InputPressed(INPUT_VERB.RIGHT) && selection == total+1 {
 			horselection = 1
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		if InputPressed(INPUT_VERB.LEFT) && selection == total+1 {
 			horselection = 0
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 	}
 	else 
@@ -99,7 +96,7 @@ else {
 		if selection <= total {
 			if is_struct(chapters[selection - 1]) {
 				if confirming == true && confirmselection == 0{
-					audio_play(snd_ui_select)
+					audio_play(snd_ui_select_CT)
 					chapters[selection - 1].exec(id)
 					lock = true
 				}
@@ -109,22 +106,26 @@ else {
 				}
 				else{
 					confirming = true;
-					audio_play(snd_ui_select)
+					audio_play(snd_ui_select_CT)
 				}
 			}
 			else
-				audio_play(snd_ui_cant_select)
+				audio_play(snd_ui_cant_select_CT)
 		}
         
 		if selection == total + 1 {
             if horselection == 0
                 game_end()
             else {
-            	loc_switch_lang()
+                audio_play(snd_ui_select)
+            	loc_switch_lang(, false)
+                
+                if restart_upon_language_switch
+                    room_goto(room)
             }
         }
 	}
-	if InputPressed(INPUT_VERB.CANCEL) && confirming {
+	else if InputPressed(INPUT_VERB.CANCEL) && confirming {
 		confirming = false
 		confirmselection = 0
 		audio_play(snd_ui_cancel)

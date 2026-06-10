@@ -6,7 +6,7 @@ execute_code = function() {
 	cutscene_player_canmove(false)
 	cutscene_party_follow(false)
     
-    if array_length(global.party_names) == 1 {
+    if party_length() == 1 {
         cutscene_dialogue([
             "* (Standing here, you realized something.)",
             "* (If you had any PARTY MEMBERS, you could've asked them to wait here.)",
@@ -17,27 +17,27 @@ execute_code = function() {
     
     else if array_length(members) == 0 {
         var _txt = []
-        if array_contains(global.party_names, "susie") {
-            array_push(_txt, string("{char(susie, 21)}* Want {0} to wait around here? Sure I guess.", (array_length(global.party_names) > 2 ? "us" : "me")))
+        if party_contains("susie", true) {
+            array_push(_txt, string("{char(susie, 21)}* Want {0} to wait around here? Sure I guess.", (party_length(true) > 2 ? "us" : "me")))
         }
-        if array_contains(global.party_names, "ralsei") {
+        if party_contains("ralsei", true) {
             array_push(_txt, ["{char(ralsei, 20)}* Huh? Wait here?", 
                 "{face_ex(19)}* Sure! Tell me if you need anything!"
             ])
         }
-        if array_contains(global.party_names, "noelle") {
+        if party_contains("noelle", true) {
             array_push(_txt, "{char(noelle, 27)}* Umm... Well, if you say please, I'll think about it!!")
         }
         
         if array_length(_txt) > 0 
             cutscene_dialogue(array_shuffle(_txt)[0])
         
-        var __len = clamp(array_length(global.party_names), 0, 4)
+        var __len = clamp(party_length(true), 0, 4)
         for (var i = 1; i < __len; i ++) {
-            var marker = marker_getpos("test_pm_wait", i)
+            var marker = marker_get("test_pm_wait", i)
             var o = party_get_inst(global.party_names[i])
             if instance_exists(o) && !is_undefined(marker) {
-                cutscene_actor_move(o, new actor_movement(marker.x, marker.y, 20), i, (i == __len-1 ? true : false))
+                cutscene_actor_move(o, new actor_movement(marker.x, marker.y, 20), (i == __len-1 ? true : false))
                 cutscene_set_variable(o, "collide", true)
             }
         }

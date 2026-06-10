@@ -1,5 +1,5 @@
 trigger_code = function() {
-    if !party_ismember("susie")
+    if !party_contains("susie")
         exit
     
     cutscene_create()
@@ -8,16 +8,16 @@ trigger_code = function() {
     cutscene_set_variable(o_camera, "target", noone)
     cutscene_camera_pan(210, 186, 20, false)
     
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(); i ++) {
         var marker = marker_get("prophecy_pos", global.party_names[i])
         if !instance_exists(marker)
             continue
         
-        cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(marker.x, marker.y, 20), i, false)
+        cutscene_actor_move(party_get_inst(global.party_names[i]), new actor_movement(marker.x, marker.y, 20), false)
     }
     cutscene_sleep(20)
     
-    for (var i = 0; i < array_length(global.party_names); i ++) {
+    for (var i = 0; i < party_length(); i ++) {
         cutscene_set_variable(party_get_inst(global.party_names[i]), "dir", DIR.UP)
     }
     cutscene_sleep(30)

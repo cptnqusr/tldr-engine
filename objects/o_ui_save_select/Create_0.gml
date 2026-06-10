@@ -55,11 +55,12 @@ subselection = 0
 buffer = 0
 threat = 0
 currently_naming = false
+surf = -1
 
 copy_from = 0
 copy_to = 0
 
-credit = $"{ENGINE_NAME} {ENGINE_VERSION}"
+credit = $"{GAME_NAME} {GAME_VERSION}"
 
 event_user(0)
 

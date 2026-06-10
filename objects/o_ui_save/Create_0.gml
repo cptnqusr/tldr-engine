@@ -23,6 +23,15 @@ m_buttons = [
 	},
 ]
 
+if global.world == WORLD_TYPE.LIGHT {
+    m_buttons[2] = {
+        name: loc("save_menu_to_title"),
+		on: true,
+		page: 4,
+    }
+    array_pop(m_buttons)
+}
+
 m_selection = 0
 s_selection = global.save_slot
 s_o_selection = 0
@@ -35,7 +44,11 @@ st_maxstpage = 2
 st_soulx = 155 - 15
 st_souly = 145 + floor(st_selection[st_page]/2)*20 + 3
 
+return_selection = 0
+
 page = 0
 
 prog = 0
 buffer = 0
+fading_out = false
+size_increment = (global.world == WORLD_TYPE.LIGHT ? 5 : 0)

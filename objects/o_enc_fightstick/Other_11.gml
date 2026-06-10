@@ -23,8 +23,19 @@ else if dist < 14
 else if dist >= 14
 	accuracy = round(max(0, 100 - (dist / 7 * 2)))
 
-dmg = (party_getdata(global.party_names[index],"attack") * accuracy) / 20
+var member_weapon = party_getdata(global.party_names[index], "weapon")
+var weapon_element = undefined
+if is_struct(member_weapon) && is_struct(member_weapon.weapon_element)
+    weapon_element = member_weapon.weapon_element
+
+dmg = (party_getdata(global.party_names[index], "attack") * accuracy) / 20
 dmg -= 3 * ecaller.encounter_data.enemies[target].defense
+dmg = max(1, dmg)
+
+// add the element multiplier
+if weapon_element.element == ecaller.encounter_data.enemies[target].element
+    dmg *= weapon_element.multiplier
+
 dmg = round(dmg)
 
 if ecaller.tp_constrict
@@ -36,12 +47,12 @@ if perfect {
 	repeat(3) {
 		instance_create(o_eff_criticalsparkle, 
 			o.x + 10 + random(20), 
-			o.y - o.myheight/2 - random(6), 
+			o.s_get_middle_y() - random(6), 
 			o.depth - 10
 		)
 	}
 }
 
-o.sprite_index = enc_getparty_sprite(index, "attack")
+o.sprite_index = enc_getparty_sprite(global.party_names[index], "attack")
 o.image_index = 0
 o.image_speed = 1

@@ -1,87 +1,89 @@
 ///@desc returns the battle sprite of a party member from the battle_sprites struct inside party data
-function enc_getparty_sprite(index, sprname) {
-	var ret = struct_get(party_getdata(global.party_names[index], "battle_sprites"), sprname)
+function enc_getparty_sprite(party_name, sprname) {
+	var ret = struct_get(party_getdata(party_name, "battle_sprites"), sprname)
 	
 	if is_array(ret) 
 		ret = ret[0]
-	party_get_inst(global.party_names[index]).sprname = sprname
+	party_get_inst(party_name).sprname = sprname
 	
-	ret = asset_get_index_state(sprite_get_name(ret), party_getdata(global.party_names[index], "s_state"))
+    if !sprite_exists(ret)
+        return undefined
+	ret = asset_get_index_state(sprite_get_name(ret), party_getdata(party_name, "s_state"))
 	
 	return ret
 }
 
 /// @desc  hurts an enemy and makes it run away if needed. if the damage is FATAL, specify in the optional argument
 /// @param {real} target_index
-/// @param {real} hurt 
-/// @param {real} user_index
-/// @param {asset.gmsound} [sfx]
-/// @param {real} [xoff]
-/// @param {real} [yoff]
+/// @param {real} hurt_amount
+/// @param {string} party_name
+/// @param {asset.GMSound} [sfx]
 /// @param {bool} [fatal]
 /// @param {string} [seed]
-function enc_hurt_enemy(target, hurt, user, sfx = snd_damage, xoff = 0, yoff = 0, fatal = false, seed = "") {
-	if o_enc.encounter_data.enemies[target].hp <= 0 
+function enc_hurt_enemy(target, hurt, user, sfx = undefined, fatal = false, seed = "") {
+	var enemy_struct = o_enc.encounter_data.enemies[target]
+    if !enc_enemy_isfighting(target)
+        return false
+    
+    hurt = round(hurt)
+    sfx ??= enemy_struct.hurt_sound
+    
+    if struct_exists(enemy_struct, "ev_hurt") && is_callable(enemy_struct.ev_hurt)
+        enemy_struct.ev_hurt()
+    
+    if !is_struct(enemy_struct)
+        exit
+    if enemy_struct.hp <= 0 || !enc_enemy_isfighting(target)
 		exit
-	o_enc.encounter_data.enemies[target].hp -= hurt
+	enemy_struct.hp -= hurt
 	
-	var o = o_enc.encounter_data.enemies[target].actor_id
+	var o = enemy_struct.actor_id
 	var txt = -hurt
+    
 	if hurt == 0
 		txt = "miss"
 	
 	if !instance_exists(o) 
-		exit
-	instance_create(o_text_hpchange, o.x + xoff, o.y - o.myheight/2 + yoff, o.depth-100, {draw: txt, mode: 1, user: global.party_names[user],})
+		return false
+	instance_create(o_text_hpchange, o.x, o.s_get_middle_y(), o.depth-100, {draw: txt, mode: TEXT_HPCHANGE_MODE.ENEMY, user: user,})
 	
 	if hurt > 0 {
-		if o_enc.encounter_data.enemies[target].hp <= 0 {
-			if fatal {
-				instance_create(o_eff_fatal_damage, o.x, o.y, o.depth, {
-					sprite_index: o.s_hurt,
-					image_xscale: o.image_xscale,
-					image_yscale: o.image_yscale,
-					image_index: o.image_index,
-					image_speed: 0,
-					shake: 6,
-				})
-				instance_destroy(o)
-			}
+		if enemy_struct.hp <= 0 {
+			if fatal
+                enemy_struct.__fatal_defeat()
 			else if seed == "" {
-				o.run_away = true
-				audio_play(snd_defeatrun)
+                enemy_struct.__run_defeat()
                 
-                if !recruit_islost(o_enc.encounter_data.enemies[target]) {
-                    instance_create(o_text_hpchange, o.x, o.y - o.myheight/2, o.depth - 100, {
+                if !recruit_islost(enemy_struct) {
+                    instance_create(o_text_hpchange, o.x, o.s_get_middle_y(), o.depth - 100, {
                         draw: "lost",
-                        mode: 4,
+                        mode: TEXT_HPCHANGE_MODE.SCALE,
                     })
-                    recruit_lose(o_enc.encounter_data.enemies[target])
+                    recruit_lose(enemy_struct)
                 }
 			}
-            else if seed == "freeze" {
-                do_animate(0, 1, 20, "linear", o, "freeze")
-                
-                instance_create(o_text_hpchange, o.x, o.y - o.myheight/2, o.depth - 100, {
-                    draw: "frozen",
-                    mode: 4,
-                })
-                audio_play(snd_petrify)
-            }
+            else if seed == "freeze"
+                enemy_struct.__freeze_defeat()
 		}
-		if instance_exists(o) 
+		else if enemy_struct.hp < enemy_struct.max_hp * enemy_struct.low_hp_tired_threshold && enemy_struct.low_hp_tired
+            enemy_struct.tired = true
+        
+        if instance_exists(o) 
 			o.hurt = 20
 		audio_play(sfx)
 		
-		do_anime(6, 0, 10, "linear", function(v, o) {
-			if instance_exists(o) o.shake = v
-		}, o)
+		animate(6, 0, 10, anime_curve.linear, o, "shake")
 	}
 }
 
-///@desc adds to the mercy bar and makes the enemy spareable if needed
-///@arg slot
-function enc_sparepercent_enemy(target, percent, sfx = snd_mercyadd) {
+/// @desc adds to the mercy bar and spawns a text indicator
+/// @arg {real} target_index the index of the target enemy
+/// @arg {real} percent the amount of percent to add
+/// @arg {Asset.GMSound} sfx the sfx to play upon adding the percentage
+function enc_enemy_add_spare(target, percent, sfx = snd_mercyadd) {
+    if !enc_enemy_isfighting(target)
+        exit
+    
 	o_enc.encounter_data.enemies[target].mercy += percent
 	if o_enc.encounter_data.enemies[target].mercy >= 100
 		percent = 100
@@ -91,29 +93,46 @@ function enc_sparepercent_enemy(target, percent, sfx = snd_mercyadd) {
 	var o = o_enc.encounter_data.enemies[target].actor_id
 	var txt = $"+{percent}%"
 	
-	instance_create(o_text_hpchange, o.x, o.y - o.myheight/2, o.depth - 100, {draw: txt, mode: 2})
+	instance_create(o_text_hpchange, o.x, o.s_get_middle_y(), o.depth - 100, {draw: txt, mode: TEXT_HPCHANGE_MODE.PERCENTAGE})
 	
 	if sfx == snd_mercyadd {
 		var _pitch = 0.8
 		
-        if percent < 99
-            _pitch = 1
-        if percent <= 50
-            _pitch = 1.2
         if percent <= 25
             _pitch = 1.4
+        else if percent <= 50
+            _pitch = 1.2
+        else if percent < 100
+            _pitch = 1
 			
         audio_play(sfx,, 0.8, _pitch, 1)
 	}
 	if o_enc.encounter_data.enemies[target].mercy >= 100 {
-		o.sprite_index = o.s_spared
-	}
+        o_enc.encounter_data.enemies[target].s_idle = o_enc.encounter_data.enemies[target].s_spare
+        o.sprite_index = o_enc.encounter_data.enemies[target].s_spare
+    }
 }
 
-///@arg slot
-function enc_sparepercent_enemy_from_inst(target, instance, variable, sfx = snd_mercyadd){
+/// @desc adds to the mercy bar and spawns a text indicator
+/// @arg {real} target_index the index of the target enemy
+/// @arg {Id.Instnace} instance the instance that holds the percentage variable
+/// @arg {string} var_name the name of the variable that holds the target percentage
+/// @arg {Asset.GMSound} sfx the sfx to play upon adding the percentage
+function enc_enemy_add_spare_from_var(target, instance, variable, sfx = snd_mercyadd){
 	var percent = variable_instance_get(instance, variable)
-	enc_sparepercent_enemy(target, percent, sfx)
+	enc_enemy_add_spare(target, percent, sfx)
+}
+
+/// @desc sets the enemy's tired variable to true
+/// @arg {real} enemy_index the index of the enemy that is to become tired/not-tired
+/// @arg {bool} _tired whether the enemy should become tired or not
+function enc_enemy_set_tired(enemy_index, _tired) {
+    if !instance_exists(o_enc)
+        exit
+    if !enc_enemy_isfighting(enemy_index)
+        exit
+    
+    o_enc.encounter_data.enemies[enemy_index].tired = _tired
 }
 
 ///@desc clamps a value between 0 and 100
@@ -124,6 +143,9 @@ function tp_clamp(tp) {
 /// @desc returns whether an enemy is still fighting
 /// @arg enemy_slot
 function enc_enemy_isfighting(target) {
+    if target >= array_length(o_enc.encounter_data.enemies) || target < 0
+        return false
+    
 	var ret = is_struct(o_enc.encounter_data.enemies[target])
 	if ret && o_enc.encounter_data.enemies[target].hp <= 0 
 		ret = false
@@ -133,7 +155,7 @@ function enc_enemy_isfighting(target) {
 
 ///@desc starts an encounter
 function enc_start(set) {
-	var inst = instance_create(o_enc_anim,,,, {encounter_data: set})
+	var inst = instance_create(o_enc_anim, get_leader().x, get_leader().y,, {encounter_data: set})
 	return inst
 }
 
@@ -152,9 +174,12 @@ function enc_enemy_count(only_alive = true) {
 
 ///@desc game over!
 function enc_gameover(){
+    if instance_exists(o_gameover)
+        exit
+    
 	instance_create(o_gameover, 
 		o_enc_soul.x - guipos_x(), o_enc_soul.y - guipos_y(), DEPTH_ENCOUNTER.UI,
-		{
+		{ 
 			image_blend: o_enc_soul.image_blend,
 			freezeframe: sprite_create_from_surface(application_surface, 0, 0, 640, 480, 0, 0, 0, 0),
 			freezeframe_gui: sprite_create_from_surface((instance_exists(o_enc) ? o_enc.surf : -1), 0, 0, 640, 480, 0, 0, 0, 0),
@@ -167,68 +192,165 @@ function enc_gameover(){
 	audio_play(snd_hurt)
 }
 
-/// @arg {real,array} index could be an index or array if there are multiple enemies to spare
-function cutscene_spare_enemy(index) {
-    var _enemy = o_enc.encounter_data.enemies
+/// @arg {string} party_name party member name
+/// @arg {Asset.GMSprite|string} sprite_ref the sprite to use. can be either a string that will be put into `enc_getparty_sprite` or a sprite index
+/// @arg {real} index the image index of the sprite, by default doesn't change it
+/// @arg {real} speed the speed of the sprite, by default doesn't change it
+function enc_party_set_battle_sprite(party_name, sprite_ref, index = undefined, speed = undefined) {
+    index ??= 0; speed ??= 1
     
-    if !is_array(index)
-        index = [index]
+    var inst = party_get_inst(party_name)
+    if is_string(sprite_ref) {
+        var target_sprite = enc_getparty_sprite(party_name, sprite_ref)
+        inst.sprite_index = (sprite_exists(target_sprite) ? target_sprite : inst.sprite_index)
+    }
+    else if sprite_exists(sprite_ref)
+        inst.sprite_index = sprite_ref
     
-    for (var i = 0; i < array_length(index); i ++) {
-        var obj = _enemy[index[i]].actor_id
-        
-        if !enc_enemy_isfighting(index[i])
-            continue
-        
-        recruit_advance(_enemy[index[i]])
-        
-        cutscene_set_variable(obj, "sprite_index", obj.s_spared)
-        cutscene_instance_create(o_text_hpchange, 
-            obj.x, obj.y - obj.myheight/2, 
-            obj.depth - 100, {
-                draw: $"{recruit_get_progress(_enemy[index[i]])}/{recruit_getneed(_enemy[index[i]])}", 
-                mode: 3
+    if !is_undefined(index)
+        inst.image_index = index
+    if !is_undefined(speed)
+        inst.image_speed = speed
+}
+
+/// @desc returns whether an enemy is recruitable
+/// @arg {function|struct.enemy} ref_or_struct
+/// @return {bool}
+function enc_enemy_is_recruitable(ref_or_struct) {
+    if is_callable(ref_or_struct)
+        ref_or_struct = new ref_or_struct()
+    
+    return is_struct(ref_or_struct.recruit)
+}
+
+function enc_get_flavor(data) {
+    if is_callable(data.flavor)
+        return data.flavor()
+    return data.flavor
+}
+
+/// @desc returns the amount of enemies that are currently fighting
+function enc_count_fighting_enemies() {
+    var count = 0
+    for (var i = 0; i < array_length(o_enc.encounter_data.enemies); i ++) {
+        if enc_enemy_isfighting(i)
+            count ++
+    }
+    return count
+}
+
+/// @arg {struct.enc_set|function} set_or_ref the encounter set struct or its reference
+/// @arg {function} enemy_ref the enemy we're looking for
+function enc_set_contains_enemy(set_or_ref, enemy_ref) {
+    if !is_struct(set_or_ref)
+        set_or_ref = new set_or_ref()
+    
+    for (var i = 0; i < array_length(set_or_ref.enemies); i ++) {
+        if enc_enemy_isfighting(i) && is_instanceof(set_or_ref.enemies[i], enemy_ref)
+            return true
+    }
+}
+/// @arg {struct.enc_set|function} set_or_ref the encounter set struct or its reference
+/// @arg {function} enemy_ref the enemy we're counting
+function enc_set_count_enemy(set_or_ref, enemy_ref) {
+    if !is_struct(set_or_ref)
+        set_or_ref = new set_or_ref()
+    
+    var counter = 0
+    for (var i = 0; i < array_length(set_or_ref.enemies); i ++) {
+        if enc_enemy_isfighting(i) && is_instanceof(set_or_ref.enemies[i], enemy_ref)
+            counter ++
+    }
+    return counter
+}
+
+/// @desc returns whether an item in the item selector page of the encounter ui can be used
+/// @arg {struct} item_struct the struct of the item you'd like to check
+function enc_item_get_enabled(item_struct) {
+    var can_perform = true
+    
+    // disable the act if some member is not up
+    if struct_exists(item_struct, "party") {
+        if item_struct.party == -1 {
+            for (var j = 0; j < party_length(); j ++) {
+                if !party_isup(global.party_names[j]) {
+                    can_perform = false
+                    break
+                }
             }
-        )
-        
-        // flash the enemy
-        cutscene_anim(.5, 1, 4, "linear", function(v, o) {
-            if instance_exists(o) 
-                o.flash = v
-        }, obj)
+        }
+        else {
+            for (var j = 0; j < array_length(item_struct.party); j ++) {
+                var name = item_struct.party[j]
+                if !party_isup(name) {
+                    can_perform = false
+                    break
+                }
+            }
+        }
     }
     
-    cutscene_audio_play(snd_spare)
-    cutscene_sleep(4)
-    
-    for (var i = 0; i < array_length(index); i ++) {
-        var obj = _enemy[index[i]].actor_id
-        
-        cutscene_instance_create(o_afterimage, obj.x, obj.y, obj.depth + 6, {
-            sprite_index: obj.sprite_index, 
-            image_index: obj.image_index, 
-            white: true, 
-            image_alpha: 1, 
-            speed: 2
-        })
-        cutscene_instance_create(o_afterimage, obj.x, obj.y, obj.depth + 6, {
-            sprite_index: obj.sprite_index,
-            image_index: obj.image_index, 
-            white: true, 
-            image_alpha: 1, 
-            speed: 4
-        })
-        cutscene_instance_create(o_eff_spareeffect, 
-            obj.x - obj.sprite_xoffset, obj.y - obj.sprite_yoffset,
-            obj.depth - 6, {
-                w: obj.sprite_width,
-                h: obj.sprite_height
-            }
-        )
-        
-        cutscene_func(instance_destroy, [obj])
-        cutscene_func(function(e) {
-            o_enc.encounter_data.enemies[e] = "spared"
-        }, [index[i]])
+    if struct_exists(item_struct, "tp_cost") {
+        if item_struct.tp_cost > o_enc.tp
+            can_perform = false
     }
+    if struct_exists(item_struct, "enabled") {
+        if is_bool(item_struct.enabled)
+            can_perform = item_struct.enabled
+        else if is_callable(item_struct.enabled)
+            can_perform = item_struct.enabled
+    }
+    
+    return can_perform
+}
+
+enum ENC_TARGET {
+    RANDOM,
+    ANY,
+    ALL,
+}
+
+/// @desc caclulates a target during an encounter based on the struct
+/// @arg {struct.enc_set} encounter the encounter struct
+function enc_calculate_target(encounter) {
+    if encounter.target_calculation == ENC_TARGET.ALL {
+        var __targets = []
+        for (var i = 0; i < party_length(); ++i) {
+		    if party_getdata(global.party_names[i], "hp") > 0
+				array_push(__targets, global.party_names[i])
+		}
+        
+        return __targets
+    } 
+    else if encounter.target_calculation == ENC_TARGET.RANDOM || encounter.target_calculation == ENC_TARGET.ANY {
+        var __targets = []
+        for (var i = 0; i < party_length(); ++i) {
+		    if party_getdata(global.party_names[i], "hp") > 0
+				array_push(__targets, global.party_names[i])
+		}
+        
+        if array_length(__targets) == 0
+            return -1
+        return [array_shuffle(__targets)[0]]
+    }
+    else {
+        return encounter.target_calculation()
+    }
+}
+/// @desc returns whether a target should be recalculated
+/// @arg {struct.enc_set} encounter the encounter struct
+/// @arg {array} current_targets the current turn targets
+function enc_recalculate_condition(encounter, current_targets) {
+    if !struct_exists(encounter, "target_recalculate_condition")
+        return false
+    
+    if !is_real(encounter.target_recalculate_condition) && is_callable(encounter.target_recalculate_condition) 
+        return encounter.target_recalculate_condition(current_targets)
+    
+    else if encounter.target_calculation == ENC_TARGET.ALL
+        return false
+    else if encounter.target_calculation == ENC_TARGET.RANDOM
+        return (!party_isup(current_targets[0]) ? true : false)
+    else if encounter.target_calculation == ENC_TARGET.ANY
+        return true
 }

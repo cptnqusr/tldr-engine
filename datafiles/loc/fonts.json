@@ -1,10 +1,10 @@
 {
     "font_main": {
-        "en": "font_main",
+        "en": "font_chrono",
         "ja": "font_main_ja"
     },
     "font_text": {
-        "en": "font_main_mono",
+        "en": "font_chrono",
         "ja": "font_main_ja"
     },
     "font_enc": {
@@ -18,5 +18,17 @@
     "font_prophecy": {
         "en": "font_prophecy",
         "ja": "font_prophecy_ja"
+    },
+    "font_main_DR": {
+        "en": "font_main",
+        "ja": "font_main_ja"
+    },
+    "font_text_DR": {
+        "en": "font_main_mono",
+        "ja": "font_main_ja"
+    },
+    "font_8bit": {
+        "en": "font_8bit",
+        "ja": "font_8bit_ja"
     }
 }

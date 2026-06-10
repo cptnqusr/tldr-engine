@@ -8,14 +8,17 @@ state = -1
 is_enemy = false
 is_follower = false
 is_in_battle = false
+is_selected_for_battle = false
 is_player = false
+is_party = false
 
 { // player specific
 	spd = 2
 	runspd = 4
 	basespd = spd
-	lockeddir = -1
+    
     auto_run = global.settings.AUTO_RUN
+    noclip = false
 	
 	slide_vertical_allow = false // can move vertically while sliding
 	diagonal = true // can move diagonally
@@ -29,23 +32,19 @@ is_player = false
 { // enemy specific
 	chaser = false
 	chasing = false
-    
-    carrying_money = 0
 }
 { // actor variables
 	follow = true
 	hurt = 0 // the timer of the sprite switch
+    link_id = undefined
 	
 	autoheight = true // whether the height is automatically determined
 	myheight = 0
 	
-	custom_depth = undefined
+	depth_override = undefined
 	pos = 0
     
-    /// @desc needs to return true to function
-    interaction_code = function() {
-        return false
-    }
+    interaction_code = function() {}
     interaction_args = []
     interactable_instances = []
 }
@@ -78,6 +77,9 @@ is_player = false
 			_angle, _blend, _alpha
 		)
 	}
+    s_get_middle_y = function(relative = false) {
+        return (relative ? 0 : y) - myheight/2
+    }
 	
 	snapping = 1 // 1 for none
 	
@@ -94,6 +96,14 @@ is_player = false
     flash_color = c_white
 	fsiner = 0 // flash siner
 	flash = 0
+    
+    // lighting
+    lighting_highlight_enabled = true
+    lighting_darken_enabled = true
+    lighting_shadow_enabled = true
+    
+    // dark lighting library
+    lb_dl_highlight_color = c_white
 	
 	can_reflect = true
 	reflection_code = function() {
@@ -106,12 +116,8 @@ is_player = false
 	}
 }
 { // internal variables
-	move[DIR.UP] = 0
-	move[DIR.RIGHT] = 0
-	move[DIR.DOWN] = 0
-	move[DIR.LEFT] = 0
-	
 	dir = DIR.DOWN
+    held_directions = []
 	
 	startedmoving = false
 	moving = false
@@ -134,6 +140,7 @@ is_player = false
     dodge_outline_surf = -1
     dodge_mysoul = noone
     spawn_buffer = 4
+    last_walk_frame = 1
 }
 { // moveables
 	moveable = true // the user-defined one, used in cutscenes and such. not touched by any of the systems in the engine by default
@@ -145,6 +152,7 @@ is_player = false
 	moveable_save = true
 	moveable_anim = true
     moveable_recruits = true
+    moveable_shop = true
 	
 	_checkmove = function() { // the main function that determines whether the player can move as of right now
 		return moveable 
@@ -156,17 +164,34 @@ is_player = false
 		&& moveable_save 
 		&& moveable_anim 
         && moveable_recruits
+        && moveable_shop
 		
 		&& hurt == 0
         && spawn_buffer <= 0
 		
 		&& !global.console
+        && global.player_moveable_global
 	}
 }
 
-alarm[0] = 1
+alarm[0] = 1 // initialize if not already initialized on the first frame
+__initialize = function() {
+    init = true
+    
+    if is_enemy 
+    	if autoheight 
+    		myheight = sprite_get_height(sprite_index)
+    
+    if is_party {
+        event_user(2)
+        
+    	s_hurt = party_getdata(name, "battle_sprites").hurt
+    	if autoheight 
+    		myheight = party_getbattleheight(name)
+    }
+}
 
 if !instance_exists(o_dodge_controller) 
 	instance_create(o_dodge_controller)
-if !instance_exists(o_lighting_controller)
-    instance_create(o_lighting_controller)
+if !instance_exists(o_eff_lighting_controller)
+    instance_create(o_eff_lighting_controller)

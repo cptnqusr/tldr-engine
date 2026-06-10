@@ -2,8 +2,10 @@ if global.console
 	exit
 
 currently_naming = instance_exists(o_ui_naming)
-if currently_naming
+if currently_naming {
+    buffer = 2 
     exit
+}
 
 if state == 0 { // choose
 	if selection < SAVE_SLOTS {
@@ -11,15 +13,15 @@ if state == 0 { // choose
 		
 		if InputPressed(INPUT_VERB.DOWN) {
 			selection ++
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		if InputPressed(INPUT_VERB.UP) && selection > 0 {
 			selection --
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 		}
 		
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			state = 1
 			buffer = 1
 		}
@@ -34,7 +36,7 @@ if state == 0 { // choose
 		
 		if InputPressed(INPUT_VERB.DOWN) && selection < SAVE_SLOTS + 3 {
 			selection += 3
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			
 			if !language && selection == SAVE_SLOTS + 4 {
 				selection = SAVE_SLOTS + 3
@@ -44,14 +46,14 @@ if state == 0 { // choose
 			}
 		}
 		if InputPressed(INPUT_VERB.UP) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			selection -= 3
 			if selection < SAVE_SLOTS {
 				selection = SAVE_SLOTS - 1
 			}
 		}
 		if InputPressed(INPUT_VERB.RIGHT) && (selection-SAVE_SLOTS) % 3 < 2 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			selection ++
 			
 			if !language && selection == SAVE_SLOTS + 4
@@ -60,7 +62,7 @@ if state == 0 { // choose
 				selection = SAVE_SLOTS + 5
 		}
 		if InputPressed(INPUT_VERB.LEFT) && (selection-SAVE_SLOTS) % 3 > 0 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			selection --
 			if !language && selection == SAVE_SLOTS + 4
 				selection = SAVE_SLOTS + 3
@@ -70,14 +72,14 @@ if state == 0 { // choose
 			
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 			if selection == SAVE_SLOTS {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				
 				state = 2
 				subselection = 0
 				msg_set(m_copy, 0)
 			}
 			if selection == SAVE_SLOTS + 1 {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				state = 3
 				subselection = 0
 				msg_set(m_erase, 0)
@@ -87,7 +89,7 @@ if state == 0 { // choose
 				music_stop(0)
 			}
 			if selection == SAVE_SLOTS + 3 {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				state = 4
 				subselection = 0
 				msg_set(m_chfile, 0)
@@ -96,7 +98,7 @@ if state == 0 { // choose
                 loc_switch_lang(, false)
                 event_user(2)
                 
-                audio_play(snd_ui_select)
+                audio_play(snd_ui_select_CT)
 			}
 			if selection == SAVE_SLOTS + 5 {
 				game_end()
@@ -111,13 +113,13 @@ if state == 1 {
 	
 	if InputPressed(INPUT_VERB.RIGHT) {
 		selection_hor = 1
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	if InputPressed(INPUT_VERB.LEFT) {
 		selection_hor = 0
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
-	if InputPressed(INPUT_VERB.CANCEL) || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
+	if (InputPressed(INPUT_VERB.CANCEL) && buffer == 0) || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
 		audio_play(snd_ui_cancel)
 		
 		selection_hor = 0
@@ -126,6 +128,8 @@ if state == 1 {
 	}
 	if InputPressed(INPUT_VERB.SELECT) && selection_hor == 0 && buffer == 0 { // load file
         if files[selection] != -1 {
+            music_stop_all()
+            
             save_load(selection, global.chapter)
             
     		room_goto(save_get("room"))
@@ -133,7 +137,10 @@ if state == 1 {
         }
 		else {
             currently_naming = true
-            instance_create(o_ui_naming,,, depth - 10, {target_save_index: selection})
+            instance_create(o_ui_naming,,, depth - 10, {
+                target_save_index: selection,
+                caller: id
+            })
         }
 	}
 }
@@ -144,16 +151,16 @@ if state == 2 {
 		soul_put(130, 144 + 90*subselection)
 		
 		if InputPressed(INPUT_VERB.DOWN) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection ++
 		}
 		if InputPressed(INPUT_VERB.UP) && subselection > 0 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection --
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 			if files[subselection] != -1 {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				msg_set(m_copyto, 0)
 				copy_from = subselection
 				buffer = 1
@@ -170,11 +177,11 @@ if state == 2 {
 		if subselection == SAVE_SLOTS 
 			soul_put(108-30, 390)
 		if InputPressed(INPUT_VERB.UP) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection = SAVE_SLOTS - 1
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			state = 0
 			subselection = 0
 			buffer = 1
@@ -197,11 +204,11 @@ if state == 21 {
 		soul_put(130, 144 + 90*subselection)
 		
 		if InputPressed(INPUT_VERB.DOWN) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection ++
 		}
 		if InputPressed(INPUT_VERB.UP) && subselection > 0 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection --
 		}
 		
@@ -214,8 +221,8 @@ if state == 21 {
 				audio_play(snd_ui_scary)
 				state = 0
 				buffer = 1
-			
-				save_write(subselection, files[copy_from])
+                
+                save_export_to_file(subselection,, files[copy_from])
 				event_user(0)
 				
 				copy_from = 0
@@ -225,7 +232,7 @@ if state == 21 {
 				msg_set(m_copysuccess)
 			}
 			else {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				copy_to = subselection
 				
 				state = 22
@@ -240,11 +247,11 @@ if state == 21 {
 			soul_put(108-30,390)
 		
 		if InputPressed(INPUT_VERB.UP) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection = SAVE_SLOTS - 1
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			state = 2
 			subselection = copy_from
 			copy_from = 0
@@ -267,11 +274,11 @@ if state == 22 {
 	soul_put(180 - 30 + 180*selection_hor, 162 + subselection*90)
 	
 	if InputPressed(INPUT_VERB.RIGHT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 1
 	}
 	if InputPressed(INPUT_VERB.LEFT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 0
 	}
 	if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
@@ -288,7 +295,7 @@ if state == 22 {
 		state = 0
 		buffer = 1
 			
-		save_write(subselection, files[copy_from])
+		save_export_to_file(subselection,, files[copy_from])
 		event_user(0)
 			
 		copy_from = 0
@@ -305,16 +312,16 @@ if state == 3 {
 		soul_put(130, 144 + 90*subselection)
 		
 		if InputPressed(INPUT_VERB.DOWN) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection ++
 		}
 		if InputPressed(INPUT_VERB.UP) && subselection > 0 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection --
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 			if files[subselection] != -1 {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				
 				buffer = 1
 				state = 31
@@ -331,11 +338,11 @@ if state == 3 {
 		if subselection == SAVE_SLOTS 
 			soul_put(108-30, 390)
 		if InputPressed(INPUT_VERB.UP) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection = SAVE_SLOTS-1
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			state = 0
 			subselection = 0
 			buffer = 1
@@ -355,11 +362,11 @@ if state == 31 {
 	soul_put(180 - 30 + 180*selection_hor, 162 + subselection*90)
 	
 	if InputPressed(INPUT_VERB.RIGHT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 1
 	}
 	if InputPressed(INPUT_VERB.LEFT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 0
 	}
 	if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
@@ -373,7 +380,7 @@ if state == 31 {
 		msg_set(m_erase, 0)
 	}
 	if InputPressed(INPUT_VERB.SELECT) && selection_hor == 0 && buffer == 0 {
-		audio_play(snd_ui_select)
+		audio_play(snd_ui_select_CT)
 		
 		state = 32
 		buffer = 1
@@ -385,11 +392,11 @@ if state == 32 {
 	soul_put(180 - 30 + 180*selection_hor, 162 + subselection*90)
 	
 	if InputPressed(INPUT_VERB.RIGHT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 1
 	}
 	if InputPressed(INPUT_VERB.LEFT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 0
 	}
 	if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
@@ -423,23 +430,23 @@ if state == 4 {
 		soul_put(130, 144 + 90*subselection)
 		
 		if InputPressed(INPUT_VERB.DOWN) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection ++
 		}
 		if InputPressed(INPUT_VERB.UP) && subselection > 0 {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection --
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 			if files_prev[subselection] != -1 && files_prev[subselection].COMPLETED {
-				audio_play(snd_ui_select)
+				audio_play(snd_ui_select_CT)
 				buffer = 1
 				state = 41
 				
 				msg_set(m_chfileconfirm, 0)
 			}
 			else {
-				audio_play(snd_ui_cant_select)
+				audio_play(snd_ui_cant_select_CT)
 				buffer = 1
 				copy_from = 0
 			}
@@ -449,11 +456,11 @@ if state == 4 {
 		if subselection == SAVE_SLOTS 
 			soul_put(108 - 30, 390)
 		if InputPressed(INPUT_VERB.UP) {
-			audio_play(snd_ui_move)
+			audio_play(snd_ui_move_CT)
 			subselection = SAVE_SLOTS - 1
 		}
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			state = 0
 			subselection = 0
 			buffer = 1
@@ -474,11 +481,11 @@ if state == 41 {
 	soul_put(180 - 30 + 180*selection_hor, 162 + subselection*90)
 	
 	if InputPressed(INPUT_VERB.RIGHT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 1
 	}
 	if InputPressed(INPUT_VERB.LEFT) {
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 		selection_hor = 0
 	}
 	if InputPressed(INPUT_VERB.CANCEL) && buffer == 0 || InputPressed(INPUT_VERB.SELECT) && selection_hor == 1 && buffer == 0 {
@@ -490,9 +497,12 @@ if state == 41 {
 		msg_set(m_chfile, 0)
 	}
 	if InputPressed(INPUT_VERB.SELECT) && selection_hor == 0 && buffer == 0 {
-		audio_play(snd_ui_select)
+		audio_play(snd_ui_select_CT)
+        
+        music_stop_all()
         
         save_load(subselection, global.chapter - 1) // load the previous chapter
+        
         room_goto(save_get("room"))
         fader_fade(1, 0, 15)
 	}

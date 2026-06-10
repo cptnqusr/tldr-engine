@@ -2,14 +2,17 @@ event_inherited()
 
 if is_enemy && freeze > 0 {
     image_speed = 0
-    sprite_index = s_hurt
+    if sprite_exists(s_frozen) && !is_undefined(s_frozen)
+        sprite_index = s_frozen
+    else 
+        sprite_index = s_intro
     
     exit
 }
 
 drawsiner += 0.25
 
-if !is_undefined(chase_dist) && !chasing && notice_timer == -1 {
+if !is_undefined(chase_dist) && !chasing && notice_timer == -1 && enable_chasing {
     if distance_to_point(get_leader().x, get_leader().y) < chase_dist {
         __start_chasing()
     }
@@ -25,9 +28,11 @@ else
 if notice_timer == 30
     chasing = true
 
+if !instance_exists(get_leader())
+    exit
+
 if chasing && !is_in_battle
-	&& instance_exists(get_leader()) 
-	&& get_leader()._checkmove() 
+	&& get_leader()._checkmove()
 {
 	var xx = dcos(point_direction(x, y, get_leader().x, get_leader().y))
 	var yy = -dsin(point_direction(x, y, get_leader().x, get_leader().y))
@@ -52,14 +57,44 @@ if chasing && !is_in_battle
 		x += sign(instance_place(x, y + yy, o_block_diag).image_xscale) * chase_spd
 }
 
+if path_exists(path_index) {
+    if get_leader()._checkmove()
+        path_speed = idle_path_spd
+    else
+        path_speed = 0
+}
+
 // collision, initiate encounter
-if place_meeting(x, y, get_leader()) && !encounter_started && (can_idle_encounter || chase_encounter) {
+if place_meeting(x, y, get_leader()) 
+    && !encounter_started && (can_idle_encounter || chase_encounter) 
+    && !instance_exists(o_enc) && !instance_exists(o_enc_anim) 
+    && get_leader()._checkmove()
+{
     chasing = false
     encounter_started = true
-    hurt = 20
+    
+    sprite_index = s_intro
+    image_speed = s_intro_spd
+    image_index = 0
     
     path_end()
     encounter._start()
     
     image_xscale = 1
+}
+
+if run_away && hurt <= 0 { // spawn the trail upon running away
+    for (var i = 0; i <= 30; i += 2) {
+        var o = afterimage()
+        o.x += i
+        o.sprite_index = s_hurt
+        o.image_alpha = 1
+        o.depth = depth-10
+    }
+    x += 30
+
+    run_away_timer ++
+    
+    if run_away_timer > 4
+        instance_destroy()
 }

@@ -1,9 +1,9 @@
 event_inherited()
 var inst = enemy_struct.actor_id
 
-if pattern == 0 { // explosions
+if pattern == "explosions" { // explosions
     if timer > 0 {
-        if timer % 60 == 0 {
+        if timer % 60 == (enemy_index*20) % 60 {
             current_cutscene = cutscene_create()
             cutscene_set_variable(inst, "image_speed", 0)
             cutscene_set_variable(inst, "image_index", 3)
@@ -23,8 +23,8 @@ if pattern == 0 { // explosions
                     targety = o_enc_box.y + random_range(-70, 70)
                 }
                 
-                do_animate(__eye.x, targetx, 20, "cubic_out", __eye, "x")
-                do_animate(__eye.y, targety, 20, "cubic_out", __eye, "y")
+                animate(__eye.x, targetx, 20, "cubic_out", __eye, "x")
+                animate(__eye.y, targety, 20, "cubic_out", __eye, "y")
             }, [inst])
             cutscene_set_variable(inst, "image_speed", 1)
             
@@ -32,3 +32,5 @@ if pattern == 0 { // explosions
         }
     }
 }
+
+__support_destroy_check();

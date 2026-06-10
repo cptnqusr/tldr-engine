@@ -11,19 +11,19 @@ if page == 0 { // main menu
 	if InputPressed(INPUT_VERB.UP) && m_selection > 1
 		m_selection -= 2
 	
-	if m_selection > 3 
-		m_selection = 3
+	if m_selection > array_length(m_buttons) - 1
+		m_selection = array_length(m_buttons) - 1
 	if m_selection < 0 
 		m_selection = 0
 	
 	if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
         if !m_buttons[m_selection].on {
-            audio_play(snd_ui_cant_select)
+            audio_play(snd_ui_cant_select_CT)
         }
         else {
     		page = m_buttons[m_selection].page
     		if page != -1 
-    			audio_play(snd_ui_select)
+    			audio_play(snd_ui_select_CT)
     		
     		buffer = 1
     		prog = 0
@@ -48,19 +48,19 @@ if page == 1 { // save menu
 		if InputPressed(INPUT_VERB.UP)
 			s_selection --
 		
-		if s_selection > 4 
-			s_selection = 4
+		if s_selection > 3
+			s_selection = 3
 		if s_selection < 0 
 			s_selection = 0
 	
 		if InputPressed(INPUT_VERB.SELECT) && s_selection < 3 && buffer == 0 {
-			if s_selection != global.save_slot && global.saves[s_selection] != -1 
+			if s_selection != global.save_slot && global.save_files[s_selection] != -1 
 				prog = 2
 			else {
-				save_export(s_selection)
-				save_set(s_selection)
+				global.save_slot = s_selection
+                save_export_to_file()
 				
-				audio_play(snd_save)
+				audio_play(snd_chrono_save)
 				prog ++
 			}
 			buffer = 1
@@ -83,9 +83,10 @@ if page == 1 { // save menu
 		
 		if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
 			if s_o_selection == 0 {
-				save_export(s_selection)
-				save_set(s_selection)
-				audio_play(snd_save)
+				audio_play(snd_chrono_save)
+                
+                global.save_slot = s_selection
+                save_export_to_file()
 				
 				prog = 1
 			}
@@ -134,7 +135,7 @@ if page == 2 { // storage
 		if st_page == 0 
 			st_page = 1
 		else {
-			audio_play(snd_ui_select)
+			audio_play(snd_ui_select_CT)
 			
 			var i1 = undefined
 			var i2 = undefined
@@ -176,6 +177,27 @@ if page == 3 { // recruits
     instance_destroy()
     instance_create(o_ui_recruits)
 }
+if page == 4 && !fading_out { // return to title
+    if InputPressed(INPUT_VERB.RIGHT)
+        return_selection --
+    else if InputPressed(INPUT_VERB.LEFT)
+        return_selection ++
+    
+    return_selection = (return_selection + 2) % 2
+    
+    if InputPressed(INPUT_VERB.SELECT) && buffer == 0 && return_selection == 0 {
+        audio_play(snd_ui_select_CT)
+        
+        fader_fade(0, 1, 20, DEPTH_UI.HIGHEST)
+        music_fade_all(0, 20)
+        
+        alarm[2] = 40
+        fading_out = true
+    }
+    else if (InputPressed(INPUT_VERB.CANCEL) || (InputPressed(INPUT_VERB.SELECT) && return_selection == 1)) && buffer == 0 {
+        page = 0
+    }
+}
 
 if buffer > 0 
-	buffer--
+	buffer --

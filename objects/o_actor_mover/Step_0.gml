@@ -1,7 +1,7 @@
 if seed[step] == "jump" { // jump animation
 	if state == 0 {
 		if timer == 0 {
-			character.custom_depth = -2000 - yreq[step]
+			character.depth_override = -2000 - yreq[step]
 			character.s_override = true
 			character.moveable_move = false
 		}
@@ -16,10 +16,8 @@ if seed[step] == "jump" { // jump animation
 		var spr = character.s_landed
         
 		if sprite_exists(spr) {
-			do_anime(0, 2, 15, "linear", function(v) {
-				if instance_exists(character) 
-					character.image_index = v
-			})
+            animate(0, 2, 15, anime_curve.linear, character, "image_index")
+            
 			character.image_speed = 0
 			character.sprite_index = spr
 		}
@@ -29,7 +27,7 @@ if seed[step] == "jump" { // jump animation
 	else if state == 2 && timer == 20 { 
 		timer = 0
 		character.yoff = 0
-		character.custom_depth = undefined
+		character.depth_override = undefined
 		step ++
 		if step >= array_length(xreq) || step >= array_length(yreq){
 			character.dir = DIR.DOWN
@@ -48,7 +46,7 @@ else { // walk over
 	if stage == 0 {
 		anims = []
 		character.moveable_move = false
-		
+        
 		var a = point_direction(0, 0, xdiff, ydiff)
 		character.dir = actor_angletodir(a)
 		if char_dir[step] != undefined
@@ -59,15 +57,13 @@ else { // walk over
 		character.sprite_index = character.s_move[character.dir]
 		character.s_override = true
 		
-		if xdiff != 0 {
-			array_push(anims, do_animate(character.x, character.x + xdiff, time[step], "linear", character, "x"))
-		}
-		if ydiff != 0 {
-			array_push(anims, do_animate(character.y, character.y + ydiff, time[step], "linear", character, "y"))
-		}
+		if xdiff != 0 
+			array_push(anims, animate(character.x, character.x + xdiff, time[step], "linear", character, "x"))
+		if ydiff != 0 
+			array_push(anims, animate(character.y, character.y + ydiff, time[step], "linear", character, "y"))
 		
 		stage = 1
-	}
+	}  
 	if stage == 1 {
 		if timer >= time[step] {
 			timer = 0
@@ -80,9 +76,8 @@ else { // walk over
 		timer = 0
 		step ++
 		
-		if step >= array_length(xreq) || step >= array_length(yreq) {
+		if step >= array_length(xreq) || step >= array_length(yreq)
 			instance_destroy()
-		}
 		else {
 			event_user(0)
 			stage = 0

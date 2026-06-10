@@ -9,11 +9,11 @@ if dialogue_overlay {
 if state == 0 {
 	if InputPressed(INPUT_VERB.DOWN) {
 		selection ++
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	else if InputPressed(INPUT_VERB.UP) {
 		selection --
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	if selection > array_length(options)-1
 		selection = 0
@@ -27,7 +27,7 @@ if state == 0 {
 	if InputPressed(INPUT_VERB.SELECT) {
 		if selection == 0 {
 			if item_get_count(ITEM_TYPE.LIGHT) == 0 {
-				audio_play(snd_ui_cant_select)
+				audio_play(snd_ui_cant_select_CT)
                 exit
             }
             
@@ -42,18 +42,18 @@ if state == 0 {
         }
         
         state = options[selection].state
-        audio_play(snd_ui_select)
+        audio_play(snd_ui_select_CT)
 		exit
 	}
 }
 if state == 1 {
 	if InputPressed(INPUT_VERB.DOWN){
-		i_selection++
-		audio_play(snd_ui_move)
+		i_selection ++
+		audio_play(snd_ui_move_CT)
 	}
 	else if InputPressed(INPUT_VERB.UP){
-		i_selection--
-		audio_play(snd_ui_move)
+		i_selection --
+		audio_play(snd_ui_move_CT)
 	}
 	
 	if i_selection > item_get_count(ITEM_TYPE.LIGHT)-1
@@ -63,7 +63,7 @@ if state == 1 {
 		
 	if InputPressed(INPUT_VERB.SELECT){
 		state = 2
-		audio_play(snd_ui_select)
+		audio_play(snd_ui_select_CT)
 		ip_selection = 0
 		exit
 	}
@@ -75,12 +75,12 @@ if state == 1 {
 }
 if state == 2 {
 	if InputPressed(INPUT_VERB.RIGHT) {
-		ip_selection++
-		audio_play(snd_ui_move)
+		ip_selection ++
+		audio_play(snd_ui_move_CT)
 	}
 	else if InputPressed(INPUT_VERB.LEFT) {
-		ip_selection--
-		audio_play(snd_ui_move)
+		ip_selection --
+		audio_play(snd_ui_move_CT)
 	}
 	
 	if ip_selection > 2
@@ -91,15 +91,15 @@ if state == 2 {
 	if InputPressed(INPUT_VERB.SELECT) {
 		var _item = item_get_array(ITEM_TYPE.LIGHT)[i_selection]
 		
-		audio_play(snd_ui_select)
+		audio_play(snd_ui_select_CT)
 		
 		if ip_selection == 0 {
 			item_use(_item, i_selection, 0)
 		}
-		else if ip_selection == 1{
-			dialogue_start(item_get_desc(_item))
+		else if ip_selection == 1 {
+			dialogue_start(item_get_desc(_item, ITEM_DESC_TYPE.FULL))
 		}
-		else if ip_selection == 2{
+		else if ip_selection == 2 {
 			_item.throw_scripts.execute_code(i_selection)
 		}
 		
@@ -121,11 +121,11 @@ if state == 3 {
 if state == 4 {
     if InputPressed(INPUT_VERB.DOWN){
 		c_selection ++
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
 	else if InputPressed(INPUT_VERB.UP){
 		c_selection --
-		audio_play(snd_ui_move)
+		audio_play(snd_ui_move_CT)
 	}
     c_selection = clamp(c_selection, 0, array_length(phone_numbers) - 1)
     
