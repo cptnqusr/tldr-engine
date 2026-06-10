@@ -35,9 +35,9 @@ function lighting_darken_self(drawer = undefined) {
     			image_angle, c_black, o_eff_lighting_controller.lighting_alpha * o_eff_lighting_controller.lighting_darken
     		)
         else
-     		draw_sprite_ext(sprite_index, image_index,
-     			x, y, image_xscale, image_yscale,
-     			image_angle, c_black, o_eff_lighting_controller.lighting_alpha * o_eff_lighting_controller.lighting_darken
-     		)
+            draw_sprite_ext(sprite_index, image_index,
+                x, y, image_xscale, image_yscale,
+                image_angle, c_black, o_eff_lighting_controller.lighting_alpha * o_eff_lighting_controller.lighting_darken
+            )
 	}
 }

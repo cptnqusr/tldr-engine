@@ -90,7 +90,7 @@ if state == 5 && selection == 0 {
 	if timer > 30
 		fader_alpha += .03
 	
-	if fader_alpha == 1.2
+	if fader_alpha == 1.5
 		event_user(0)
 }
 if state == 5 && selection == 1 {

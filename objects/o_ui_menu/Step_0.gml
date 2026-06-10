@@ -79,7 +79,7 @@ if !only_hp {
 				}
 			}
 		}
-		if state == 2 { // use, toss, key
+		if state == 2 { // use/toss/key
 			var arr = global.items
 			if i_pselection == 2 
 				arr = global.key_items
@@ -134,6 +134,8 @@ if !only_hp {
                         if i_selection > item_get_count(t) - 1 
                             i_selection = item_get_count(t) - 1
                     }
+                    else 
+                        audio_play(snd_ui_cant_select);
 				}
 				else {
 					if item_check_useable(arr[i_selection]) {
@@ -144,6 +146,9 @@ if !only_hp {
 						
 						audio_play(snd_ui_select_CT);
 					}
+                    else 
+                        audio_play(snd_ui_cant_select);
+                    
 					if i_pselection == 1 
 						i_mode = 1
 				}

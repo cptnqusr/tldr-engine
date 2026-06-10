@@ -7,6 +7,10 @@ color = c_white
 lighting_darken = .75
 lighting_alpha = 0
 
+shadows = true;
+darken = true;
+highlights = true;
+
 surf = -1
 surf_border = 30
 

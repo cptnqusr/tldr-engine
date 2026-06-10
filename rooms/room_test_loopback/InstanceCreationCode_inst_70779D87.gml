@@ -1,1 +1,1 @@
-text = "* Thank you for visiting the TEST ZONE!"
+text = "{auto_breaks(false)}* Thank you for visiting{br}the TEST ZONE!"

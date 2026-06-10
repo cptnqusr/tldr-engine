@@ -66,7 +66,7 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 			var o = party_get_inst(name)
 			
             if instance_exists(o_enc)
-                o_enc.pm_hurt[party_get_index(name)] = 15
+                o_enc.pm_hurt[party_get_index(name)] = 15;
             
 			if o.is_in_battle {
 				o.hurt = 20
@@ -78,12 +78,14 @@ function party_hpchange(name, heal, caller = noone, sfx = -1, spawn_text = true)
 					txt = "down"
 				}
 			}
-			else{
+			else {
 				o.hurt = 5
 				screen_shake(5)
 				
-				if instance_exists(get_leader())
-					get_leader().dodge_mysoul.i_frames = ENC_SETUP_SOUL_INV
+				if instance_exists(get_leader().dodge_mysoul) 
+					get_leader().dodge_mysoul.i_frames = ENC_SETUP_SOUL_INV;
+                else if climb_check()
+                    o_dev_climb_controller.leader_inv = o_dev_climb_controller.leader_inv_max;
 				
 				if !instance_exists(o_ui_menu) 
 					instance_create(o_ui_menu,,,, {only_hp: true})
@@ -212,7 +214,7 @@ function party_check_gameover() {
 	
 	if res_enc && instance_exists(o_enc) 
 		enc_gameover()
-    else if res_ow && dodge_getalpha() > 0
+    else if res_ow
         dodge_gameover()
 }
 

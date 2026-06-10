@@ -6,20 +6,20 @@
   "bbox_left":2,
   "bbox_right":17,
   "bbox_top":2,
-  "collisionKind":1,
+  "collisionKind":0,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"7638f131-3aab-44a3-afa7-b240dcce8370","name":"7638f131-3aab-44a3-afa7-b240dcce8370","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"8093b80d-2d38-4f17-b652-87f33f05b2db","name":"8093b80d-2d38-4f17-b652-87f33f05b2db","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":20,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"8b28433f-a493-4cb8-8b06-dbc9fab7e8d5","blendMode":0,"displayName":"default","isLocked":false,"name":"8b28433f-a493-4cb8-8b06-dbc9fab7e8d5","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"bcfcc930-5ce1-4199-a3f4-d81895f7ac9b","blendMode":0,"displayName":"default","isLocked":false,"name":"bcfcc930-5ce1-4199-a3f4-d81895f7ac9b","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_soul_mask",
   "nineSlice":null,
@@ -70,7 +70,9 @@
     "timeUnits":1,
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
-            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{"0":{"$SpriteFrameKeyframe":"","Id":{"name":"7638f131-3aab-44a3-afa7-b240dcce8370","path":"sprites/spr_soul_mask/spr_soul_mask.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},},"Disabled":false,"id":"9347b501-91b1-4bb7-97ba-9d0b685448d7","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+            {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"8093b80d-2d38-4f17-b652-87f33f05b2db","path":"sprites/spr_soul_mask/spr_soul_mask.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"87fe30b7-84c5-4f64-94f2-a01d7b02ec74","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

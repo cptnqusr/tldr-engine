@@ -1,4 +1,4 @@
-if is_undefined(face_creator)
+if is_undefined(face_creator) || !is_callable(face_creator)
     instance_destroy()
 
 if x_offset > 0

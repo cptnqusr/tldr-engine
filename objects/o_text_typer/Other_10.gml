@@ -390,11 +390,14 @@ if command == "mini" { // mini(`text`, char = undefined, face_expression = undef
     
     array_push(mini_faces, 
         instance_create(o_text_mini, __xx, __yy, depth, {
-            face_creator: struct_get(struct_get(char_presets, __char), "face_create"),
+            face_creator: (struct_exists(char_presets, __char) 
+                ? struct_get(struct_get(char_presets, __char), "face_create") 
+                : undefined
+            ),
             face_expression: __face_ex,
             text: arg[0]
         })
-    )
+    );
 }
 
 if command == "link_var_set" { // link_var_set(variable_name, value, is_real = false)

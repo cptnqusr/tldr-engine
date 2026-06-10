@@ -35,10 +35,17 @@ function dodge_gameover(){
     if instance_exists(o_gameover)
         exit
     
+    var xx = get_leader().x;
+    var yy = get_leader().s_get_middle_y();
+    if instance_exists(o_dodge_soul) {
+        xx = o_dodge_soul.x; 
+        yy = o_dodge_soul.y;
+    }
+    
 	instance_create(o_gameover, 
-		o_dodge_soul.x - guipos_x(), o_dodge_soul.y - guipos_y(), DEPTH_ENCOUNTER.UI,
+		xx - guipos_x(), yy - guipos_y(), DEPTH_ENCOUNTER.UI,
 		{
-			image_blend: o_dodge_soul.image_blend,
+			image_blend: (instance_exists(o_dodge_soul) ? o_dodge_soul.image_blend : c_red),
 			freezeframe: sprite_create_from_surface(application_surface, 0, 0, 640, 480, 0, 0, 0, 0),
 			freezeframe_gui: sprite_create_from_surface((instance_exists(o_ui_menu) ? o_ui_menu.surf : -1), 0, 0, 640, 480, 0, 0, 0, 0),
 		}

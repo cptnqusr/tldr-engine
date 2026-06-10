@@ -61,3 +61,12 @@ function item_key_locket() : item_key() constructor {
 		cutscene_play()
 	}
 }
+
+function item_key_claimbclaws() : item_key() constructor {
+	name = ["ClaimbClaws"];
+	desc = ["Claws so small they conveniently can't\nbe seen. Use them to climb up obvious walls.", "--"];
+	
+    can_use = false;
+    
+    item_localize("item_key_claimb_claws");
+}

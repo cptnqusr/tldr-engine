@@ -52,6 +52,9 @@ function camera_pan(x_dest, y_dest, time, ease_type = "linear", confined_x = tru
         o_camera.animation_y = animate(o_camera.y, y_dest, time, ease_type, o_camera, "y")
 }
 function camera_unpan(target, time, ease_type = "linear") {
+    if !instance_exists(target)
+        return false;
+    
     o_camera.target = target
     
     o_camera.offset_x = guipos_x() - camera_confine_x(target.x)
@@ -70,16 +73,16 @@ function camera_stop_animations() {
 }
 
 function camera_confine_x(xx) {
-    xx = xx - o_camera.width/2
-    xx = clamp(xx, 0, room_width - o_camera.width)
+    xx = xx - o_camera.width/2 * o_camera.scale_x;
+    xx = clamp(xx, 0, room_width - (o_camera.width * o_camera.scale_x));
     
-    return xx
+    return xx;
 }
 function camera_confine_y(yy) {
-    yy = yy - o_camera.height/2
-    yy = clamp(yy, 0, room_height - o_camera.height)
+    yy = yy - o_camera.height/2 * o_camera.scale_y;
+    yy = clamp(yy, 0, room_height - (o_camera.height * o_camera.scale_y));
     
-    return yy
+    return yy;
 }
 
 
@@ -99,33 +102,45 @@ enum AUDIO {
  * @param {real} [gain] the gain of the sound played. will be automatically mulitplied by the volume of the sound type
  * @param {real} [pitch] the pitch of the sound played. 
  * @param {bool} [nonstack] whether the sound should not stack if played on the same frame twice
- * @param {enum.AUDIO} [type] the type of the sound
+ * @param {enum.AUDIO} [sound_type] the type of the sound
+ * @param {real} [offset] the offset of the sound (in frames)
  * @returns {id.Sound}
  */
-function audio_play(sound, loop = 0, gain = 1, pitch = 1, nonstack = false, type = AUDIO.SOUND) {
-	var ret = -1
-    var target_emitter = noone
-    
+function audio_play(sound, loop = 0, gain = 1, pitch = 1, nonstack = false, type = AUDIO.SOUND, offset = 0) {
     if nonstack && o_world.sound_on_frame == sound // exit if you're we are avoiding sound stacking
-        return undefined
+        return undefined;
     
-    switch type {
-        case AUDIO.SOUND:
-            target_emitter = o_world.emitter_sfx;
-            break
-        case AUDIO.MUSIC:
-            target_emitter = o_world.emitter_bgm
-            break
+    if offset > 0 
+        call_later(offset, time_source_units_frames, method({type, sound, loop, gain, pitch}, function() {
+            audio_play_sound_on(audio_get_target_emitter(type), 
+                sound, loop, 
+                0, gain,
+                0, pitch
+            );
+        }));
+    else {
+        var ret = audio_play_sound_on(audio_get_target_emitter(type), 
+            sound, loop, 
+            0, gain,
+            0, pitch
+        );
+        o_world.sound_on_frame = sound;
+        
+        return ret;
     }
     
-    ret = audio_play_sound_on(target_emitter, 
-        sound, loop, 
-        0, gain,
-        0, pitch
-    )
-    o_world.sound_on_frame = sound
-	
-    return ret
+    return noone;
+}
+
+/// @desc returns an emitter based on an `AUDIO` sound type
+/// @arg {enum.AUDIO} sound_type
+function audio_get_target_emitter(sound_type) {
+    switch sound_type {
+        case AUDIO.SOUND:
+            return o_world.emitter_sfx;
+        case AUDIO.MUSIC:
+            return o_world.emitter_bgm;
+    }
 }
 
 ///@desc Creates a loaded stream of audio straight from "locale/sfx/..."
@@ -327,6 +342,14 @@ function array_sort_ext(array, sort_type_or_function) {
 /// @description              Check if a string contains a string inside it.
 function string_contains(substring, fullString) {
     return string_pos(substring, fullString) > 0;
+}
+
+/// @desc snaps a number x to a multiple of n
+/// @arg {real} x the number to snap
+/// @arg {real} n the number to multiple of which to snap to
+/// @returns {real}
+function snap(x, n) {
+    return n * round(x / n);
 }
 
 /// @desc adds padding to the start of a string to reach desired length (e.g. 01 instead of 1)

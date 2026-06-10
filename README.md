@@ -1,7 +1,8 @@
 # Welcome to tlDR[^1] Engine!
 
 An Independent 1:1 DELTARUNE Engine built in Gamemaker Studio, the software used to create DELTARUNE.
-It contains nearly all aspects of the original game, including, but not limited to, the overworld movement, encounters, shops and various UI elements. 
+It contains nearly all aspects of the original game, including, but not limited to, the overworld movement, encounters, climbing, shops and various other fully-realized gameplay elements!
+Prouds itself in simple minimalist ways to recreate, reimagine and create brand new ways to play DELTARUNE via having a really convenient room editor structure and object-oriented programming (via structs) at its center.
 
 ## Helpful links:
 - [Documentation](https://docs.google.com/document/d/14SpnU32P-_HLdNS17gwaIe8Z2mO8AG1KUUGMe_hNdzM/edit?tab=t.0) - the document that contains answers to most questions you may have regarding the engine.
@@ -13,6 +14,7 @@ It contains nearly all aspects of the original game, including, but not limited 
 <img width="1920" height="1440" alt="tldr-promo-japanese" src="https://github.com/user-attachments/assets/fcfb4cc1-37db-41d7-a2df-c054699a9468" />
 <img width="2880" height="1620" alt="tldr-promo-borders" src="https://github.com/user-attachments/assets/5c13dc7a-07ad-4cde-a396-7a660d7d0541" />
 <img width="1920" height="1440" alt="tldr-promo-shops" src="https://github.com/user-attachments/assets/0c7dd0e3-2a35-49a0-8528-a41d101369ca" />
+<img width="1920" height="1440" alt="tldr-promo-climbing" src="https://github.com/user-attachments/assets/2df1d021-2901-4d3c-a08e-063c5c33dbae" />
 
 ---
 

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"lb_ripple",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"lb_ripple",
+  "parent":{
+    "name":"ripple",
+    "path":"folders/@Libraries/ripple.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -15,7 +15,9 @@ var xx = x + xoff + sine(.5, shake)
 var yy = y + yoff
 
 var isave = image_blend
-image_blend = merge_color(image_blend, c_black, darken)
+image_blend = merge_color(image_blend, c_black, darken);
+if !is_undefined(override_blend)
+    image_blend = override_blend;
 
 if dodge_getalpha() > 0 && is_player { // outline and bg darkener
 	if !surface_exists(dodge_outline_surf) // create outline surface
@@ -47,7 +49,7 @@ if dodge_getalpha() > 0 && is_player { // outline and bg darkener
 s_drawer(spr, image_index, 
 	xx, yy, 
 	image_xscale, image_yscale, 
-	image_angle, image_blend, image_alpha
+	image_angle, image_blend, image_alpha * alpha_mod
 )
 
 if freeze > 0 {
@@ -76,7 +78,7 @@ if instance_exists(o_eff_lighting_controller) && o_eff_lighting_controller.light
     var __l_darken = o_eff_lighting_controller.lighting_darken
     var __l_off = o_eff_lighting_controller.surf_border/2
     
-    if lighting_highlight_enabled {
+    if lighting_highlight_enabled && o_eff_lighting_controller.highlights {
         surface_set_target(o_eff_lighting_controller.surf) {
             gpu_set_fog(true, c_white, 0, 1)
             s_drawer(spr, image_index, 
@@ -98,15 +100,15 @@ if instance_exists(o_eff_lighting_controller) && o_eff_lighting_controller.light
     }
 	
 	// the shadow on the actor
-    if lighting_darken_enabled
+    if lighting_darken_enabled && o_eff_lighting_controller.darken
         lighting_darken_self(s_drawer)
 
 	// the shadow on the ground
-    if lighting_shadow_enabled
+    if lighting_shadow_enabled && o_eff_lighting_controller.shadows
         s_drawer(spr, image_index, 
             xx, yy, 
             image_xscale, anime_curve_lerp(0, -2, __l_alpha, anime_curve.linear), 
-            image_angle, c_black, image_alpha * o_eff_lighting_controller.lighting_alpha
+            image_angle, c_black, image_alpha * o_eff_lighting_controller.lighting_alpha * alpha_mod
         )
 }
 
@@ -116,7 +118,7 @@ if sweat {
 		x-sprite_get_xoffset(spr)*image_xscale,
 		y-sprite_get_yoffset(spr)*image_yscale, 
 		.5, .5, 
-		image_angle, image_blend, image_alpha
+		image_angle, image_blend, image_alpha * alpha_mod
 	)
 }
 	
@@ -124,7 +126,7 @@ if sweat {
 if dodge_getalpha() > 0 { 
     if is_player {
         gpu_set_fog(true, merge_color(c_black, c_dkgray, .5), 0, 0)
-    	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, image_blend, .8 * dodge_getalpha())
+    	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, image_blend, .8 * dodge_getalpha() * alpha_mod);
     	gpu_set_fog(false, c_white, 0, 0)
     }
     else
@@ -133,14 +135,14 @@ if dodge_getalpha() > 0 {
 
 if flashing { // battle select flash
 	gpu_set_fog(true, c_white, 0, 0)
-	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_white, -cos(fsiner / 5)*0.4 + 0.6)
+	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_white, (-cos(fsiner / 5)*0.4 + 0.6) * alpha_mod);
 	gpu_set_fog(false, c_white, 0, 0)
     
     lighting_darken_self()
 }
 if flash > 0 { // normal flash
 	gpu_set_fog(true, flash_color, 0, 0)
-	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_white, flash)
+	s_drawer(spr, image_index, xx, yy, image_xscale, image_yscale, image_angle, c_white, flash * alpha_mod);
 	gpu_set_fog(false, flash_color, 0, 0)
 }
 

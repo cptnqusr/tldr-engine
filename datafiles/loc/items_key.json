@@ -16,5 +16,15 @@
     "item_key_locket_cutscene": {
         "en": ["Sponge opened the locket.", "Inside, a picture of Sponge and a woman dressed in clown attire.", "Sponge smiled."],
         "ja": ["TEMP"]
+    },
+    "item_key_claimb_claws": {
+        "en": {
+            "name": "ClaimbClaws",
+            "desc": ["Claws so small they conveniently can't\nbe seen. Use them to climb up obvious walls.", "--"]
+        },
+        "ja": {
+            "name": "ノボるのツメ",
+            "desc": ["とても小さくて　都合よく目に見えないツメ。\n使えば　いかにも登れそうなカベを登れる。", "--"]
+        }
     }
 }

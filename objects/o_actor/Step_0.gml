@@ -1,5 +1,5 @@
 var currentspd = spd
-var check_canmove = _checkmove()
+var check_canmove = _checkmove() && !climb_check();
 var x_move = 0
 var y_move = 0
 
@@ -118,22 +118,16 @@ if is_player && check_canmove {
 			instance_create(o_ui_menu_lw)
 	}
 	
-	// play the step sounds
-	if stepsounds && !sliding {
-		if floor(image_index % 4) == 1 { // only if 1 <= image_index < 2
-			if stepsound == 0 {
-				audio_play(asset_get_index(stepsoundprefix + "1"))
-				stepsound = 1
-			}
-		}
-		else if floor(image_index % 4) == 3 { // only if 3 <= image_index < 4
-			if stepsound == 0{
-				audio_play(asset_get_index(stepsoundprefix + "2"))
-				stepsound = 1
-			}
+	// make steps and call the `__step` method
+	if !sliding {
+		if floor(image_index % image_number) % 2 != 0 {
+			if !made_step {
+                __step(floor(image_index % image_number));
+                made_step = true;
+            }
 		}
 		else 
-			stepsound = 0
+			made_step = false;
 	}
 }
 
@@ -166,6 +160,9 @@ else if sliding{
 }
 
 moving = false
+
+delta_x = 0;
+delta_y = 0;
 
 // actually move now
 if x_move != 0 || y_move != 0 {
@@ -219,10 +216,14 @@ if x_move != 0 || y_move != 0 {
         }
     }
     
-    if canmove_x 
-        x += xx
-    if canmove_y 
-        y += yy
+    if canmove_x {
+        x += xx;
+        delta_x += xx;
+    }
+    if canmove_y {
+        y += yy;
+        delta_y += yy;
+    }
     
     // diagonal collisions
     var __diagonal_x = instance_place_list_ext(x + xx, y, o_block_diag, false)
@@ -238,7 +239,8 @@ if x_move != 0 || y_move != 0 {
                 }
             }
             
-            y += compensate_y
+            y += compensate_y;
+            delta_y += compensate_y;
             
             break
         }
@@ -257,7 +259,8 @@ if x_move != 0 || y_move != 0 {
                 }
             }
             
-            x += compensate_x
+            x += compensate_x;
+            delta_x += compensate_x;
             
             break
         }
@@ -284,7 +287,8 @@ if moving && !is_in_battle && !is_enemy && s_dynamic && !s_override {
 	if !startedmoving {
 		startedmoving = true
         
-        last_walk_frame = cap_wraparound(last_walk_frame + 2, image_number)
+        last_walk_frame = cap_wraparound(last_walk_frame + 1, image_number);
+        last_walk_buffer = 12;
 		image_index = last_walk_frame
 	}
 	if !running
@@ -320,10 +324,16 @@ if !is_in_battle && !is_enemy && s_dynamic && !s_override {
 	
 	if flashing 
 		fsiner ++
+    
     if trail {
         var inst = afterimage(.05)
         inst.depth += 10
     }
+    
+    if last_walk_buffer > 0
+        last_walk_buffer --;
+    else 
+        last_walk_frame = 0;
 }
 		
 // overworld battle
