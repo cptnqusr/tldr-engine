@@ -8,8 +8,8 @@
   "name":"o_shop_Ringo",
   "overriddenProperties":[],
   "parent":{
-    "name":"tldr-engine",
-    "path":"tldr-engine.yyp",
+    "name":"Objects",
+    "path":"folders/Objects.yy",
   },
   "parentObjectId":{
     "name":"o_shop",
