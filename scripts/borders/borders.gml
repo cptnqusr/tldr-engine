@@ -52,7 +52,8 @@ function borders_toggle(borders_on = !global.border) {
 
 /// @arg {function} border  the border struct of the target border
 /// @arg {bool} force       whether to set the border even if they aren't dynamic
-function border_set(_border, _force = false) {
+/// @arg {real} animation_length (in frames) the length of the crossfade animation. 30 by default, 0 if instant
+function border_set(_border, _force = false, _animation_length = 30) {
     if instanceof(_border) == instanceof(global.border_struct) // don't do anything if the previous border and the current border are the same
         return
     if !global.border
@@ -81,27 +82,30 @@ function border_set(_border, _force = false) {
     
     anime_stop(global.border_trans_anim)
     
-    global.border_trans = 0
-    global.border_trans_anim = anime_tween(0, 1, 30, anime_curve.linear, function(v) {
-        global.border_trans = v
-    })
+    global.border_trans = 0;
+    if _animation_length > 0
+        global.border_trans_anim = anime_tween(0, 1, _animation_length, anime_curve.linear, function(v) {
+            global.border_trans = v
+        });
+    else 
+        global.border_trans = 1;
 }
 
 /// @desc resizes the window upon toggling borders. usage is fully internal
-function borders_window_resize(borders_on = global.border, window_size = o_world.window_scale) {
-    var res_borders = [960 * window_size, 540 * window_size]
-    var res_window = [GAME_W_GUI * window_size, GAME_H_GUI * window_size]
+function borders_window_resize(borders_on = global.border, window_scale = o_world.window_scale, border_scale = o_world.window_border_scale) {
+    var res_borders = [960 * border_scale, 540 * border_scale];
+    var res_window = [GAME_W_GUI * window_scale, GAME_H_GUI * window_scale];
     
-    var winx = window_get_x()
-    var winy = window_get_y()
+    var winx = window_get_x();
+    var winy = window_get_y();
     if borders_on {
-        window_set_size(res_borders[0], res_borders[1])
-        winx -= (res_borders[0] - res_window[0])/2
-        winy -= (res_borders[1] - res_window[1])/2
+        window_set_size(res_borders[0], res_borders[1]);
+        winx -= (res_borders[0] - res_window[0])/2;
+        winy -= (res_borders[1] - res_window[1])/2;
     }
     else {
-        window_set_size(res_window[0], res_window[1])
-        winx -= (res_window[0] - res_borders[0])/2
+        window_set_size(res_window[0], res_window[1]);
+        winx -= (res_window[0] - res_borders[0])/2;;
         winy -= (res_window[1] - res_borders[1])/2
     }
     
