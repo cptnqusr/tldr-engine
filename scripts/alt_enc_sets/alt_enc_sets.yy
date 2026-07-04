@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"alt_enc_sets",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"alt_enc_sets",
+  "parent":{
+    "name":"encounter",
+    "path":"folders/m@Challenge/scripts/encounter.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

@@ -129,4 +129,4 @@ global.lw_items = []
 global.lw_weapon = undefined
 global.lw_armor = undefined
 
-//save_wipe()
+save_wipe()

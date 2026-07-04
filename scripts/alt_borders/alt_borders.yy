@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"alt_borders",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"alt_borders",
+  "parent":{
+    "name":"scripts",
+    "path":"folders/m@Challenge/scripts.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
