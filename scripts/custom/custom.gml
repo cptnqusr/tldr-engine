@@ -15,7 +15,12 @@ function onscreen(instance = id, tolerance = 0, percise_collisions = false) {
     if !instance_exists(instance)
         exit
     
-    if collision_rectangle(guipos_x(), guipos_y(), guipos_x() + o_camera.width, guipos_y() + o_camera.height, instance, percise_collisions, false)
+    if collision_rectangle(guipos_x() - tolerance, 
+        guipos_y() - tolerance, 
+        guipos_x() + o_camera.width + tolerance, 
+        guipos_y() + o_camera.height + tolerance, 
+        instance, percise_collisions, false
+    )
         return true
     else
         return false
@@ -132,6 +137,26 @@ function audio_play(sound, loop = 0, gain = 1, pitch = 1, nonstack = false, type
     return noone;
 }
 
+/**
+ * plays a sound with decaying echo
+ * @param {asset} sound the sound to play
+ * @param {real} delay the delay between the echo instances
+ * @param {real} decay the decay power of the echo
+ * @param {real} [gain] the gain of the sound played. will be automatically mulitplied by the volume of the sound type
+ * @param {real} [pitch] the pitch of the sound played
+ */
+function audio_play_sound_echo(sound, delay = 10, decay = .2, gain = 1, pitch = 1) {
+    var _offset = 0;
+    for (var i = gain; i > 0; i -= decay) {
+        audio_play(
+            sound, false, 
+            i, pitch, 
+            false, AUDIO.SOUND, _offset
+        );
+        _offset += delay;
+    }
+}
+
 /// @desc returns an emitter based on an `AUDIO` sound type
 /// @arg {enum.AUDIO} sound_type
 function audio_get_target_emitter(sound_type) {
@@ -240,6 +265,31 @@ function draw_get_index_looped(sprite = undefined, timer = o_world.frames, img_f
     return floor((img_start_index + timer*img_fps/fps) % img_number)
 }
 
+/// @desc draws a cone based on two positions and a radius
+/// @arg {real} x1
+/// @arg {real} y1
+/// @arg {real} x2
+/// @arg {real} y2
+/// @arg {real} radius the radius of the end of the cone
+/// @arg {real} direction the direction of the cone's end
+function draw_cone(_x1, _y1, _x2, _y2, _radius, _direction = 0, _color = draw_get_colour(), _alpha = draw_get_alpha()) {
+    var dist = point_distance(_x1, _y1, _x2, _y2);
+    var og_color = draw_get_colour();
+    var og_alpha = draw_get_alpha();
+    
+    
+    draw_set_colour(_color);
+    draw_set_alpha(_alpha);
+    
+    draw_primitive_begin(pr_trianglelist);
+    draw_vertex(_x1, _y1);
+    draw_vertex(_x2 + lengthdir_x(_radius, _direction), _y2 + lengthdir_y(_radius, _direction));
+    draw_vertex(_x2 + lengthdir_x(_radius, _direction + 180), _y2 + lengthdir_y(_radius, _direction + 180));
+    draw_primitive_end();
+    
+    draw_set_colour(og_color);
+    draw_set_alpha(og_alpha);
+}
 
 // ------------- INSTANCE AND OBJECT STUFF --------------
 
@@ -426,6 +476,11 @@ function string_to_bool(_string) {
         return real(string_digits(_string)) > .5
 }
 
+function increment_towards(a, b, increment) {
+    var i = sign(b - a) * increment;
+    return a + i;
+}
+
 
 // ------------ MISC FUNTIONS ---------------------
 function sine(INP_DEVIDE, OUT_MULTIPLY, input = undefined) {
@@ -443,6 +498,15 @@ function cosine(INP_DEVIDE, OUT_MULTIPLY, input = undefined) {
 	else
 		sine_output = cos(input/INP_DEVIDE) * OUT_MULTIPLY
 	return sine_output
+}
+
+/// @desc converts a callable (or not callable) variable into value
+/// @arg {function|any} variable the variable you'd like to convert
+/// @arg {array} arg_array the array of arguments you'd like to pass to the function if it's callable. empty by default
+function variable_callable_to_value(variable, arg_array = []) {
+    if is_method(variable)
+        return method_call(variable, arg_array);
+    return variable;
 }
 
 /// @desc makes a black fade
@@ -499,7 +563,7 @@ function afterimage(_decay_speed = 0.1, inst = id, gui = false, drawer = undefin
     _afterimage.image_angle = inst.image_angle
     _afterimage.decay_speed = _decay_speed
     
-    if !is_undefined(drawer) && is_callable(drawer)
+    if !is_undefined(drawer) && is_method(drawer)
         _afterimage.drawer = drawer
 
     return _afterimage;

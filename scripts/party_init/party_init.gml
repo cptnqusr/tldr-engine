@@ -214,7 +214,8 @@ function party_m_susie(_initialized_name) : party_m(_initialized_name) construct
     armor2 = new item_a_ambercard()
 	spells = [
 		new item_s_rudebuster(),
-        new item_s_susieheal(),
+        new item_s_susieheal({progress: 3, uses: 0}),
+        new item_s_scythemare()
 	]
 	
 	// sprites
@@ -282,7 +283,8 @@ function party_m_ralsei(_initialized_name) : party_m(_initialized_name) construc
     armor2 = new item_a_white_ribbon()
 	spells = [
 		new item_s_pacify(),
-		new item_s_healprayer()
+		new item_s_healprayer(),
+        new item_s_revivesong(),
 	]
 	
 	// sprites
@@ -313,6 +315,8 @@ function party_m_ralsei(_initialized_name) : party_m(_initialized_name) construc
 		victory: [spr_bralsei_victory, true],
 		spare: [spr_bralsei_act, "idle", 1],
 		attack_eff: spr_bralsei_attackeff,
+        revivesong_sing_ready: spr_ralsei_sing_ready,
+        revivesong_sing: spr_ralsei_sing,
 	}
 }
 function party_m_noelle(_initialized_name) : party_m(_initialized_name) constructor {

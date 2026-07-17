@@ -7,13 +7,13 @@ function cutscene_spare_enemy(index) {
         var _enemy = o_enc.encounter_data.enemies[index[i]]
         var obj = _enemy.actor_id
         
-        if !enc_enemy_isfighting(index[i])
+        if !enc_enemy_is_fighting(index[i])
             continue
         
         recruit_advance(_enemy)
         
         cutscene_set_variable(obj, "sprite_index", _enemy.s_spare)
-        if !recruit_islost(_enemy) && enc_enemy_is_recruitable(_enemy)
+        if !recruit_islost(_enemy) && enc_enemy_is_recruitable(_enemy) && !recruit_isrecruited(_enemy)
             cutscene_instance_create(o_text_hpchange, 
                 obj.x, obj.s_get_middle_y(), 
                 obj.depth - 100, {

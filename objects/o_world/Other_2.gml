@@ -84,7 +84,7 @@ array_push(global.items, new item_revivemint())
     save_entry("TIME", global.time, function(_conv_data){ global.time = _conv_data }, function(){ return global.time })
     save_entry("CHAPTER", global.chapter, function(_conv_data){ global.chapter = _conv_data }, function(){ return global.chapter })
     save_entry("PLOT", 0)
-    save_entry("MONEY", 0)
+    save_entry("MONEY", 12800)
     save_entry("EXP", 0)
     
     save_entry("CRYSTAL", false)
@@ -103,58 +103,52 @@ array_push(global.items, new item_revivemint())
     save_entry("LW_WEAPON", 
         new item_w_lw_pencil(), 
         function(_conv_data){ global.lw_weapon = _conv_data }, 
-        function(){ return save_export_constructed(global.lw_weapon) },
-        function(_raw_data) { return save_import_constructed(_raw_data) }
+        function(_conv_data){ return global.lw_weapon }, 
     )
     save_entry("LW_ARMOR", 
         new item_a_lw_bandage(), 
         function(_conv_data){ global.lw_armor = _conv_data }, 
-        function(){ return save_export_constructed(global.lw_armor) },
-        function(_raw_data) { return save_import_constructed(_raw_data) }
+        function(_conv_data){ return global.lw_armor }, 
     )
     save_entry("LW_ITEMS", 
         global.lw_items, 
         function(_conv_data){ global.lw_items = _conv_data }, 
-        function(){ return save_export_constructed_array(global.lw_items) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.lw_items }, 
     )
     
     // inventory
     save_entry("ITEMS", global.items, 
         function(_conv_data){ global.items = _conv_data }, 
-        function(){ return save_export_constructed_array(global.items) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.items }, 
     )
     save_entry("KEY_ITEMS", global.key_items, 
-        function(_conv_data){ global.key_items = _conv_data }, 
-        function(){ return save_export_constructed_array(global.key_items) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ global.key_items = _conv_data },
+        function(_conv_data){ return global.key_items }, 
     )
     save_entry("WEAPONS", global.weapons, 
         function(_conv_data){ global.weapons = _conv_data }, 
-        function(){ return save_export_constructed_array(global.weapons) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.weapons }, 
     )
     save_entry("ARMORS", global.armors, 
         function(_conv_data){ global.armors = _conv_data }, 
-        function(){ return save_export_constructed_array(global.armors) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.armors }, 
     )
     save_entry("STORAGE", global.storage, 
         function(_conv_data){ global.storage = _conv_data }, 
-        function(){ return save_export_constructed_array(global.storage) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.storage }, 
     )
     
     // misc
     save_entry("SHOP_DATA", {})
-    save_entry("MEMORIES", global.memories, function(_conv_data){ global.memories = _conv_data }, function(){ return global.memories })
+    save_entry("MEMORIES", global.memories,
+        function(_conv_data) { global.memories = _conv_data },
+        function(_conv_data){ return global.memories }, 
+    );
     save_entry("WORLD", global.world, function(_conv_data){ global.world = _conv_data }, function(){ return global.world })
     
     save_entry("RECRUITS", global.recruits, 
         function(_conv_data){ global.recruits = _conv_data }, 
-        function(){ return save_export_constructed_array(global.recruits) },
-        function(_raw_data) { return save_import_constructed_array(_raw_data) }
+        function(_conv_data){ return global.recruits }, 
     )
     save_entry("RECRUITS_LOST", global.recruits_lost, function(_conv_data){ global.recruits_lost = _conv_data }, function(){ return global.recruits_lost })
 #endregion
@@ -183,8 +177,7 @@ global.font_numbers_g = font_add_sprite_ext(spr_ui_numbers_gfont,"0123456789+-%/
 // create entries for the party stuff later since we must first apply their equipment
 save_entry("PARTY_DATA", global.party, 
     function(_conv_data) { global.party = _conv_data },
-    function() { return save_export_struct(global.party, ["weapon", "armor1", "armor2", "spells"]) },
-    function(_raw_data) { return save_import_struct(_raw_data, ["weapon", "armor1", "armor2", "spells"]) }
+    function(_conv_data) { return global.party },
 )
 save_entry("PARTY_NAMES", global.party_names, 
     function(_conv_data) { global.party_names = _conv_data },
