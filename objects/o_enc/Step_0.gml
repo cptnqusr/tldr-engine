@@ -108,6 +108,7 @@ if battle_state == BATTLE_STATE.MENU {
     }
     else if battle_menu == BATTLE_MENU.INV_SELECTION {
         var __button = party_buttons[party_selection][party_button_selection[party_selection]]
+        var __moved = false;
         
         var list = battle_menu_inv_list
         var selection_var_name = battle_menu_inv_var_name
@@ -118,36 +119,47 @@ if battle_state == BATTLE_STATE.MENU {
         
         // four direction ui movement
         if InputPressed(INPUT_VERB.RIGHT) && selected_item_index < array_length(list) - 1 {
-            selected_item_index ++
+            selected_item_index ++;
 			if selected_item_index % 2 == 0
-				selected_item_index -= 2
-			
-			audio_play(snd_ui_move_CT)
+				selected_item_index -= 2;
+            
+            __moved = true;
+            audio_play(snd_ui_move_CT)
 		}
 		if InputPressed(INPUT_VERB.DOWN) && selected_item_index < array_length(list) - 2 {
-			selected_item_index += 2
-			audio_play(snd_ui_move_CT)
+			selected_item_index += 2;
+            __moved = true;
+            audio_play(snd_ui_move_CT)
 		}
 		if InputPressed(INPUT_VERB.LEFT) && selected_item_index > 0 {
-			selected_item_index -= 1
+			selected_item_index -= 1;
 			if selected_item_index % 2 == 1
-				selected_item_index += 2
-			audio_play(snd_ui_move_CT)
+				selected_item_index += 2;
+            
+            __moved = true;
+            audio_play(snd_ui_move_CT)
 		}
-		else if InputPressed(INPUT_VERB.LEFT) && selected_item_index == 0 && array_length(list) > 1
-			selected_item_index -= 1
-			audio_play(snd_ui_move_CT)
-		}
+		else if InputPressed(INPUT_VERB.LEFT) && selected_item_index == 0 && array_length(list) > 1 {
+			selected_item_index -= 1;
+            __moved = true;
+            audio_play(snd_ui_move_CT)
+        }
 		if InputPressed(INPUT_VERB.UP) && selected_item_index > 1 {
-			selected_item_index -= 2
-			audio_play(snd_ui_move_CT)
-		}
-        if selected_item_index > 5
-			array_set(variable_instance_get(self, battle_menu_inv_page_var_name), party_selection, 1)
-		else
-			array_set(variable_instance_get(self, battle_menu_inv_page_var_name), party_selection, 0)
+			selected_item_index -= 2;
+            __moved = true;
+            audio_play(snd_ui_move_CT)
+        }
         
-        selection_operate(cap_wraparound(selected_item_index, array_length(list)), true)
+        // clamp the item index
+        selected_item_index = clamp(selected_item_index, 0, array_length(list)-1)
+        selection_operate(selected_item_index, true)
+        
+        // change page number
+        array_set(variable_instance_get(self, battle_menu_inv_page_var_name), party_selection, selected_item_index div 6);
+        
+        // make the tp cost visible
+        if __moved
+            __tp_update_cost(list[selected_item_index]);
         
         if InputPressed(INPUT_VERB.SELECT) && buffer == 0 {
             battle_menu_inv_proceed(list[selected_item_index])

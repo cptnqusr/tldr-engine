@@ -367,6 +367,22 @@ if command == "voice" { // voice(asset OR nil, pitch_range = undefined, interrup
 		voice_skip = string_to_bool(arg[3])
 }
 
+if command == "pitch" { // pitch([val OR min], [max]) -- setting no arguments resets pitch
+	if array_length(arg) > 0 {
+		if array_length(arg) == 1
+		{
+			voice_pitchrange = [arg[0], arg[0]];
+		}
+		else {
+			voice_pitchrange = [arg[0], arg[1]];
+		}
+	}
+	else {
+		voice_pitchrange = undefined;
+	}
+	
+}
+
 if command == "mini" { // mini(`text`, char = undefined, face_expression = undefined, x = `auto`, y = `auto`)
     draw_set_font(loc_font("main"))
     
