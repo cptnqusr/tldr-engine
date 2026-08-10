@@ -1,6 +1,6 @@
 {
   "$GMSound":"v2",
-  "%Name":"mus_cryos_remote",
+  "%Name":"mus_triggerarune",
   "audioGroupId":{
     "name":"audiogroup_default",
     "path":"audiogroups/audiogroup_default",
@@ -10,9 +10,9 @@
   "compression":1,
   "compressionQuality":4,
   "conversionMode":0,
-  "duration":143.17714,
+  "duration":72.01959,
   "exportDir":"",
-  "name":"mus_cryos_remote",
+  "name":"mus_triggerarune",
   "parent":{
     "name":"Music",
     "path":"folders/Music.yy",
@@ -21,6 +21,6 @@
   "resourceType":"GMSound",
   "resourceVersion":"2.0",
   "sampleRate":44100,
-  "soundFile":"mus_cryos_remote.mp3",
+  "soundFile":"mus_triggerarune.mp3",
   "volume":1.0,
 }

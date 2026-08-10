@@ -19,8 +19,8 @@
   ],
   "name":"room_DO_entrance",
   "parent":{
-    "name":"dracula_orphanage",
-    "path":"folders/Rooms/dracula_orphanage.yy",
+    "name":"dracula_house",
+    "path":"folders/Rooms/dracula_house.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

@@ -18,7 +18,7 @@ _cutscene_RizonCentralPark = function() {
 	
 	
 	cutscene_sleep(60)
-	cutscene_dialogue("????: Good evening, wretch.",,true)
+	cutscene_dialogue(["????: Well.", "????: Are you enjoying yourself?"],,true)
 	cutscene_set_variable(o_camera, "target", noone)
 	//cutscene_func(method(self, function() { 
 	//	with o_actor_rizon
@@ -52,19 +52,20 @@ _cutscene_RizonCentralPark = function() {
 	cutscene_sleep(30)
 	
 	cutscene_dialogue(
-	["RIZON: You have presented quite a problem for me and my shareholders.", 
+	["RIZON: You and your ilk have presented quite a problem for me and my shareholders.", 
 	"The great Rizon Fortress is now Will Smith's 10th house, all thanks to your meddling.",
 	"In exchange for curbing your idiocy, the board and I are presenting you a lucrative offer.",
 	"This world is one I have created to fit your every desire.",
 	"Of course, our data shows that your only desire is to be miserable.",
 	"Welcome, Sponge... {p} to GLOOM YORK CITY.",
 	"A city built upon the Chudson river of tears, with every citizen endlessly and inescapably depressed...",
-	"And all powered by an infinite resource: darkness.",
+	"And all powered by an infinite resource: unfathomable darkness.",
 	"We can assure you that your lamentations will be of the highest quality.",
-	"Should you have any problems adjusting to your new home... {p}{c}feel free to visit the NEO Rizon Fortress for support.",
-	"...After you've found all 4 of the Support Keys scattered around the city, of course.",
+	"Should you have any problems adjusting to your new home, feel free to visit the NEO Rizon Fortress for support.",
+	"After you've found all 4 of the SUPPORT KEYS scattered around the city, of course.",
 	"Upon presenting the keys, we will put you on the waitlist.",
-	"Again, we welcome you to your new home, wretch. Please..."],,true,true)
+	"...",
+	"All of this is to say that if you know what's good for you..."],,true,true)
 	
 	
 	cutscene_sleep(10)
@@ -72,7 +73,7 @@ _cutscene_RizonCentralPark = function() {
 	//cutscene_set_variable(o_actor_rizon, "dir", DIR.UP)
 	cutscene_sleep(30)
 	
-	cutscene_dialogue("...sample our hospitality.",,true)
+	cutscene_dialogue(["...you will not follow me.", "Goodbye."],,true)
 	
 	cutscene_actor_move_old(o_actor_rizon,new actor_movement(
 	0,

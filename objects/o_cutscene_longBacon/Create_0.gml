@@ -7,23 +7,22 @@ function cutscene_longBacon() {
 	cutscene_player_canmove(false)
 	cutscene_party_follow(false)
 	
-	// cutscene_sleep(10)
-	cutscene_func(fader_fade,[1,0,20])
-	cutscene_sleep(30)
-	cutscene_audio_play(snd_undertale_captivity_yes)
-	cutscene_sleep(230)
-	cutscene_func(fader_fade,[0,1,20])
-	cutscene_sleep(50)
-	cutscene_dialogue([
-	"{char(ralsei_noface)}{speed(2)}????: Please... anyone...", 
-	"...my friend, they're...",
-	"...he took their...",],,)
-	cutscene_sleep(30)
-	cutscene_dialogue("{char(none)}{speed(3)}I just need someone to",,false,)
-	cutscene_sleep(79)
-	cutscene_func(function(){room_goto_next()})
-	cutscene_func(fader_fade,[1,0,1]) 
+	cutscene_dialogue(["* Hey.", "* How are they?", "* ...good. I think.", 
+	"* Color's still going away, but...", 
+	"* They did this goofy goddamn voice and told me to 'go get 'er'.",])
+	cutscene_sleep(15)
+	cutscene_dialogue(["* Oh my god.", "* Did they actually say 'go get her'???????", "* YEAH. And, like,", 
+	"* I told them that I was going to tell you that they said that.", "* Like, dumbass,"])
+	cutscene_sleep(10)
+	cutscene_dialogue(["* YOU'RE A DWEEB!!"])
+	cutscene_audio_play(snd_suslaugh_ch1)
+	cutscene_sleep(10)
+	cutscene_audio_play(snd_krislaugh)
+	cutscene_sleep(70)
+	cutscene_dialogue(["* ...", "* (That laugh...)"])
+	cutscene_sleep(130)
 	
+	cutscene_dialogue(["* Hey, uh...", "* Yeah?", "* ..."])
 	cutscene_party_follow(true)
 	cutscene_party_interpolate()
 	cutscene_player_canmove(true)
