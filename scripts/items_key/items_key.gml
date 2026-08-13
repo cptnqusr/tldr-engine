@@ -36,6 +36,7 @@ function item_key_cell_phone() : item_key() constructor {
     
     item_localize("item_key_cell_phone")
 }
+item_register(item_key_cell_phone);
 function item_key_locket() : item_key() constructor {
 	name = ["Locket"]
 	desc = ["Holds a picture.", "--"]
@@ -70,3 +71,4 @@ function item_key_claimbclaws() : item_key() constructor {
     
     item_localize("item_key_claimb_claws");
 }
+item_register(item_key_claimbclaws);
