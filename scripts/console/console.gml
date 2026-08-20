@@ -198,7 +198,7 @@ function console_command_intro() : console_command() constructor {
 console_command_register(console_command_intro);
 
 
-function console_log(_text, _drawer = method(self, function(_offx = 0, _offy = 0) {
+function console_log(_text, _drawer = method(self, function(_offx = 0, _offy = 0) { // possibly replace with a text typer
     draw_set_alpha(alpha * .75);
     draw_set_halign(fa_right);
     draw_set_valign(fa_bottom);
