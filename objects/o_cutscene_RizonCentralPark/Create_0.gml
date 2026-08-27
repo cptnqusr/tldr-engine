@@ -18,7 +18,7 @@ _cutscene_RizonCentralPark = function() {
 	
 	
 	cutscene_sleep(60)
-	cutscene_dialogue(["????: Well.", "????: Are you enjoying yourself?"],,true)
+	cutscene_dialogue(["????: Well.", "????: That was a bit of a fall.","????: Are you enjoying yourself?"],,true)
 	cutscene_set_variable(o_camera, "target", noone)
 	//cutscene_func(method(self, function() { 
 	//	with o_actor_rizon
@@ -65,12 +65,12 @@ _cutscene_RizonCentralPark = function() {
 	"After you've found all 4 of the SUPPORT KEYS scattered around the city, of course.",
 	"Upon presenting the keys, we will put you on the waitlist.",
 	"...",
-	"All of this is to say that if you know what's good for you..."],,true,true)
+	"All of this is to say that if you know what's good for you, as I do..."],,true,true)
 	
 	
 	cutscene_sleep(10)
 	cutscene_func(music_fade, [0, -300, 20])
-	//cutscene_set_variable(o_actor_rizon, "dir", DIR.UP)
+	cutscene_set_variable(o_actor_rizon, "dir", DIR.UP)
 	cutscene_sleep(30)
 	
 	cutscene_dialogue(["...you will not follow me.", "Goodbye."],,true)

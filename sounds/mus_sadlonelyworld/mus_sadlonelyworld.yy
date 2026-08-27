@@ -14,8 +14,8 @@
   "exportDir":"",
   "name":"mus_sadlonelyworld",
   "parent":{
-    "name":"Sounds",
-    "path":"folders/Sounds.yy",
+    "name":"Music",
+    "path":"folders/Music.yy",
   },
   "preload":false,
   "resourceType":"GMSound",

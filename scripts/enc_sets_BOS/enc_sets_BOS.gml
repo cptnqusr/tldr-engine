@@ -54,15 +54,13 @@ function enc_set_meatDummy() : enc_set() constructor {
 	_count = 0
 	
 	flavor = function() {
-		var _flavor_array = ["Time your attack as close to the end as possible.", "Move Vineshroom to dodge bullets.", "Cast spells with Sadness Points (SP).", "No mercy."]
+		var _flavor_array = ["","Time your attack as close to the end as possible.", "Move Vineshroom to dodge bullets.", "Cast spells with Sadness Points (SP).", "No mercy."]
 		var _selected_text
-		var _returned_text
 		_selected_text = _flavor_array[_count]
-		_returned_text = _selected_text
 		_count++
-		if _count > 3
-			_count = 3
-		return _returned_text
+		if _count > 4
+			_count = 4
+		return _selected_text
 		}
 }
 
