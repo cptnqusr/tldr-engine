@@ -116,5 +116,13 @@
     "party_atlas_desc": {
         "en": "Scapegoat\nHe who holds\nthe world.",
         "ja": "Sponge\nSoaks up the world's\nsadness. Lonely."
+    },
+    "party_bowie_name": {
+        "en": "Bowie",
+        "ja": "Bowie"
+    },
+    "party_bowie_desc": {
+        "en": "Reflection\nLike a dead\nman walking.",
+        "ja": "Reflection\nLike a dead\nman walking."
     }
 }

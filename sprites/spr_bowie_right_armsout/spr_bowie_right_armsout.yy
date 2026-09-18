@@ -12,18 +12,18 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"v1","%Name":"d733b0c7-922b-488f-8fa0-91ca056154a1","name":"d733b0c7-922b-488f-8fa0-91ca056154a1","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"0be5d7f6-5813-4426-96a8-c01b0964eb71","name":"0be5d7f6-5813-4426-96a8-c01b0964eb71","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
   "height":31,
   "HTile":false,
   "layers":[
-    {"$GMImageLayer":"","%Name":"90cf65e3-f2db-4f84-bcb5-1316c948dc76","blendMode":0,"displayName":"default","isLocked":false,"name":"90cf65e3-f2db-4f84-bcb5-1316c948dc76","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
+    {"$GMImageLayer":"","%Name":"5c6b9915-64f7-462e-ba24-5f1cfc320cee","blendMode":0,"displayName":"default","isLocked":false,"name":"5c6b9915-64f7-462e-ba24-5f1cfc320cee","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
   ],
   "name":"spr_bowie_right_armsout",
   "nineSlice":null,
-  "origin":7,
+  "origin":0,
   "parent":{
     "name":"bowie",
     "path":"folders/Sprites/actors/party/bowie.yy",
@@ -69,14 +69,14 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"d733b0c7-922b-488f-8fa0-91ca056154a1","path":"sprites/spr_bowie_right_armsout/spr_bowie_right_armsout.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"1f3c8a39-577c-4ec1-9589-8ce867007da5","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
+                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"0be5d7f6-5813-4426-96a8-c01b0964eb71","path":"sprites/spr_bowie_right_armsout/spr_bowie_right_armsout.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
+              },"Disabled":false,"id":"acb43abe-7da8-4a3a-a286-a5b5cf52afe7","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":11,
-    "yorigin":31,
+    "xorigin":0,
+    "yorigin":0,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

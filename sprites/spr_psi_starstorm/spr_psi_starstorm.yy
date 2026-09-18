@@ -72,8 +72,8 @@
   "nineSlice":null,
   "origin":9,
   "parent":{
-    "name":"eggects",
-    "path":"folders/Sprites/eggects.yy",
+    "name":"effects",
+    "path":"folders/Sprites/effects.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

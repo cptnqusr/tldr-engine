@@ -36,9 +36,6 @@
     "name":"spr_bowie_down",
     "path":"sprites/spr_bowie_down/spr_bowie_down.yy",
   },
-  "spriteMaskId":{
-    "name":"spr_bowie_down",
-    "path":"sprites/spr_bowie_down/spr_bowie_down.yy",
-  },
+  "spriteMaskId":null,
   "visible":true,
 }

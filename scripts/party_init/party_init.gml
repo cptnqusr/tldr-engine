@@ -454,12 +454,12 @@ function party_m_sponge(_initialized_name) : party_m(_initialized_name) construc
 	lv =	2
 	desc =	"party_sponge_desc"
 	power_stats = [
-		["party_sponge_stat_sadness", 100, spr_ui_menu_icon_none],
-		"???",
-		["party_stat_guts", 0, spr_ui_menu_icon_fire],
+		new party_power_stat_unknown(),
+        new party_power_stat_unknown(),
+        new party_power_stat_images("party_stat_guts", spr_ui_menu_icon_fire, 2),
 	]
 	
-	max_hp =	party_m_calculate_hp(100, lv)
+	max_hp =	100
     hp =        max_hp
 	attack =	4
 	defense =	2
@@ -468,7 +468,7 @@ function party_m_sponge(_initialized_name) : party_m(_initialized_name) construc
 	}
 	
 	// inventory
-    weapon = new item_w_wood_blade()
+    weapon = new item_w_depressionedge()
     armor1 = undefined
     armor2 = undefined
 	spells = [
@@ -507,12 +507,7 @@ function party_m_sponge(_initialized_name) : party_m(_initialized_name) construc
 }
 function party_m_frog(_initialized_name) : party_m(_initialized_name) constructor {
 	name = "party_frog_name"
-	obj = {
-		obj: o_actor_frog,
-		var_struct: {
-			name: "frog"
-		},
-	}
+	obj = o_actor_frog
 	
 	// colors
 	color = c_green
@@ -523,12 +518,12 @@ function party_m_frog(_initialized_name) : party_m(_initialized_name) constructo
 	lv =	5
 	desc =	"party_frog_desc"
 	power_stats = [
-		["party_frog_stat_frog", "Yes", spr_ui_menu_icon_none],
-		["party_noelle_stat_boldness", 100, spr_ui_menu_icon_exclamation],
-		["party_stat_guts", 3, spr_ui_menu_icon_fire],
+		new party_power_stat_unknown(),
+        new party_power_stat_unknown(),
+        new party_power_stat_images("party_stat_guts", spr_ui_menu_icon_fire, 2),
 	]
 	
-	max_hp =	party_m_calculate_hp(130, lv)
+	max_hp =	180
     hp =        max_hp
 	attack =	4
 	defense =	2
@@ -541,10 +536,10 @@ function party_m_frog(_initialized_name) : party_m(_initialized_name) constructo
     armor1 = new item_a_ambercard()
     armor2 = new item_a_ambercard()
 	spells = [
-		new item_s_rudebuster(),
 	]
 	
 	// sprites
+	s_name = "frog"
 	s_state =		""
 	s_substate =	""
 	s_icon =		spr_ui_susie_icon
@@ -560,7 +555,7 @@ function party_m_frog(_initialized_name) : party_m(_initialized_name) constructo
 		attackready: spr_bfrog_attack_1,
 		defeat: spr_bsusie_defeat,
 		defend: [spr_bsusie_defend, true],
-		hurt: spr_bsusie_hurt,
+		hurt: spr_bfrog_hurt,
 		idle: spr_bfrog_idle,
 		intro: spr_susie_right,
 		introb: spr_susie_right,
@@ -571,8 +566,6 @@ function party_m_frog(_initialized_name) : party_m(_initialized_name) constructo
 		victory: [spr_bsusie_victory, true],
 		spare: [spr_bsusie_act, "idle", 1],
 		attack_eff: spr_bkris_attackeff,
-				
-		rudebuster: [spr_bsusie_rudebuster, 14],
 	}
 }
 function party_m_bowie(_initialized_name) : party_m(_initialized_name) constructor {
@@ -585,187 +578,58 @@ function party_m_bowie(_initialized_name) : party_m(_initialized_name) construct
 	iconcolor = #ff0000
 	
 	// stats
-	lv =	3
+	lv =	1
 	desc =	"party_bowie_desc"
 	power_stats = [
-		["party_frog_stat_frog", "Yes", spr_ui_menu_icon_none],
-		["party_noelle_stat_boldness", 100, spr_ui_menu_icon_exclamation],
-		["party_stat_guts", 3, spr_ui_menu_icon_fire],
-	]
-	
-	max_hp =	party_m_calculate_hp(90, lv)
-    hp =        max_hp
+        new party_power_stat_unknown(),
+        new party_power_stat_unknown(),
+        new party_power_stat_images("party_stat_guts", spr_ui_menu_icon_fire, 2),
+	] 
+    
+    max_hp =	120
+	hp =		max_hp
 	attack =	3
 	defense =	1
-	magic =		10
+	magic =		11
 	element_resistance = {
 	}
 	
 	// inventory
-    weapon = new item_w_spookysword()
-    armor1 = new item_a_ambercard()
-    armor2 = new item_a_ambercard()
+    weapon = new item_w_snowring()
+    armor1 = new item_a_silver_watch()
+    armor2 = new item_a_royal_pin()
 	spells = [
-		new item_s_rudebuster(),
+		new item_s_healprayer(),
+		new item_s_starman()
 	]
 	
 	// sprites
+    s_name = "bowie"
 	s_state =		""
 	s_substate =	""
-	s_icon =		spr_ui_susie_icon
-	s_icon_ow =		spr_ui_susie_head
-	s_icon_weapon = spr_ui_menu_weapon_sword
+	s_icon =		spr_ui_noelle_icon
+	s_icon_ow =		spr_ui_noelle_head
+	s_icon_weapon = spr_ui_menu_weapon_ring
 	s_battle_intro =	1 // 1 for attack, 0 for full intro	
 	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
-		act: [spr_bsusie_act, true],
-		actready: spr_bsusie_actready,
-		actend: [spr_bsusie_actend, "idle", 1],
-		attack: [spr_bsusie_attack, true],
-		attackready: spr_bsusie_attackready,
-		defeat: spr_bsusie_defeat,
-		defend: [spr_bsusie_defend, true],
-		hurt: spr_bsusie_hurt,
-		idle: spr_bsusie_idle,
-		intro: spr_susie_right,
-		introb: spr_susie_right,
-		itemuse: [spr_bsusie_item, "idle", 1],
-		itemready: spr_bsusie_itemready,
-		spell: [spr_bsusie_spell, "idle", 1],
-		spellready: spr_bsusie_spellready,
-		victory: [spr_bsusie_victory, true],
-		spare: [spr_bsusie_act, "idle", 1],
-		attack_eff: spr_bsusie_attackeff,
-				
-		rudebuster: [spr_bsusie_rudebuster, 14],
-	}
-}
-function party_m_scoot(_initialized_name) : party_m(_initialized_name) constructor {
-	name = "party_scoot_name"
-	obj = o_actor_scoot
-	
-	// colors
-	color = c_red
-	darkcolor = c_red
-	iconcolor = #ff0000
-	
-	// stats
-	lv =	3
-	desc =	"party_scoot_desc"
-	power_stats = [
-		["party_frog_stat_frog", "Yes", spr_ui_menu_icon_none],
-		["party_noelle_stat_boldness", 100, spr_ui_menu_icon_exclamation],
-		["party_stat_guts", 3, spr_ui_menu_icon_fire],
-	]
-	
-	max_hp =	party_m_calculate_hp(90, lv)
-    hp =        max_hp
-	attack =	3
-	defense =	1
-	magic =		10
-	element_resistance = {
-	}
-	
-	// inventory
-    weapon = new item_w_spookysword()
-    armor1 = new item_a_ambercard()
-    armor2 = new item_a_ambercard()
-	spells = [
-		new item_s_rudebuster(),
-	]
-	
-	// sprites
-	s_state =		""
-	s_substate =	""
-	s_icon =		spr_ui_susie_icon
-	s_icon_ow =		spr_ui_susie_head
-	s_icon_weapon = spr_ui_menu_weapon_sword
-	s_battle_intro =	1 // 1 for attack, 0 for full intro	
-	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
-		act: [spr_bsusie_act, true],
-		actready: spr_bsusie_actready,
-		actend: [spr_bsusie_actend, "idle", 1],
-		attack: [spr_bsusie_attack, true],
-		attackready: spr_bsusie_attackready,
-		defeat: spr_bsusie_defeat,
-		defend: [spr_bsusie_defend, true],
-		hurt: spr_bsusie_hurt,
-		idle: spr_bsusie_idle,
-		intro: spr_susie_right,
-		introb: spr_susie_right,
-		itemuse: [spr_bsusie_item, "idle", 1],
-		itemready: spr_bsusie_itemready,
-		spell: [spr_bsusie_spell, "idle", 1],
-		spellready: spr_bsusie_spellready,
-		victory: [spr_bsusie_victory, true],
-		spare: [spr_bsusie_act, "idle", 1],
-		attack_eff: spr_bsusie_attackeff,
-				
-		rudebuster: [spr_bsusie_rudebuster, 14],
-	}
-}
-function party_m_atlas(_initialized_name) : party_m(_initialized_name) constructor {
-	name = "party_atlas_name"
-	obj = o_actor_atlas
-	
-	// colors
-	color = c_orange
-	darkcolor = c_orange
-	iconcolor = #ffa040
-	
-	// stats
-	lv =	2
-	desc =	"party_atlas_desc"
-	power_stats = [
-		"???",
-		"???",
-		"???",
-	]
-	
-	max_hp =	party_m_calculate_hp(100, lv)
-    hp =        max_hp
-	attack =	4
-	defense =	2
-	magic =		3
-	element_resistance = {
-	}
-	
-	// inventory
-    weapon = new item_w_wood_blade()
-    armor1 = undefined
-    armor2 = undefined
-	spells = [
-		new item_s_testdmg()
-	]
-	
-	// sprites
-	s_name = "atlas"
-	s_state =		""
-	s_substate =	""
-	s_icon =		spr_ui_susie_icon
-	s_icon_ow =		spr_ui_susie_head
-	s_icon_weapon = spr_ui_menu_weapon_sword
-	s_battle_intro =	1 // 1 for attack, 0 for full intro	
-	
-	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed)]
-		act: [spr_bsusie_act, true],
-		actready: spr_bsusie_actready,
-		actend: [spr_bsusie_actend, "idle", 1],
-		attack: [spr_bsponge_attack, true],
-		attackready: spr_bsponge_attackready,
-		defeat: spr_bsponge_defeat,
-		defend: [spr_bsponge_defend, true],
-		hurt: spr_bsponge_hurt,
-		idle: spr_bsponge_idle,
-		intro: spr_susie_right,
-		introb: spr_susie_right,
-		itemuse: [spr_bsponge_item, "idle", 1],
-		itemready: spr_bsponge_itemready,
-		spell: [spr_bsponge_spell, "idle", 1],
-		spellready: spr_bsponge_spellready,
-		victory: [spr_sponge_right, true],
-		spare: [spr_sponge_duck_speak, "idle", 1],
-		attack_eff: spr_bkris_attackeff,
+	battle_sprites = { // [sprite, whether stop at the end (or change to what sprite), (image speed of the upcoming sprite)]
+		act: [spr_bnoelle_act, true],
+		actready: spr_bnoelle_actready,
+		actend: [spr_bnoelle_actend, "idle", 1],
+		attack: [spr_bbowie_attack, true],
+		attackready: spr_bnoelle_attackready,
+		defeat: spr_bbowie_dead,
+		defend: spr_bnoelle_defend,
+		hurt: spr_bbowie_hurt,
+		idle: spr_bbowie_idle,
+		intro: [spr_bnoelle_intro, true],
+		introb: spr_noelle_right,
+		itemuse: [spr_bbowie_item, "idle", 1],
+		itemready: spr_bnoelle_itemready,
+		spell: [spr_bnoelle_spell, "idle", 1],
+		spellready: spr_bnoelle_spellready,
+		victory: [spr_bbowie_idle, true],
+		spare: [spr_bnoelle_act, "idle", 1],
+		attack_eff: spr_bnoelle_attackeff,
 	}
 }

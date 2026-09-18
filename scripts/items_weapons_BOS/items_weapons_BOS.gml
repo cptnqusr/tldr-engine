@@ -13,7 +13,7 @@ function item_w_masamune() : item_weapon() constructor {
 	reactions = {
 		susie: "(I want a sword now.)",
 		ralsei: "It's beautiful!",
-        noelle: "(Like a fairy tale...)",
+        noelle: "I could use it as a mirror!",
 		frog: "Nought but thou remain.",
 		scoot: "[It's fancy!]",
 		bowie: "What a little wonder."
