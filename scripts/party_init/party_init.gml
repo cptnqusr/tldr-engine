@@ -618,7 +618,7 @@ function party_m_bowie(_initialized_name) : party_m(_initialized_name) construct
 		actend: [spr_bnoelle_actend, "idle", 1],
 		attack: [spr_bbowie_attack, true],
 		attackready: spr_bnoelle_attackready,
-		defeat: spr_bbowie_dead,
+		defeat: spr_bbowie_defeat,
 		defend: spr_bnoelle_defend,
 		hurt: spr_bbowie_hurt,
 		idle: spr_bbowie_idle,
